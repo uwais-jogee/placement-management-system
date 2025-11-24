@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" class="h-full bg-gray-100">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Placement Authorisation Requests | PMS</title>
+    <link rel="stylesheet" href="/css/main.css"/>
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.2.1/css/dataTables.dataTables.min.css">
+    <!-- DataTable Custom CSS -->
+    <link rel="stylesheet" th:href="@{/css/data-table.css}"/>
+</head>
+<body>
+<div class="min-h-full">
+    <!-- Nav Bar Fragment -->
+    <div th:replace="fragments :: navAdmin ('authRequests')"></div>
+
+    <header class="bg-white shadow">
+        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+            <h1 class="text-3xl font-bold tracking-tight text-gray-900">Placement Authorisation Requests</h1>
+        </div>
+    </header>
+    <main>
+        <!-- Content -->
+        <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+
+            <!-- Table Tabs - styled based on the current tab -->
+            <div class="flex max-w-fit shadow overflow-x-auto text-center">
+                <a th:class="${tab == 'All' ? 'px-6 py-3 text-xs sm:text-sm border border-gray-300 font-semibold bg-white text-gray-900 border-t-2 border-t-teal-600' : 'px-6 py-3 text-xs sm:text-sm border border-gray-300 bg-gray-200 text-gray-600 font-semibold'}"
+                   th:href="@{/admin/auth-requests/all}">
+                    All
+                </a>
+                <a th:class="${tab == 'Pending Initial Admin Approval' ? 'px-6 py-3 text-xs sm:text-sm border border-gray-300 font-semibold bg-white text-gray-900 border-t-2 border-t-teal-600' : 'px-6 py-3 text-xs sm:text-sm border border-gray-300 bg-gray-200 text-gray-600 font-semibold'}"
+                   th:href="@{/admin/auth-requests/pending-initial-admin-approval}">
+                    Pending Initial Admin Approval
+                </a>
+                <a th:class="${tab == 'Pending Company Approval' ? 'px-6 py-3 text-xs sm:text-sm border border-gray-300 font-semibold bg-white text-gray-900 border-t-2 border-t-teal-600' : 'px-6 py-3 text-xs sm:text-sm border border-gray-300 bg-gray-200 text-gray-600 font-semibold'}"
+                   th:href="@{/admin/auth-requests/pending-company-approval}">
+                    Pending Company Approval
+                </a>
+                <a th:class="${tab == 'Pending Final Admin Approval' ? 'px-6 py-3 text-xs sm:text-sm border border-gray-300 font-semibold bg-white text-gray-900 border-t-2 border-t-teal-600' : 'px-6 py-3 text-xs sm:text-sm border border-gray-300 bg-gray-200 text-gray-600 font-semibold'}"
+                   th:href="@{/admin/auth-requests/pending-final-admin-approval}">
+                    Pending Final Admin Approval
+                </a>
+                <a th:class="${tab == 'Approved' ? 'px-6 py-3 text-xs sm:text-sm border border-gray-300 font-semibold bg-white text-gray-900 border-t-2 border-t-teal-600' : 'px-6 py-3 text-xs sm:text-sm border border-gray-300 bg-gray-200 text-gray-600 font-semibold'}"
+                   th:href="@{/admin/auth-requests/approved}">
+                    Approved
+                </a>
+                <a th:class="${tab == 'Rejected' ? 'px-6 py-3 text-xs sm:text-sm border border-gray-300 font-semibold bg-white text-gray-900 border-t-2 border-t-teal-600' : 'px-6 py-3 text-xs sm:text-sm border border-gray-300 bg-gray-200 text-gray-600 font-semibold'}"
+                   th:href="@{/admin/auth-requests/rejected}">
+                    Rejected
+                </a>
+            </div>
+
+            <!-- Table Card -->
+            <div class="tableDiv bg-white shadow rounded-lg rounded-t-none sm:rounded-tr-lg max-h-fit">
+                <div class="px-4 py-5 flex justify-between items-center">
+                    <h2 class="text-lg font-medium leading-6 text-gray-900" th:text="${tab} + ' Requests'"></h2>
+                    <!-- Search Bar -->
+                    <div class="w-1/3">
+                        <input type="search"
+                               class="tableSearch block w-full rounded border border-gray-300 bg-white px-2 py-1"
+                               placeholder="Search" aria-label="Search"/>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto overflow-y-auto max-h-screen pb-5">
+                    <table class="w-full table-auto">
+                        <thead class="border border-y border-gray-300">
+                        <tr class="bg-gray-200">
+                            <th scope="col" class="text-xs px-4 py-1 text-gray-600">
+                                ID
+                            </th>
+                            <th scope="col" class="text-xs px-4 py-1 text-gray-600">
+                                Student Name
+                            </th>
+                            <th scope="col" class="text-xs px-4 py-1 text-gray-600">
+                                Company
+                            </th>
+                            <th scope="col" class="text-xs px-4 py-1 text-gray-600">
+                                Requested On Date
+                            </th>
+                            <th scope="col" class="text-xs px-4 py-1 text-gray-600">
+                                Status
+                            </th>
+                            <th scope="col" class="text-xs px-4 py-1 text-gray-600">
+                                View
+                            </th>
+                        </tr>
+                        </thead>
+
+                        <tbody class="divide-y divide-gray-300 border-b border-b-gray-100">
+                        <tr th:each="authRequest : ${authRequests}" class="hover:bg-gray-50">
+                            <td th:text="'#' + ${authRequest.id}"
+                                class="px-4 py-3 text-sm text-gray-900"></td>
+                            <td th:text="${authRequest.student.firstName + ' ' + authRequest.student.lastName}"
+                                class="px-4 py-3 text-sm text-gray-900"></td>
+                            <!-- Check if the company exists already, if so display the company name, if not display the other name -->
+                            <td class="px-4 py-3 text-sm text-gray-900">
+                                <span th:if="${authRequest.company == null}"
+                                      th:text="${authRequest.companyNameOther}"></span>
+                                <span th:unless="${authRequest.company == null}"
+                                      th:text="${authRequest.company.companyName}"></span>
+                            </td>
+                            <td class="px-4 py-3 text-sm text-gray-900"
+                                th:text="${#temporals.format(authRequest.requestedOn, 'dd/MM/yy')}">
+                            </td>
+                            <td class="text-sm text-gray-900">
+                                <span th:if="${authRequest.status.getFormattedStatus().contains('Pending')}"
+                                      class="text-nowrap px-2 py-1 text-sm font-medium rounded-full bg-yellow-100 text-yellow-800"
+                                      th:text="${authRequest.status.getFormattedStatus()}">
+                                </span>
+                                <span th:if="${authRequest.status.getFormattedStatus().contains('Approved')}"
+                                      class="text-nowrap px-2 py-1 text-sm font-medium rounded-full bg-green-100 text-green-800"
+                                      th:text="${authRequest.status.getFormattedStatus()}">
+                                </span>
+                                <span th:if="${authRequest.status.getFormattedStatus().contains('Rejected')}"
+                                      class="text-nowrap px-2 py-1 text-sm font-medium rounded-full bg-red-100 text-red-800"
+                                      th:text="${authRequest.status.getFormattedStatus()}">
+                                </span>
+                            </td>
+                            <td class="px-4 py-3 text-sm text-gray-900">
+                                <a th:href="@{/admin/auth-request/view(id=${authRequest.id})}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                         stroke-width="1.5" stroke="currentColor"
+                                         class="h-6 w-6 text-teal-600 hover:text-teal-400 inline-block">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                              d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/>
+                                    </svg>
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </main>
+</div>
+
+<script src="/js/app.js" defer></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/2.2.1/js/dataTables.min.js" defer></script>
+<script src="/js/dataTableSetup.js" defer></script>
+
+</body>
+</html>

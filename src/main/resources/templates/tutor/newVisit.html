@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" class="h-full bg-gray-100">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Visit | PMS</title>
+    <link rel="stylesheet" href="/css/main.css"/>
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <!-- FullCalendar Custom CSS -->
+    <link th:href="@{/css/full-calendar.css}" rel="stylesheet"/>
+</head>
+<body>
+<div class="min-h-full">
+    <!-- Nav Bar Fragment -->
+    <div th:replace="fragments :: navTutor ('')"></div>
+
+    <header class="bg-white shadow">
+        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+            <h1 class="text-3xl font-bold tracking-tight text-gray-900">New Visit</h1>
+        </div>
+    </header>
+
+    <main>
+        <!-- Content -->
+        <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-12">
+
+                <!-- Calendar -->
+                <div class="col-span-1 sm:col-span-1 space-y-6">
+                    <!-- Calendar Card -->
+                    <div class="bg-white shadow rounded-lg">
+                        <div class="px-4 py-5 flex items-center justify-between">
+                            <h2 class="text-lg font-medium leading-6 text-gray-900">Microsoft Calendar</h2>
+                        </div>
+                        <div class="border-t border-gray-200 p-6 flex justify-center">
+                            <div id="calendar" th:attr="data-has-linked-calendar=${hasLinkedCalendar}"
+                                 class="w-full h-screen sm:h-fit"></div>
+                            <button id="syncButton"
+                                    class="bg-teal-600 text-white px-4 py-2 rounded-md hover:bg-teal-500 disabled:bg-teal-600/50 disabled:text-white disabled:cursor-not-allowed"
+                                    onclick="window.location.href='/tutor/visits/new/calendar-auth/send'">
+                                Sync Microsoft Calendar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Google Map -->
+                <div class="col-span-1 sm:col-span-1 space-y-6">
+                    <div id="hiddenData" th:attr="data-placement-addresses=${placementAddresses}">
+                        <!-- Map Card -->
+                        <div class="bg-white shadow rounded-lg">
+                            <div class="px-4 py-5 flex items-center justify-between">
+                                <h2 class="text-lg font-medium leading-6 text-gray-900">Map</h2>
+                            </div>
+                            <div class="border-t border-gray-200 p-6 flex justify-center">
+                                <div id="map" class="w-full h-96"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visit Details -->
+                <div class="col-span-1 sm:col-span-2">
+                    <div class="bg-white shadow rounded-lg">
+                        <!-- Header -->
+                        <div class="px-4 py-5">
+                            <h2 class="text-lg font-medium leading-6 text-gray-900">Visit Details</h2>
+                        </div>
+
+                        <!-- Visit Details Form -->
+                        <form id="visitForm" th:action="@{/tutor/visits/new/submit}" th:object="${visitDTO}"
+                              method="POST">
+                            <div class="border-t border-gray-200 px-8 py-6 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-10">
+                                <!-- Select a Placement -->
+                                <div class="sm:col-span-2">
+                                    <label for="placementDropdown" class="block text-sm font-medium text-gray-500">Select
+                                        a Placement</label>
+                                    <select id="placementDropdown" name="placementId"
+                                            class="px-2 py-1.5 border-0 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500"
+                                            required>
+                                        <option value="" disabled selected>Select a Placement</option>
+                                        <th:block th:each="placement : ${placements}">
+                                            <option th:value="${placement.id}"
+                                                    th:text="'#' + ${placement.id} + ' | ' + ${placement.student.firstName + ' ' + placement.student.lastName + ' | ' + placement.company.companyName}"
+                                                    th:attr="data-student-email=${placement.student.email}">
+                                            </option>
+                                        </th:block>
+                                    </select>
+                                </div>
+
+                                <!-- Meeting Duration -->
+                                <div class="sm:col-span-1">
+                                    <label for="duration" class="block text-sm font-medium text-gray-500">Meeting
+                                        Duration (minutes)</label>
+                                    <input type="number" id="duration" name="meetingDuration" min="5" step="5"
+                                           class="px-2 py-1.5 mt-2 border-0 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500"
+                                           placeholder="Enter duration" required>
+                                </div>
+
+                                <!-- Meeting Type -->
+                                <div class="sm:col-span-1">
+                                    <label class="block text-sm font-medium text-gray-500 mb-2">Meeting Type</label>
+                                    <div class="mt-1 flex space-x-8">
+                                        <label class="inline-flex items-center">
+                                            <input id="onlineRadio" type="radio" name="meetingType" value="online"
+                                                   class="accent-[#0d9488]" checked>
+                                            <span class="ml-2 text-gray-900">Online</span>
+                                        </label>
+                                        <label class="inline-flex items-center">
+                                            <input id="inPersonRadio" type="radio" name="meetingType" value="in-person"
+                                                   class="accent-[#0d9488]">
+                                            <span class="ml-2 text-gray-900">In-person</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Other Placement Visit Suggestion -->
+                                <div id="suggestedPlacementsDiv" class="sm:col-span-2 hidden">
+                                    <div class="flex justify-center">
+                                        <div
+                                                class="p-3 w-fit bg-blue-100 border border-blue-200 font-medium text-sm text-blue-800 rounded-lg items-center text-center">
+                                            <p><b>Suggestion:</b> Consider visiting the following placements on the same
+                                                day as they are nearby:</p><br/>
+                                            <ul id="suggestedPlacements" class="mt-4 space-y-2 list-item list-inside">
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <!-- From address -->
+                                <div id="fromAddressDiv" class="sm:col-span-1 hidden">
+                                    <label for="fromAddressInput" class="block text-sm font-medium text-gray-500">Enter
+                                        the address you will be traveling from</label>
+                                    <input type="text" id="fromAddressInput" placeholder="Start typing an address..."
+                                           class="px-2 py-1.5 border-0 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
+                                </div>
+                                <!-- From address hidden inputs -->
+                                <input type="hidden" id="fromPlaceId" name="fromPlaceId">
+                                <input type="hidden" id="fromFormattedAddress" name="fromFormattedAddress">
+
+                                <!-- Travel Time -->
+                                <div id="travelTimeDiv" class="sm:col-span-1 hidden">
+                                    <p class="block text-sm font-medium text-gray-500">Travel Time</p>
+                                    <div>
+                                        <p id="travelTimeDisplay" class="ml-4 mt-2.5 text-gray-900">Complete the above
+                                            fields to calculate travel time</p>
+                                    </div>
+                                </div>
+                                <!-- Travel Duration hidden input -->
+                                <input type="hidden" id="travelDuration" name="travelDuration">
+
+
+                                <!-- Select a Week -->
+                                <div class="sm:col-span-2">
+                                    <label for="weekPicker" class="block text-sm font-medium text-gray-500">Select a
+                                        Week</label>
+                                    <input type="week" id="weekPicker"
+                                           class="px-2 border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500"
+                                           required>
+                                </div>
+
+                                <!-- Suggested Times -->
+                                <div class="sm:col-span-2">
+                                    <h3 class="block text-sm font-medium text-gray-500">Suggested Times</h3>
+                                    <div id="suggestTimesButtonDiv" class="mt-2 flex justify-center">
+                                        <button id="suggestTimesButton" type="button"
+                                                class="bg-white border-2 border-teal-600 text-teal-600 px-4 py-1.5 rounded-md hover:bg-gray-100">
+                                            Get Suggested Visit Times
+                                        </button>
+                                    </div>
+                                    <div id="suggestedTimes" class="mt-4 space-y-4">
+                                    </div>
+                                    <div id="suggestedTimesSyncPrompt">
+                                        <p class="mt-2 px-6 py-4 text-center text-sm text-gray-500">
+                                            Sync your Microsoft Calendar to view suggested times.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- Date and Time Selection -->
+                                <div class="sm:col-span-1">
+                                    <label class="block text-sm font-medium text-gray-500">Select Date and Time</label>
+                                    <div class="flex space-x-4">
+                                        <input type="date" id="datePicker" name="date"
+                                               class="px-2 block w-1/2 py-1.5 border-0 mt-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500"
+                                               required>
+                                        <input type="time" id="timePicker" name="time"
+                                               class="px-2 py-1.5 block w-1/2 border-0 mt-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500"
+                                               min="08:00:00" max="18:00:00" required>
+                                    </div>
+                                </div>
+
+                                <!-- Submit Button -->
+                                <div class="flex justify-center sm:col-span-2">
+                                    <button id="submitButton" type="button"
+                                            class="w-40 bg-teal-600 text-white px-4 py-2 rounded-md hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500">
+                                        Schedule Visit
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Confirmation Modal -->
+<div id="confirmModal"
+     class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden z-[99999]">
+    <div class="bg-white rounded-lg p-6 max-w-md w-full text-center shadow-lg">
+        <h2 class="text-lg font-semibold text-gray-800">Confirm Visit</h2>
+        <p class="mt-4 text-sm text-gray-600">Are you sure you would like to schedule this visit?</p>
+        <p th:if="${hasLinkedCalendar == true}" class="mt-2 text-sm text-gray-600">Once confirmed the visit (and travel
+            time if appropriate) will be added to your Microsoft Calendar</p>
+        <div class="mt-6 flex justify-between">
+            <button id="goBackConfirmModalButton"
+                    class="rounded-md bg-gray-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">
+                Go Back
+            </button>
+            <button id="confirmSubmitButton"
+                    class="rounded-md bg-teal-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">
+                Submit
+            </button>
+        </div>
+    </div>
+</div>
+
+<script src="/js/app.js" defer></script>
+<script src="/js/utilities.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js" defer></script>
+<script src="/js/tutor/newVisit.js" defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCWEiwbCY0v7DjfGIs9BsPrFbpMa0Tb8fQ&libraries=places&callback=initGoogle" defer></script>
+
+</body>
+</html>

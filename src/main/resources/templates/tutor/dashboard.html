@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" class="h-full bg-gray-100">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | PMS</title>
+    <link rel="stylesheet" href="/css/main.css"/>
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+</head>
+<body>
+<div class="min-h-full">
+    <!-- Nav Bar Fragment -->
+    <div th:replace="fragments :: navTutor ('dashboard')"></div>
+
+    <header class="bg-white shadow">
+        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+            <h1 class="text-3xl font-bold tracking-tight text-gray-900">Dashboard</h1>
+        </div>
+    </header>
+
+    <main>
+        <!-- Content -->
+        <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-6 gap-x-12 gap-y-12 sm:grid-cols-6">
+
+                <!-- Placements Card -->
+                <div class="col-span-6 sm:col-span-4 bg-white shadow rounded-lg h-fit">
+                    <div class="px-4 py-5">
+                        <h2 class="text-lg font-medium leading-6 text-gray-900">Placements</h2>
+                        <p class="mt-1 text-sm text-gray-500">Track the placements you are currently supervising.</p>
+                    </div>
+                    <div class="border-t border-gray-200 px-4 py-4 space-y-4 overflow-x-auto">
+                        <div th:if="${placements.isEmpty()}">
+                            <p class="text-sm text-gray-500 text-center px-4">You do not have any placements assigned to
+                                you.</p>
+                        </div>
+                        <div th:each="placement : ${placements}"
+                             class="border-b border-gray-200 pb-4 flex items-center justify-between space-x-8">
+                            <!-- Placement ID -->
+                            <a th:href="@{/tutor/placement/view(id=${placement.id})}"
+                               class="text-sm font-medium text-teal-600 hover:underline">
+                                <span th:text="'Placement #' + ${placement.id}"></span>
+                            </a>
+                            <!-- Student Name -->
+                            <p class="text-sm text-gray-800"
+                               th:text="${placement.student.firstName + ' ' + placement.student.lastName}"></p>
+                            <!-- Company Name -->
+                            <p class="text-sm text-gray-800" th:text="${placement.company.companyName}"></p>
+                            <!-- Start and End Date -->
+                            <p class="text-sm text-gray-800">
+                                <span th:text="'Start: ' + ${#temporals.format(placement.startDate, 'dd/MM/yy')}"></span><br>
+                                <span th:text="'End: ' + ${#temporals.format(placement.endDate, 'dd/MM/yy')}"></span>
+                            </p>
+                            <!-- Status -->
+                            <div>
+                                <span th:if="${placement.status.getFormattedStatus() == 'In Progress'}"
+                                      class="text-nowrap rounded-full px-2 py-1 text-sm font-medium bg-green-100 text-green-800"
+                                      th:text="${placement.status.getFormattedStatus()}">
+                                </span>
+                                <span th:if="${placement.status.getFormattedStatus() == 'Upcoming'}"
+                                      class="text-nowrap rounded-full px-2 py-1 text-sm font-medium bg-blue-100 text-blue-800"
+                                      th:text="${placement.status.getFormattedStatus()}">
+                                </span>
+                            </div>
+                        </div>
+                        <!-- View All Placements Button -->
+                        <div th:if="!${placements.isEmpty()}" class="flex justify-center">
+                            <button id="createNewPlacementButton"
+                                    onclick="window.location.href='/tutor/placements'"
+                                    class="rounded-md bg-teal-600 px-6 py-2 text-sm font-semibold text-white hover:bg-teal-500 disabled:bg-teal-600/50 disabled:text-white disabled:cursor-not-allowed">
+                                View all Placements
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notifications -->
+                <div class="col-span-6 sm:col-span-2 bg-white shadow rounded-lg max-h-fit">
+                    <div class="px-4 py-5">
+                        <h2 class="text-lg font-medium leading-6 text-gray-900">Notifications</h2>
+                    </div>
+                    <div class="border-t border-gray-200 overflow-y-auto max-h-60">
+                        <!-- Notifications List -->
+                        <ul role="list" class="divide-y divide-gray-200" id="notificationsList">
+                            <li th:if="${unreadMessageCount} == 0 and ${#lists.isEmpty(unreadNotifications)}"
+                                class="py-4 px-4 flex items-start justify-center">
+                                <p class="text-sm text-gray-500 text-center">No notifications.</p>
+                            </li>
+                            <!-- Unread messages -->
+                            <li th:if="${unreadMessageCount} > 0" class="py-4 px-4 flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                     stroke-width="1.5" stroke="currentColor"
+                                     class="h-6 w-6 text-teal-600 flex-shrink-0">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 0 1-.825-.242m9.345-8.334a2.126 2.126 0 0 0-.476-.095 48.64 48.64 0 0 0-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0 0 11.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155"/>
+                                </svg>
+                                <div class="ml-4">
+                                    <p class="text-sm text-gray-800 font-semibold"
+                                       th:text="'Unread Messages (' + ${unreadMessageCount} + ')'"></p>
+                                    <p class="text-sm text-gray-500 mt-1">
+                                        <span th:text="'You have ' + ${unreadMessageCount} + ' unread messages from your students.'"></span><br/>
+                                        <a th:href="@{/tutor/messages}" class="text-teal-600 hover:underline">View
+                                            Messages</a>
+                                    </p>
+                                </div>
+                            </li>
+                            <!-- Other Notifications -->
+                            <li th:each="notification: ${unreadNotifications}"
+                                th:id="'notification-' + ${notification.id}" class="py-4 px-4 flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                     stroke-width="1.5" stroke="currentColor"
+                                     class="h-6 w-6 text-teal-600 flex-shrink-0">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0"/>
+                                </svg>
+                                <div class="ml-4">
+                                    <p class="text-sm text-gray-800 font-semibold"
+                                       th:text="${notification.title}"></p>
+                                    <p class="text-sm text-gray-500 mt-1">
+                                        <span th:text="${notification.message}"></span><br/>
+                                        <a th:href="${notification.link}" th:text="${notification.linkText}"
+                                           class="text-teal-600 hover:underline"></a>
+                                    </p>
+                                    <p class="text-xs text-gray-400 mt-2"
+                                       th:text="${#temporals.format(notification.dateTime, 'dd/MM/yy, HH:mm')}"></p>
+                                </div>
+                                <!-- Acknowledge Checkbox -->
+                                <div class="ml-4 flex items-center">
+                                    <label>
+                                        <input th:attr="data-notification-id=${notification.id}" type="checkbox"
+                                               class="size-5 mt-1 rounded border-teal-600 accent-teal-600 text-teal-600 focus:ring-teal-600"/>
+                                    </label>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Google Map - displaying placement locations -->
+                <div class="col-span-6 sm:col-span-3 bg-white shadow rounded-lg">
+                    <div class="px-4 py-5">
+                        <h2 class="text-lg font-medium leading-6 text-gray-900">Placements Map</h2>
+                        <p class="mt-1 text-sm text-gray-500">View the locations of the placements you are currently
+                            supervising.</p>
+                    </div>
+                    <div class="border-t border-gray-200 p-6">
+                        <div id="map" th:attr="data-placement-addresses=${placementAddresses}"
+                             class="w-full h-96"></div>
+                    </div>
+                </div>
+
+                <!-- Upcoming Visits Card -->
+                <div class="col-span-6 sm:col-span-3 bg-white shadow rounded-lg max-h-fit">
+                    <div class="px-4 py-5">
+                        <h2 class="text-lg font-medium leading-6 text-gray-900">Upcoming Placement Visits</h2>
+                        <p class="mt-1 text-sm text-gray-500">View your upcoming placement visits.</p>
+                    </div>
+                    <div class="border-t border-gray-200 px-4 py-4 space-y-4">
+                        <div th:if="${visits.isEmpty()}">
+                            <p class="text-sm text-gray-500 text-center px-4">No upcoming visits.</p>
+                        </div>
+                        <div th:each="visit : ${visits}" th:if="${visit.status.getFormattedStatus() == 'Upcoming'}"
+                             class="border-b border-gray-200 pb-4 flex items-center justify-between">
+                            <div class="flex items-center">
+                                <!-- Left: Status -->
+                                <span class="text-nowrap px-2 py-1 text-sm font-medium rounded-full bg-yellow-100 text-yellow-800"
+                                      th:text="${visit.status.getFormattedStatus()}"></span>
+                                <!-- Middle: Date/Time and Location -->
+                                <div class="ml-6 sm:ml-24 flex-col space-y-1">
+                                    <!-- Date -->
+                                    <p class="text-gray-600 text-sm"
+                                       th:text="${#temporals.format(visit.date, 'dd/MM/yy')}"></p>
+                                    <!-- Time -->
+                                    <p class="text-gray-600 text-sm"
+                                       th:text="${#temporals.format(visit.startTime, 'HH:mm') + ' - ' + #temporals.format(visit.endTime, 'HH:mm')}"></p>
+                                    <!-- Location -->
+                                    <p class="text-gray-600 text-sm"
+                                       th:text="${visit.isOnline() ? 'Online' : 'In Person'}"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex justify-center">
+                            <button onclick="window.location.href='/tutor/visits'"
+                                    class="rounded-md bg-teal-600 px-6 py-2 text-sm font-semibold text-white hover:bg-teal-500">
+                                View all Visits
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+</div>
+
+<script src="/js/app.js" defer></script>
+<script src="/js/tutor/dashboard.js" defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCWEiwbCY0v7DjfGIs9BsPrFbpMa0Tb8fQ&libraries=places&callback=initGoogle"
+        defer></script>
+
+</body>
+</html>

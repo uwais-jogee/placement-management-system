@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" class="h-full bg-gray-100">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="'Company - ' + ${company.companyName} + ' | PMS'"></title>
+    <link rel="stylesheet" href="/css/main.css"/>
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+</head>
+<body>
+<div class="min-h-full">
+    <!-- Nav Bar Fragment -->
+    <div th:replace="fragments :: navAdmin ('')"></div>
+
+    <header class="bg-white shadow">
+        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+            <h1 class="text-3xl font-bold tracking-tight text-gray-900"
+                th:text="'Company - ' + ${company.companyName}"></h1>
+        </div>
+    </header>
+
+    <main>
+        <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-12">
+
+                <!-- Company Details Card -->
+                <div class="col-span-1 sm:col-span-1 bg-white shadow rounded-lg max-h-fit">
+                    <div class="px-4 py-5">
+                        <h2 class="text-lg font-medium leading-6 text-gray-900">Company Details</h2>
+                    </div>
+                    <div class="border-t border-gray-200 px-6 py-5">
+                        <div class="grid grid-cols-1 gap-y-6 sm:grid-cols-6">
+                            <!-- Company ID -->
+                            <div class="sm:col-span-6">
+                                <label class="text-sm font-medium text-gray-500">Company ID</label>
+                                <p class="text-sm text-gray-800" id="id"
+                                   th:text="'#' + ${company.id}"></p>
+                            </div>
+                            <!-- Company Name -->
+                            <div class="sm:col-span-6">
+                                <label class="text-sm font-medium text-gray-500">Company Name</label>
+                                <p class="text-sm text-gray-800" id="name"
+                                   th:text="${company.companyName}"></p>
+                            </div>
+
+                            <!-- Address -->
+                            <div class="sm:col-span-6">
+                                <label class="text-sm font-medium text-gray-500">Address</label>
+                                <p class="text-sm text-gray-800" id="address"
+                                   th:text="${company.address.formattedAddress}"></p>
+                            </div>
+
+                            <!-- Industry -->
+                            <div class="sm:col-span-6">
+                                <label class="text-sm font-medium text-gray-500">Industry</label>
+                                <p class="text-sm text-gray-800" id="industry"
+                                   th:text="${company.industry}"></p>
+                            </div>
+
+                            <!-- Web Address -->
+                            <div class="sm:col-span-6">
+                                <label class="text-sm font-medium text-gray-500">Web Address</label>
+                                <p class="text-sm text-gray-800" id="webAddress"
+                                   th:text="${company.webAddress}"></p>
+                            </div>
+
+                            <!-- Total Placements -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">Total Placements</label>
+                                <p class="text-sm text-gray-800" id="totalPlacements"
+                                   th:text="${#lists.size(company.placements)}"></p>
+                            </div>
+
+                            <!-- Current Placements -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">Current Placements</label>
+                                <div class="flex items-center">
+                                    <p class="text-sm text-gray-800" id="currentPlacements"
+                                       th:text="${#lists.size(company.getCurrentPlacements())}">
+                                    </p>
+                                    <a class="viewPlacementsButton hover:cursor-pointer">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                             stroke-width="1.5" stroke="currentColor"
+                                             class="h-6 w-6 text-teal-600 hover:text-teal-400 ml-4">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                  d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"/>
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                  d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ratings Radar Chart -->
+                <div class="col-span-1 sm:col-span-1 bg-white shadow rounded-lg max-h-fit">
+                    <div class="px-4 py-5">
+                        <h2 class="text-lg font-medium leading-6 text-gray-900">Feedback Average Ratings</h2>
+                    </div>
+                    <div class="border-t border-gray-200 px-6 py-5">
+                        <div id="ratingsChartDiv" th:attr="data-chart-data=${ratingsChartData}">
+                            <canvas id="ratingsChart" class="w-full h-96"></canvas>
+                        </div>
+                        <!-- Overall Feedback Rating / 10 -->
+                        <div class="mt-6">
+                            <label class="text-sm font-medium text-gray-500">Overall Feedback Rating / 10</label>
+                            <p class="text-sm text-gray-800" id="overallRating"
+                               th:text="${#numbers.formatDecimal(company.getAverageOverallRating(), 1, 2, 'POINT')}"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Button Section -->
+                <div class="col-span-1 sm:col-span-2 flex items-center">
+                    <a class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-400"
+                       href="javascript:window.history.back();">
+                        Back
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Company Placements Modal -->
+<div id="placementsModal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
+    <div class="w-3/4 max-h-3/4 bg-white shadow rounded-lg">
+        <div class="px-4 py-5">
+            <h2 class="text-lg font-medium leading-6 text-gray-900"
+                th:text="'Placements: ' + ${company.companyName}"></h2>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="w-full table-auto">
+                <thead class="border border-y border-gray-300">
+                <tr class="bg-gray-200">
+                    <th scope="col" class="text-center text-sm px-4 py-1 text-gray-600">
+                        ID
+                    </th>
+                    <th scope="col" class="text-left text-sm px-4 py-1 text-gray-600">
+                        Student Name
+                    </th>
+                    <th scope="col" class="text-left text-sm px-4 py-1 text-gray-600">
+                        Company
+                    </th>
+                    <th scope="col" class="text-left text-sm px-4 py-1 text-gray-600">
+                        Start Date
+                    </th>
+                    <th scope="col" class="text-left text-sm px-4 py-1 text-gray-600">
+                        End Date
+                    </th>
+                    <th scope="col" class="text-center text-sm px-4 py-1 text-gray-600">
+                        Status
+                    </th>
+                    <th scope="col" class="text-center text-sm px-4 py-1 text-gray-600">
+                        View
+                    </th>
+                </tr>
+                </thead>
+
+                <tbody id="placementsTableBody" class="divide-y divide-gray-300 border-b border-b-gray-100">
+                <tr th:each="placement : ${company.getCurrentPlacements()}" class="hover:bg-gray-50">
+                    <td id="placementId" class="px-4 py-3 text-sm text-gray-900 text-center"
+                        th:text="'#' + ${placement.id}"></td>
+                    <td id="studentName" class="px-4 py-3 text-sm text-gray-900"
+                        th:text="${placement.student.firstName} + ' ' + ${placement.student.lastName}"></td>
+                    <td id="companyName" class="px-4 py-3 text-sm text-gray-900"
+                        th:text="${placement.company.companyName}"></td>
+                    <td id="startDate" class="px-4 py-3 text-sm text-gray-900"
+                        th:text="${#temporals.format(placement.startDate, 'dd/MM/yy')}"></td>
+                    <td id="endDate" class="px-4 py-3 text-sm text-gray-900"
+                        th:text="${#temporals.format(placement.endDate, 'dd/MM/yy')}"></td>
+                    <td id="status" class="text-sm text-gray-900 text-center">
+                        <span th:if="${placement.status.getFormattedStatus() == 'In Progress'}"
+                              class="text-nowrap px-2 py-1 text-sm font-medium rounded-full bg-green-100 text-green-800"
+                              th:text="${placement.status.getFormattedStatus()}">
+                        </span>
+                        <span th:if="${placement.status.getFormattedStatus() == 'Upcoming'}"
+                              class="text-nowrap px-2 py-1 text-sm font-medium rounded-full bg-blue-100 text-blue-800"
+                              th:text="${placement.status.getFormattedStatus()}">
+                                        </span>
+                        <span th:if="${placement.status.getFormattedStatus() == 'Pending Student Evaluation'}"
+                              class="text-nowrap px-2 py-1 text-sm font-medium rounded-full bg-yellow-100 text-yellow-800"
+                              th:text="${placement.status.getFormattedStatus()}">
+                                        </span>
+                        <span th:if="${placement.status.getFormattedStatus() == 'Completed'}"
+                              class="text-nowrap px-2 py-1 text-sm font-medium rounded-full bg-gray-100 text-gray-800"
+                              th:text="${placement.status.getFormattedStatus()}">
+                        </span>
+                    </td>
+                    <td class="px-4 py-3 text-sm text-gray-900 text-center">
+                        <a id="viewPlacementLink" th:href="@{/admin/placement/view(id=${placement.id})}">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                 stroke-width="1.5" stroke="currentColor"
+                                 class="h-6 w-6 text-teal-600 hover:text-teal-400 inline-block">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                      d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/>
+                            </svg>
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Show a message for number of rows -->
+        <div id="totalRecordsMsgModal"
+             class="text-center text-xs text-gray-500 py-2">
+            <span th:if="${#lists.size(company.getCurrentPlacements()) == 0}">No records found</span>
+            <span th:if="${#lists.size(company.getCurrentPlacements()) > 0}"
+                  th:text="'Showing ' + ${#lists.size(company.getCurrentPlacements())} + ' records'"></span>
+        </div>
+
+        <div class="flex justify-center my-6">
+            <button id="placementsModalCloseButton" type="button"
+                    class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-400">
+                Close
+            </button>
+        </div>
+    </div>
+</div>
+
+<script src="/js/app.js" defer></script>
+<script src="/js/utilities.js" defer></script>
+<script src="/js/admin/viewCompany.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" defer></script>
+
+</body>
+</html>

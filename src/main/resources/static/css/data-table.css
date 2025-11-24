@@ -1,0 +1,74 @@
+/* DateTable Pagination Button Styling */
+/* General number buttons */
+div.dt-container .dt-paging .dt-paging-button {
+    border-radius: 0.5rem; /* Matches rounded-lg */
+    padding: 0.25rem 0.5rem; /* Matches px-2 py-1 */
+    font-size: 0.875rem; /* Matches text-sm */
+    font-weight: 500; /* Matches font-medium */
+    border: 1px solid #e5e7eb; /* Matches border-gray-200 */
+    background-color: #f3f4f6; /* Matches bg-gray-100 */
+    color: #4b5563 !important; /* Matches text-gray-600 */
+    cursor: pointer;
+    background-image: none !important; /* Remove any gradient background */
+    box-shadow: none !important; /* Remove any box-shadow */
+    filter: none !important; /* Remove any CSS filters (e.g., darkening) */
+}
+
+/* Hover state */
+div.dt-container .dt-paging .dt-paging-button:hover {
+    border: 1px solid #e5e7eb; /* Matches border-gray-200 */
+    background-color: #f9fafb;
+    color: #4b5563 !important; /* Matches text-gray-600 */
+    background-image: none !important; /* Remove any gradient background */
+    box-shadow: none !important; /* Remove any box-shadow */
+    filter: none !important; /* Remove any CSS filters (e.g., darkening) */
+}
+
+/* Disabled buttons */
+div.dt-container .dt-paging .dt-paging-button.disabled {
+    border: 1px solid #d1d5db; /* Light border color (matches border-gray-300) */
+    background-color: #f9fafb; /* Light gray background to indicate disabled */
+    color: #9ca3af !important; /* Lighter gray text to indicate disabled (matches text-gray-400) */
+    opacity: 0.6; /* Slight transparency to reinforce the disabled look */
+    pointer-events: none; /* Disable pointer events to make it non-clickable */
+    cursor: not-allowed; /* Add the "not-allowed" cursor for visual feedback */
+}
+
+/* Active (current) button styling */
+div.dt-container .dt-paging .dt-paging-button.current {
+    border: 1px solid #0d9488; /* Matches border-teal-600 */
+    background-color: #0d9488; /* Matches bg-teal-600 */
+    color: #ffffff !important; /* Matches text-white */
+    cursor: pointer;
+    background-image: none !important; /* Remove any gradient background */
+    box-shadow: none !important; /* Remove any box-shadow */
+    filter: none !important; /* Remove any CSS filters (e.g., darkening) */
+}
+
+/* Active (current) button hover state */
+div.dt-container .dt-paging .dt-paging-button.current:hover {
+    border: 1px solid #0d9488; /* Matches border-teal-600 */
+    background-color: #14b8a6 !important; /* Matches hover:bg-teal-500 */
+    color: #ffffff !important; /* Matches text-white */
+    cursor: pointer;
+    background-image: none !important; /* Remove any gradient background */
+    box-shadow: none !important; /* Remove any box-shadow */
+    filter: none !important; /* Remove any CSS filters (e.g., darkening) */
+}
+
+/* Numeric and date columns - left align instead of default right align */
+table.dataTable th.dt-type-numeric, table.dataTable th.dt-type-date, table.dataTable td.dt-type-numeric, table.dataTable td.dt-type-date {
+    text-align: left;
+}
+
+/* Pagination container */
+div.dt-paging {
+    margin-left: 1rem;
+}
+
+/* Table info */
+div .dt-info {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    text-align: center;
+}

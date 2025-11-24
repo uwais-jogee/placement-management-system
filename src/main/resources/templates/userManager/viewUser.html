@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" class="h-full bg-gray-100">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${'User: ' + user.username + ' | PMS'}"></title>
+    <link rel="stylesheet" href="/css/main.css"/>
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+</head>
+<body>
+<div class="min-h-full">
+    <!-- Nav Bar Fragment -->
+    <div th:replace="fragments :: navUserManager ('')"></div>
+
+    <header class="bg-white shadow">
+        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+            <h1 class="text-3xl font-bold tracking-tight text-gray-900" th:text="${'User: ' + user.username}"></h1>
+        </div>
+    </header>
+
+    <main>
+        <!-- Content -->
+        <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+
+            <!-- Success Toast Fragment -->
+            <div th:if="${successMessage}">
+                <div th:replace="fragments :: successToast (${successMessage})"></div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-x-12 gap-y-12">
+
+                <!-- User details card -->
+                <div class="col-span-1 sm:col-span-2 bg-white shadow rounded-lg max-h-fit">
+                    <div class="px-4 py-5 flex justify-between items-center">
+                        <h2 class="text-lg font-medium leading-6 text-gray-900">User Details</h2>
+                        <div class="space-x-4">
+                            <!-- Activated Status Badge -->
+                            <span th:if="${user.accountNonLocked}"
+                                  class="inline-flex items-center text-nowrap rounded-full px-3 py-1 text-sm font-medium bg-blue-100 text-blue-800">
+                                Active
+                            </span>
+                            <span th:unless="${user.accountNonLocked}"
+                                  class="inline-flex items-center text-nowrap rounded-full px-3 py-1 text-sm font-medium bg-yellow-100 text-yellow-800">
+                                Inactive
+                            </span>
+                            <!-- Enabled Status Badge -->
+                            <span th:if="${user.enabled}"
+                                  class="inline-flex items-center text-nowrap rounded-full px-3 py-1 text-sm font-medium bg-green-100 text-green-800">
+                                Enabled
+                            </span>
+                            <span th:unless="${user.enabled}"
+                                  class="inline-flex items-center text-nowrap rounded-full px-3 py-1 text-sm font-medium bg-red-100 text-red-800">
+                                Disabled
+                            </span>
+                        </div>
+                    </div>
+                    <div class="border-t border-gray-200 px-6 py-5">
+                        <div class="grid grid-cols-1 gap-y-6 sm:grid-cols-6">
+                            <!-- Username -->
+                            <div class="sm:col-span-3">
+                                <label for="username" class="font-medium text-gray-500">Username</label>
+                                <p class="text-gray-800" id="username"
+                                   th:text="${user.username}"></p>
+                            </div>
+
+                            <!-- Role -->
+                            <div class="sm:col-span-3">
+                                <label for="role" class="font-medium text-gray-500">Role</label>
+                                <p class="text-gray-800" id="role"
+                                   th:text="${user.role.getFormattedRole()}"></p>
+                            </div>
+
+                            <!-- First and Last Name -->
+                            <div class="sm:col-span-3">
+                                <label for="name" class="font-medium text-gray-500">Name</label>
+                                <p class="text-gray-800" id="name"
+                                   th:text="${user.firstName + ' ' + user.lastName}"></p>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="sm:col-span-3">
+                                <label for="email" class="font-medium text-gray-500">Email</label>
+                                <p class="text-gray-800" id="email"
+                                   th:text="${user.email}"></p>
+                            </div>
+
+                            <!-- Created On -->
+                            <div class="sm:col-span-3">
+                                <label for="createdOn" class="font-medium text-gray-500">Created On</label>
+                                <p class="text-gray-800" id="createdOn"
+                                   th:text="${#temporals.format(user.created, 'dd/MM/yyyy HH:mm')}"></p>
+                            </div>
+
+                            <!-- Last Login -->
+                            <div class="sm:col-span-3">
+                                <label for="lastLogin" class="font-medium text-gray-500">Last Login</label>
+                                <p class="text-gray-800" id="lastLogin">
+                                    <span th:if="${user.lastLogin}"
+                                          th:text="${#temporals.format(user.lastLogin, 'dd/MM/yyyy HH:mm')}"></span>
+                                    <span th:unless="${user.lastLogin}">Never</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="col-span-1 sm:col-span-1 max-h-fit">
+                    <div class="py-4 flex flex-col space-y-4 items-center">
+                        <button th:if="${!user.accountNonLocked}"
+                                class="bg-teal-600 text-white px-10 py-2 rounded-md hover:bg-teal-500 w-2/3"
+                                id="resendActivationEmailButton">Resend Account Activation Email
+                        </button>
+                        <button class="bg-teal-600 text-white px-10 py-2 rounded-md hover:bg-teal-500 w-2/3"
+                                id="editButton">Edit
+                        </button>
+                        <button th:unless="${user.enabled}"
+                                class="bg-teal-600 text-white px-10 py-2 rounded-md hover:bg-teal-500 w-2/3"
+                                id="enableButton">Enable Account
+                        </button>
+                        <button th:if="${user.enabled}"
+                                class="bg-red-600 text-white px-10 py-2 rounded-md hover:bg-red-400 w-2/3"
+                                id="disableButton">Disable Account
+                        </button>
+                        <button class="bg-red-600 text-white px-10 py-2 rounded-md hover:bg-red-400 w-2/3"
+                                id="deleteButton">Delete Account
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Button Section -->
+                <div class="col-span-1 sm:col-span-2 flex items-center">
+                    <a class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-400"
+                       th:href="@{/user-manager/user-management/all}">
+                        Back
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Modals -->
+
+<!-- Resend Activation Email Modal -->
+<div th:if="${!user.accountNonLocked}" id="resendActivationEmailModal"
+     class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
+    <form th:action="@{/user-manager/user/view/resend-activation-email}" method="POST"
+          class="bg-white rounded-lg p-6 max-w-md w-full text-center shadow-lg">
+        <h2 class="text-lg font-semibold text-gray-800">Are you sure you want to resend the account activation email to
+            the user?</h2>
+        <!-- Hidden input for username -->
+        <input type="hidden" name="username" th:value="${user.username}">
+        <div class="mt-6 flex justify-between">
+            <button id="cancelResendActivationEmailModal"
+                    type="button"
+                    class="rounded-md bg-gray-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">
+                Cancel
+            </button>
+            <button type="submit" id="confirmResendActivationEmailModal"
+                    class="rounded-md bg-teal-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">
+                Resend Account Activation Email
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- Enable Account Modal -->
+<div th:unless="${user.enabled}" id="enableModal"
+     class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
+    <form th:action="@{/user-manager/user/view/enable}" method="POST"
+          class="bg-white rounded-lg p-6 max-w-md w-full text-center shadow-lg">
+        <h2 class="text-lg font-semibold text-gray-800">Are you sure you want to enable this account?</h2>
+        <!-- Hidden input for username -->
+        <input type="hidden" name="username" th:value="${user.username}">
+        <div class="mt-6 flex justify-between">
+            <button id="cancelEnableModal"
+                    type="button"
+                    class="rounded-md bg-gray-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">
+                Cancel
+            </button>
+            <button type="submit" id="confirmEnableModal"
+                    class="rounded-md bg-teal-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">
+                Enable Account
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- Disable Account Modal -->
+<div th:if="${user.enabled}" id="disableModal"
+     class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
+    <form th:action="@{/user-manager/user/view/disable}" method="POST"
+          class="bg-white rounded-lg p-6 max-w-lg w-full text-center shadow-lg">
+        <h2 class="text-lg font-semibold text-gray-800">Are you sure you want to disable this account?</h2>
+        <!-- Hidden input for username -->
+        <input type="hidden" name="username" th:value="${user.username}">
+        <div class="mt-6 flex justify-between">
+            <button id="cancelDisableModal"
+                    type="button"
+                    class="rounded-md bg-gray-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">
+                Cancel
+            </button>
+            <button type="submit" id="confirmDisableModal"
+                    class="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">
+                Disable Account
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- Delete Account Modal -->
+<div id="deleteModal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
+    <form th:action="@{/user-manager/user/view/delete}" method="POST"
+          class="bg-white rounded-lg p-6 max-w-lg w-full text-center shadow-lg">
+        <h2 class="text-lg font-semibold text-gray-800">Are you sure you want to delete this account?</h2>
+        <p class="mt-4 mb-6 text-sm text-gray-800">All related records will also be deleted. This cannot be
+            reversed.</p>
+        <!-- Hidden input for username -->
+        <input type="hidden" name="username" th:value="${user.username}"/>
+        <div class="mt-6 flex justify-between">
+            <button type="button" id="cancelDeleteModal"
+                    class="rounded-md bg-gray-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">
+                Cancel
+            </button>
+            <button type="submit" id="confirmDeleteModal"
+                    class="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">
+                Delete Account
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- Edit User Modal -->
+<div id="editModal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
+    <form id="editForm" th:action="@{/user-manager/user/view/edit}" method="POST"
+          class="bg-white rounded-lg p-6 max-w-lg w-full text-center shadow-lg">
+        <h2 class="text-lg font-semibold text-gray-800">Edit User</h2>
+        <p class="mt-4 mb-6 text-sm text-gray-800 text-center">Make the necessary changes to the user's details below,
+            and then click 'Save Changes' to update the information.</p>
+        <!-- Hidden input for username -->
+        <input type="hidden" name="username" th:value="${user.username}">
+        <div class="flex flex-col space-y-4">
+            <!-- Input field for first name -->
+            <div class="text-left">
+                <label for="editFirstName" class="block text-sm font-medium text-gray-900">First Name</label>
+                <input type="text" id="editFirstName" name="firstName" maxlength="255"
+                       class="mt-2 w-full rounded-md text-sm text-gray-900 p-2 placeholder:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 leading-6"
+                       required
+                       th:value="${user.firstName}"/>
+            </div>
+
+            <!-- Input field for last name -->
+            <div class="text-left">
+                <label for="editLastName" class="block text-sm font-medium text-gray-900">Last Name</label>
+                <input type="text" id="editLastName" name="lastName" maxlength="255"
+                       class="mt-2 w-full rounded-md text-sm text-gray-900 p-2 placeholder:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 leading-6"
+                       required
+                       th:value="${user.lastName}"/>
+            </div>
+
+            <!-- Input field for email -->
+            <div class="text-left">
+                <label for="editEmail" class="block text-sm font-medium text-gray-900">Email</label>
+                <input type="email" pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$" id="editEmail" name="email" maxlength="255"
+                       class="mt-2 w-full rounded-md text-sm text-gray-900 p-2 placeholder:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 leading-6"
+                       required
+                       th:value="${user.email}"/>
+                <p id="editEmailError" class="text-sm text-red-600 mt-1 hidden">Email already in use</p>
+            </div>
+        </div>
+
+        <div class="mt-6 flex justify-between">
+            <button type="button" id="cancelEditModal"
+                    class="rounded-md bg-gray-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-400">
+                Cancel
+            </button>
+            <button type="submit" id="submitEditModal"
+                    class="rounded-md bg-teal-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-500 disabled:bg-teal-600/50 disabled:text-white disabled:cursor-not-allowed">
+                Save Changes
+            </button>
+        </div>
+    </form>
+</div>
+
+<script src="/js/app.js" defer></script>
+<script src="/js/utilities.js" defer></script>
+<script src="/js/userManager/viewUser.js" defer></script>
+
+</body>
+</html>

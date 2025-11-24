@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" class="h-full bg-gray-100">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visits | PMS</title>
+    <link rel="stylesheet" href="/css/main.css"/>
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.2.1/css/dataTables.dataTables.min.css">
+    <!-- DataTable Custom CSS -->
+    <link rel="stylesheet" th:href="@{/css/data-table.css}"/>
+    <!-- FullCalendar Custom CSS -->
+    <link th:href="@{/css/full-calendar.css}" rel="stylesheet"/>
+</head>
+<body>
+<div class="min-h-full">
+    <!-- Nav Bar Fragment -->
+    <div th:replace="fragments :: navTutor ('visits')"></div>
+
+    <header class="bg-white shadow">
+        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+
+            <!-- Success Toast Fragment -->
+            <div th:if="${successMessage}">
+                <div th:replace="fragments :: successToast (${successMessage})"></div>
+            </div>
+
+            <h1 class="text-3xl font-bold tracking-tight text-gray-900">Visits</h1>
+        </div>
+    </header>
+
+    <main>
+        <!-- Content -->
+        <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 sm:grid-cols-4 gap-x-12 gap-y-12">
+
+                <!-- Left Column 3/4: Visits List/Calendar -->
+                <div class="col-span-1 sm:col-span-3 space-y-6">
+                    <div class="bg-white shadow rounded-lg">
+                        <div class="px-4 py-5 flex items-center justify-between">
+                            <h2 class="text-lg font-medium leading-6 text-gray-900">Visits</h2>
+
+                            <!-- Toggle Buttons -->
+                            <div class="inline-flex rounded-md shadow-sm mr-4">
+                                <!-- List Button -->
+                                <button id="listToggle" type="button"
+                                        class="px-4 py-2 text-sm font-medium bg-teal-600 text-white rounded-l-md hover:bg-teal-500">
+                                    List
+                                </button>
+                                <!-- Calendar Button -->
+                                <button id="calendarToggle" type="button"
+                                        class="px-4 py-2 text-sm font-medium bg-gray-200 text-gray-800 rounded-r-md hover:bg-gray-300">
+                                    Calendar
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- List view -->
+                        <div id="listView">
+                            <div class="tableDiv overflow-x-auto overflow-y-auto max-h-screen pb-5">
+                                <table class="w-full table-auto">
+                                    <thead class="border border-y border-gray-300">
+                                    <tr class="bg-gray-200">
+                                        <th scope="col" class="text-xs px-4 py-1 text-gray-600">
+                                            Student Name
+                                        </th>
+                                        <th scope="col" class="text-xs px-4 py-1 text-gray-600">
+                                            Company
+                                        </th>
+                                        <th scope="col" class="text-xs px-4 py-1 text-gray-600">
+                                            Status
+                                        </th>
+                                        <th scope="col" class="text-xs px-4 py-1 text-gray-600">
+                                            Date
+                                        </th>
+                                        <th scope="col" class="text-xs px-4 py-1 text-gray-600">
+                                            Time
+                                        </th>
+                                        <th scope="col" class="text-xs px-4 py-1 text-gray-600">
+                                            Location
+                                        </th>
+                                        <th scope="col" class="text-xs px-4 py-1 text-gray-600">
+                                            Travel
+                                        </th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody class="divide-y divide-gray-300 border-b border-b-gray-100"
+                                           th:attr="data-number-of-rows=${#lists.size(visits)}">
+                                    <tr th:each="visit : ${visits}"
+                                        class="visitRow hover:bg-gray-50 hover:cursor-pointer" th:id="${visit.id}">
+                                        <td th:text="${visit.placement.student.firstName + ' ' + visit.placement.student.lastName}"
+                                            class="px-4 py-3 text-sm text-gray-900">
+                                        </td>
+                                        <td th:text="${visit.placement.company.companyName}"
+                                            class="px-4 py-3 text-sm text-gray-900">
+                                        </td>
+                                        <td class="text-sm text-gray-900">
+                                            <span th:if="${visit.status.getFormattedStatus() == 'Completed'}"
+                                                  class="text-nowrap px-2 py-1 text-sm font-medium rounded-full bg-green-100 text-green-800"
+                                                  th:text="${visit.status.getFormattedStatus()}">
+                                            </span>
+                                            <span th:if="${visit.status.getFormattedStatus() == 'Upcoming'}"
+                                                  class="text-nowrap px-2 py-1 text-sm font-medium rounded-full bg-yellow-100 text-yellow-800"
+                                                  th:text="${visit.status.getFormattedStatus()}">
+                                            </span>
+                                            <span th:if="${visit.status.getFormattedStatus() == 'Cancelled'}"
+                                                  class="text-nowrap px-2 py-1 text-sm font-medium rounded-full bg-red-100 text-red-800"
+                                                  th:text="${visit.status.getFormattedStatus()}">
+                                            </span>
+                                        </td>
+                                        <td th:text="${#temporals.format(visit.date, 'dd/MM/yy')}"
+                                            class="px-4 py-3 text-sm text-gray-900">
+                                        </td>
+                                        <td th:text="${#temporals.format(visit.startTime, 'HH:mm') + ' - ' + #temporals.format(visit.endTime, 'HH:mm')}"
+                                            class="px-4 py-3 text-sm text-gray-900">
+                                        </td>
+                                        <td th:if="${visit.isOnline == true}"
+                                            class="px-4 py-3 text-sm text-gray-900">Online
+                                        </td>
+                                        <td th:unless="${visit.isOnline == true}"
+                                            th:text="${visit.placement.company.address.formattedAddress}"
+                                            class="px-4 py-3 text-sm text-gray-900">
+                                        </td>
+                                        <td th:if="${visit.isOnline == true}"
+                                            class="px-4 py-3 text-sm text-gray-900">N/A
+                                        </td>
+                                        <td th:unless="${visit.isOnline == true}"
+                                            th:text="${visit.travelDuration} + ' mins'"
+                                            class="px-4 py-3 text-sm text-gray-900">
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Calendar view -->
+                        <div class="border-t border-gray-200 px-10 py-6 hidden" id="calendarView">
+                            <div id="calendar" class="w-full h-screen sm:h-fit" th:attr="data-visitsJson=${visitsJson}"></div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Right Column 1/4: View Visit -->
+                <div class="col-span-1 sm:col-span-1">
+                    <div class="bg-white shadow rounded-lg">
+                        <div class="px-4 py-5">
+                            <h2 class="text-lg font-medium leading-6 text-gray-900">Visit Details</h2>
+                        </div>
+                        <div class="border-t border-gray-200 px-4 py-5">
+                            <!-- Placeholder for visit details -->
+                            <p class="text-center text-gray-500 py-10" id="visitDetailsPrompt">
+                                Select a visit to view their details.
+                            </p>
+                            <div id="visitDetailsArea" class="hidden">
+                                <p class="hidden" id="visitId"></p>
+                                <div>
+                                    <label class="text-sm font-medium text-gray-500">Student Name</label>
+                                    <p class="text-sm text-gray-800" id="studentName"></p>
+                                </div>
+                                <div class="mt-2">
+                                    <label class="text-sm font-medium text-gray-500">Company</label>
+                                    <p class="text-sm text-gray-800" id="companyName"></p>
+                                </div>
+                                <div class="mt-2">
+                                    <label class="text-sm font-medium text-gray-500">Date</label>
+                                    <p class="text-sm text-gray-800" id="date"></p>
+                                </div>
+                                <div class="mt-2">
+                                    <label class="text-sm font-medium text-gray-500">Time</label>
+                                    <p class="text-sm text-gray-800" id="startEndTime"></p>
+                                </div>
+                                <div class="mt-2">
+                                    <label class="text-sm font-medium text-gray-500">Location</label>
+                                    <p class="text-sm text-gray-800" id="location"></p>
+                                </div>
+                                <div class="mt-2">
+                                    <label class="text-sm font-medium text-gray-500">Travel Duration</label>
+                                    <p class="text-sm text-gray-800" id="travelDuration"></p>
+                                </div>
+                                <div class="mt-2">
+                                    <label class="text-sm font-medium text-gray-500">Status</label><br/>
+                                    <span id="status"
+                                          class="text-nowrap px-2 py-1 text-sm font-medium rounded-full"></span>
+                                </div>
+                                <!-- Cancel button -->
+                                <div class="mt-6 flex justify-center">
+                                    <button id="cancelVisitButton" type="button"
+                                            class="rounded-md bg-red-600 px-6 py-2 text-sm font-semibold text-white hover:bg-red-400 disabled:bg-red-600/50 disabled:text-white disabled:cursor-not-allowed">
+                                        Cancel Visit
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-12 flex justify-center">
+                        <button class="bg-teal-600 text-white px-4 py-2 rounded-md hover:bg-teal-500 disabled:bg-teal-600/50 disabled:text-white disabled:cursor-not-allowed"
+                                onclick="window.location.href='/tutor/visits/new'">
+                            Organise a New Visit
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Cancel Visit modal -->
+<div id="cancelVisitModal"
+     class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-[999999] hidden">
+    <form id="cancelVisitForm" th:action="@{/tutor/visits/cancel}" method="POST"
+          class="bg-white rounded-lg p-6 max-w-sm w-full text-center shadow-lg">
+        <h2 class="text-lg font-semibold text-gray-800">Confirm Cancellation</h2>
+        <p class="mt-4 text-sm text-gray-800">Are you sure you would like to cancel this visit?</p>
+        <div class="mt-6 flex justify-between">
+            <button type="button" id="goBackCancelVisitModal"
+                    class="rounded-md bg-gray-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">
+                Go Back
+            </button>
+            <button id="confirmSubmitButton" type="submit"
+                    class="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">
+                Cancel Visit
+            </button>
+        </div>
+        <!-- Hidden input to store the ID of the visit to cancel -->
+        <input id="cancelVisitId" type="hidden" name="id"/>
+    </form>
+</div>
+
+<script src="/js/app.js" defer></script>
+<script src="/js/utilities.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js" defer></script>
+<script src="/js/tutor/visits.js" defer></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/2.2.1/js/dataTables.min.js" defer></script>
+<script src="/js/dataTableSetup.js" defer></script>
+
+</body>
+</html>

@@ -1,0 +1,26 @@
+.progress-line {
+    background-color: #d1d5db; /* Light gray */
+}
+
+.progress-circle {
+    background-color: #e5e7eb; /* Light gray */
+    border: 2px solid #e5e7eb;
+}
+
+.progress-circle.active {
+    background-color: #14b8a6; /* Tailwind teal-400 */
+    border-color: #14b8a6; /* Tailwind teal-400 */
+}
+
+.progress-circle.rejected {
+    background-color: #dc2626; /* Tailwind red-600 */
+    border-color: #dc2626; /* Tailwind red-600 */
+}
+
+.progress-line.active {
+    background-color: #14b8a6; /* Tailwind teal-400 */
+}
+
+.progress-line.rejected {
+    background-color: #dc2626; /* Tailwind teal-400 */
+}

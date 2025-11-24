@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" class="h-full bg-gray-100">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | PMS</title>
+    <link rel="stylesheet" href="/css/main.css"/>
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+</head>
+<body>
+<div class="min-h-full">
+    <!-- Nav Bar Fragment -->
+    <div th:replace="fragments :: navAdmin ('dashboard')"></div>
+
+    <header class="bg-white shadow">
+        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+            <h1 class="text-3xl font-bold tracking-tight text-gray-900">Dashboard</h1>
+        </div>
+    </header>
+
+    <main>
+        <!-- Content -->
+        <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-6 gap-x-12 gap-y-12 sm:grid-cols-6">
+
+                <div class="col-span-6 sm:col-span-4">
+                    <!-- Info Cards -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <!-- Card 1 -->
+                        <div class="col-span-1 bg-white shadow rounded-lg">
+                            <div class="p-5 h-full flex flex-col">
+                                <p class="text-xs font-medium text-gray-600">Authorisation Requests</p>
+                                <p class="text-sm font-bold text-gray-800">Pending Initial Admin Approval</p>
+                                <a class="text-6xl font-bold text-teal-600 hover:cursor-pointer hover:text-teal-400 mt-auto"
+                                   th:href="@{/admin/auth-requests/pending-initial-admin-approval}"
+                                   title="Go to Authorisation Requests - Pending Initial Approval">
+                                    <h3 th:text="${pendingInitialAdminApproval}" class="mt-1 text-center">X</h3>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Card 2 -->
+                        <div class="col-span-1 bg-white shadow rounded-lg">
+                            <div class="p-5 h-full flex flex-col">
+                                <p class="text-xs font-medium text-gray-600">Authorisation Requests</p>
+                                <p class="text-sm font-bold text-gray-800">Pending Company Approval</p>
+                                <a class="text-6xl font-bold text-teal-600 hover:cursor-pointer hover:text-teal-400 mt-auto"
+                                   th:href="@{/admin/auth-requests/pending-company-approval}"
+                                   title="Go to Authorisation Requests - Pending Company Approval">
+                                    <h3 th:text="${pendingCompanyApproval}" class="mt-1 text-center">X</h3>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Card 3 -->
+                        <div class="col-span-1 bg-white shadow rounded-lg">
+                            <div class="p-5 h-full flex flex-col">
+                                <p class="text-xs font-medium text-gray-600">Authorisation Requests</p>
+                                <p class="text-sm font-bold text-gray-800">Pending Final Approval</p>
+                                <a class="text-6xl font-bold text-teal-600 hover:cursor-pointer hover:text-teal-400 mt-auto"
+                                   th:href="@{/admin/auth-requests/pending-final-admin-approval}"
+                                   title="Go to Authorisation Requests - Pending Final Approval">
+                                    <h3 th:text="${pendingFinalAdminApproval}" class="mt-1 text-center">X</h3>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Card 4 -->
+                        <div class="col-span-1 bg-white shadow rounded-lg">
+                            <div class="p-5 h-full flex flex-col">
+                                <p class="text-xs font-medium text-gray-600">Placements</p>
+                                <p class="text-sm font-bold text-gray-800">In Progress</p>
+                                <a class="text-6xl font-bold text-teal-600 hover:cursor-pointer hover:text-teal-400 mt-auto"
+                                   th:href="@{/admin/placements/in-progress}"
+                                   title="Go to Placements - In Progress">
+                                    <h3 th:text="${inProgressPlacements}" class="mt-1 text-center">X</h3>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tasks -->
+                <div class="col-span-6 sm:col-span-2 bg-white shadow rounded-lg max-h-fit">
+                    <div class="px-4 py-5">
+                        <h2 class="text-lg font-medium leading-6 text-gray-900">Tasks</h2>
+                    </div>
+                    <div class="border-t border-gray-200">
+                        <!-- Tasks List -->
+                        <ul role="list" class="divide-y divide-gray-200" id="tasksList">
+                            <li th:if="${pendingInitialAdminApproval == 0 && pendingFinalAdminApproval == 0}"
+                                class="py-4 px-4 flex items-start justify-center">
+                                <p class="text-sm text-gray-500 text-center">No Tasks.</p>
+                            </li>
+
+                            <!-- Pending Initial Admin Task -->
+                            <li th:if="${pendingInitialAdminApproval} > 0" class="py-4 px-4 flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                     stroke-width="1.5" stroke="currentColor"
+                                     class="h-6 w-6 text-teal-600 flex-shrink-0">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"/>
+                                </svg>
+                                <div class="ml-4">
+                                    <p class="text-sm text-gray-800 font-semibold">Review Authorisation Requests
+                                        Pending Initial Approval</p>
+                                    <p class="text-sm text-gray-500 mt-1">
+                                        <span th:text="'There are ' + ${pendingInitialAdminApproval} + ' authorisation requests requiring review and initial approval.'"></span><br/>
+                                        <a th:href="@{/admin/auth-requests/pending-initial-admin-approval}"
+                                           class="text-teal-600 hover:underline line">View</a>
+                                    </p>
+                                </div>
+                            </li>
+
+                            <!-- Pending Final Admin Task -->
+                            <li th:if="${pendingFinalAdminApproval} > 0" class="py-4 px-4 flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                     stroke-width="1.5" stroke="currentColor"
+                                     class="h-6 w-6 text-teal-600 flex-shrink-0">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"/>
+                                </svg>
+                                <div class="ml-4">
+                                    <p class="text-sm text-gray-800 font-semibold">Review Authorisation Requests
+                                        Pending Final Approval</p>
+                                    <p class="text-sm text-gray-500 mt-1">
+                                        <span th:text="'There are ' + ${pendingFinalAdminApproval} + ' authorisation requests requiring review and final approval.'"></span><br/>
+                                        <a th:href="@{/admin/auth-requests/pending-final-admin-approval}"
+                                           class="text-teal-600 hover:underline">View</a>
+                                    </p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- In Progress Placements Map -->
+                <div class="col-span-6 sm:col-span-3 bg-white shadow rounded-lg">
+                    <div class="px-4 py-5">
+                        <h2 class="text-lg font-medium leading-6 text-gray-900">Map - Placements In Progress</h2>
+                        <p class="mt-1 text-sm text-gray-500">View the locations of placements that are currently in
+                            progress</p>
+                    </div>
+                    <div class="border-t border-gray-200 p-6">
+                        <div id="map" th:attr="data-placement-addresses=${placementAddresses}"
+                             class="w-full h-96"></div>
+                    </div>
+                </div>
+
+                <!-- Placements over time chart -->
+                <div class="col-span-6 sm:col-span-3 bg-white shadow rounded-lg max-h-fit">
+                    <div class="px-4 py-5">
+                        <h2 class="text-lg font-medium leading-6 text-gray-900">Placements Over Time</h2>
+                    </div>
+                    <div class="border-t border-gray-200 p-6">
+                        <div id="placementsOverTimeDiv" th:attr="data-chart-data=${chartData}">
+                            <canvas id="placementsOverTimeChart" class="w-full h-96"></canvas>
+                        </div>
+                        <p id="placementsOverTimeNoData" class="text-sm text-gray-500 px-4 text-center hidden">No data found.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+</div>
+
+
+<script src="/js/app.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" defer></script>
+<script src="/js/admin/dashboard.js" defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCWEiwbCY0v7DjfGIs9BsPrFbpMa0Tb8fQ&libraries=places&callback=initGoogle" defer></script>
+
+</body>
+</html>

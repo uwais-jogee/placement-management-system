@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" class="h-full bg-gray-100">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${'Placement Authorisation Request #' + authRequest.id + ' | PMS'}"></title>
+    <link rel="stylesheet" href="/css/main.css"/>
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <!-- Progress Bar Styling -->
+    <link th:href="@{/css/auth-request-progress-bar.css}" rel="stylesheet"/>
+</head>
+<body>
+<div class="min-h-full">
+    <!-- Nav Bar Fragment -->
+    <div th:replace="fragments :: navStudent ('')"></div>
+
+    <header class="bg-white shadow">
+        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+            <h1 class="text-3xl font-bold tracking-tight text-gray-900"
+                th:text="${'Placement Authorisation Request #' + authRequest.id}"></h1>
+        </div>
+    </header>
+
+    <main>
+        <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+            <!-- Content -->
+            <div class="grid grid-cols-8 gap-x-12 gap-y-12 sm:grid-cols-8">
+
+                <!-- Hidden div with data attribute for status -->
+                <div id="authRequestStatus" class="hidden" th:attr="data-status=${authRequest.status}"></div>
+
+                <!-- Status Progress Bar -->
+                <div class="relative col-span-8 sm:col-span-8">
+                    <div class="flex justify-between mb-2">
+                        <span class="progress-label text-xs sm:text-sm font-medium text-gray-600 text-center">Submitted</span>
+                        <span class="progress-label text-xs sm:text-sm font-medium text-gray-600 text-center">Initial Approval</span>
+                        <span class="progress-label text-xs sm:text-sm font-medium text-gray-600 text-center">Company Approval</span>
+                        <span class="progress-label text-xs sm:text-sm font-medium text-gray-600 text-center">Final Approval</span>
+                        <span class="progress-label text-xs sm:text-sm font-medium text-gray-600 text-center">Approved</span>
+                    </div>
+                    <div class="flex items-center">
+                        <!-- Stage 1 (Submitted) -->
+                        <div class="flex flex-col items-center">
+                            <div class="progress-circle w-6 h-6 rounded-full flex items-center justify-center text-sm"
+                                 id="submitted"></div>
+                        </div>
+
+                        <!-- Stage 2 (Initial Approval) -->
+                        <div class="progress-line flex-grow h-1" id="lineToInitialApproval"></div>
+                        <div class="flex flex-col items-center">
+                            <div class="progress-circle w-6 h-6 rounded-full flex items-center justify-center text-sm"
+                                 id="initialApproval"></div>
+                        </div>
+
+                        <!-- Stage 3 (Company Approval) -->
+                        <div class="progress-line flex-grow h-1" id="lineToCompanyApproval"></div>
+                        <div class="flex flex-col items-center">
+                            <div class="progress-circle w-6 h-6 rounded-full flex items-center justify-center text-sm"
+                                 id="companyApproval"></div>
+                        </div>
+
+                        <!-- Stage 4 (Final Approval) -->
+                        <div class="progress-line flex-grow h-1" id="lineToFinalApproval"></div>
+                        <div class="flex flex-col items-center">
+                            <div class="progress-circle w-6 h-6 rounded-full flex items-center justify-center text-sm"
+                                 id="finalApproval"></div>
+                        </div>
+
+                        <!-- Stage 5 (Approved) -->
+                        <div class="progress-line flex-grow h-1" id="lineToApproved"></div>
+                        <div class="flex flex-col items-center">
+                            <div class="progress-circle w-6 h-6 rounded-full flex items-center justify-center text-sm"
+                                 id="approved"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Request Details Card -->
+                <div class="col-span-8 sm:col-span-8 bg-white shadow rounded-lg max-h-fit">
+                    <div class="px-4 py-5">
+                        <h2 class="text-lg font-medium leading-6 text-gray-900">Request Details</h2>
+                    </div>
+                    <div class="border-t border-gray-200 px-6 py-5">
+                        <div class="grid grid-cols-1 gap-y-6 sm:grid-cols-6">
+                            <!-- ID -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">Request ID</label>
+                                <p class="text-sm text-gray-800" th:text="'#' + ${authRequest.id}"></p>
+                            </div>
+
+                            <!-- Requested On -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">Request On</label>
+                                <p class="text-sm text-gray-800"
+                                   th:text="${#temporals.format(authRequest.requestedOn, 'dd/MM/yy')}"></p>
+                            </div>
+
+                            <!-- Status -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">Request Status</label>
+                                <p class="text-sm text-gray-800"
+                                   th:text="${authRequest.status.getFormattedStatus()}"></p>
+                            </div>
+
+                            <!-- Rejection reason (displays if the status is one of the rejected) -->
+                            <div class="sm:col-span-6"
+                                 th:if="${authRequest.status.getFormattedStatus() == 'Rejected Initial By Admin' or authRequest.status.getFormattedStatus() == 'Rejected By Company' or authRequest.status.getFormattedStatus() == 'Rejected Final By Admin'}">
+                                <label class="text-sm font-medium text-gray-500">Rejection Reason</label>
+                                <p class="text-sm text-gray-800" th:text="${authRequest.rejectionReason}"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Student Details Card -->
+                <div class="col-span-8 sm:col-span-8 bg-white shadow rounded-lg max-h-fit">
+                    <div class="px-4 py-5">
+                        <h2 class="text-lg font-medium leading-6 text-gray-900">Student Details</h2>
+                    </div>
+                    <div class="border-t border-gray-200 px-6 py-5">
+                        <div class="grid grid-cols-1 gap-y-6 sm:grid-cols-6">
+                            <!-- Student Username -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">Username</label>
+                                <p class="text-sm text-gray-800" th:text="${authRequest.student.username}"></p>
+                            </div>
+
+                            <!-- Student Name -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">Name</label>
+                                <p class="text-sm text-gray-800"
+                                   th:text="${authRequest.student.firstName + ' ' + authRequest.student.lastName}"></p>
+                            </div>
+
+                            <!-- Student Email -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">Email</label>
+                                <p class="text-sm text-gray-800" th:text="${authRequest.student.email}"></p>
+                            </div>
+
+                            <!-- Student Phone -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">Contact Number</label>
+                                <p class="text-sm text-gray-800" th:text="${authRequest.studentPhone}"></p>
+                            </div>
+
+                            <!-- Programme of Study -->
+                            <div class="sm:col-span-6">
+                                <label class="text-sm font-medium text-gray-500">Programme of Study</label>
+                                <p class="text-sm text-gray-800" th:text="${authRequest.programmeOfStudy}"></p>
+                            </div>
+
+                            <!-- International Student -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">International Student</label>
+                                <p class="text-sm text-gray-800" th:text="${authRequest.internationStudent}"></p>
+                            </div>
+
+                            <!-- Visa Status -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">Visa Status</label>
+                                <p class="text-sm text-gray-800" th:text="${authRequest.visaStatus}"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Company Details Card -->
+                <div class="col-span-8 sm:col-span-8 bg-white shadow rounded-lg max-h-fit">
+                    <div class="px-4 py-5">
+                        <h2 class="text-lg font-medium leading-6 text-gray-900">Company Details</h2>
+                    </div>
+                    <div class="border-t border-gray-200 px-6 py-5">
+                        <div class="grid grid-cols-1 gap-y-6 sm:grid-cols-6">
+                            <!-- Company Name -->
+                            <div class="sm:col-span-6">
+                                <label class="text-sm font-medium text-gray-500">Company Name</label>
+                                <p class="text-sm text-gray-800"
+                                   th:if="${authRequest.companySelect == 'Other'}"
+                                   th:text="${authRequest.companyNameOther}"></p>
+                                <p class="text-sm text-gray-800"
+                                   th:if="${authRequest.companySelect != 'Other'}"
+                                   th:text="${authRequest.company.companyName}"></p>
+                            </div>
+
+                            <!-- Company Address -->
+                            <div class="sm:col-span-6">
+                                <label class="text-sm font-medium text-gray-500">Address</label>
+                                <p class="text-sm text-gray-800" th:text="${authRequest.companyFormattedAddress}"></p>
+                            </div>
+
+                            <!-- Company Industry -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">Industry</label>
+                                <p class="text-sm text-gray-800" th:text="${authRequest.companyIndustry}"></p>
+                            </div>
+
+                            <!-- Company Web Address -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">Web Address</label>
+                                <p class="text-sm text-gray-800" th:text="${authRequest.companyWebAddress}"></p>
+                            </div>
+
+                            <!-- Company Contact Name -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">Company Contact Name</label>
+                                <p class="text-sm text-gray-800" th:text="${authRequest.companyContactName}"></p>
+                            </div>
+
+                            <!-- Company Contact Email -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">Contact Email</label>
+                                <p class="text-sm text-gray-800" th:text="${authRequest.companyContactEmail}"></p>
+                            </div>
+
+                            <!-- Company Contact Phone -->
+                            <div class="sm:col-span-3">
+                                <div>
+                                    <label class="text-sm font-medium text-gray-500">Company Contact Phone</label>
+                                    <p class="text-sm text-gray-800" th:text="${authRequest.companyContactPhone}"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Placement Details Card -->
+                <div class="col-span-8 sm:col-span-8 bg-white shadow rounded-lg max-h-fit">
+                    <div class="px-4 py-5">
+                        <h2 class="text-lg font-medium leading-6 text-gray-900">Placement Details</h2>
+                    </div>
+                    <div class="border-t border-gray-200 px-6 py-5">
+                        <div class="grid grid-cols-1 gap-y-6 sm:grid-cols-6">
+                            <!-- Role Title -->
+                            <div class="sm:col-span-6">
+                                <label class="text-sm font-medium text-gray-500">Role Title</label>
+                                <p class="text-sm text-gray-800" th:text="${authRequest.roleTitle}"></p>
+                            </div>
+
+                            <!-- Placement Start Date -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">Start Date</label>
+                                <p class="text-sm text-gray-800"
+                                   th:text="${#temporals.format(authRequest.placementStartDate, 'dd/MM/yy')}"></p>
+                            </div>
+
+                            <!-- Placement End Date -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">End Date</label>
+                                <p class="text-sm text-gray-800"
+                                   th:text="${#temporals.format(authRequest.placementEndDate, 'dd/MM/yy')}"></p>
+                            </div>
+
+                            <!-- Working Hours per Week -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">Working Hours</label>
+                                <p class="text-sm text-gray-800" th:text="${authRequest.hoursPerWeek}"></p>
+                            </div>
+
+                            <!-- Annual Salary -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">Salary</label>
+                                <p class="text-sm text-gray-800" th:text="'£' + ${#numbers.formatDecimal(authRequest.salary, 1, 'COMMA', 2, 'POINT')}"></p>
+                            </div>
+
+                            <!-- Role Description -->
+                            <div class="sm:col-span-6">
+                                <label class="text-sm font-medium text-gray-500">Role Description</label>
+                                <p class="text-sm text-gray-800" th:text="${authRequest.roleDescription}"></p>
+                            </div>
+
+                            <!-- Remote Work Question -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">Remote Work</label>
+                                <p class="text-sm text-gray-800" th:text="${authRequest.remote}"></p>
+                            </div>
+
+                            <!-- Travel Arrangements -->
+                            <div class="sm:col-span-6">
+                                <label class="text-sm font-medium text-gray-500">How will you travel to and from the
+                                    placement and your residence?</label>
+                                <p class="text-sm text-gray-800" th:text="${authRequest.travelArrangements}"></p>
+                            </div>
+
+                            <!-- Residential Arrangements -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">What are your residential arrangements
+                                    while on placement?</label>
+                                <p class="text-sm text-gray-800" th:text="${authRequest.residentialArrangements}"></p>
+                            </div>
+
+                            <!-- Adjustments for Disability or Health Condition -->
+                            <div class="sm:col-span-6">
+                                <label class="text-sm font-medium text-gray-500">Have you considered any adjustments
+                                    with
+                                    your employer that may be required for you to carry out the role relating to any
+                                    disability or health condition?</label>
+                                <p class="text-sm text-gray-800" th:text="${authRequest.personalAdjustments}"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Button Section -->
+                <div class="flex items-center">
+                    <a class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-400"
+                       th:href="@{/student/dashboard}">Back</a>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script src="/js/app.js" defer></script>
+<script src="/js/student/viewAuthRequest.js" defer></script>
+
+</body>
+</html>

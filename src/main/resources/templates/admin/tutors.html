@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" class="h-full bg-gray-100">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutors | PMS</title>
+    <link rel="stylesheet" href="/css/main.css"/>
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.2.1/css/dataTables.dataTables.min.css">
+    <!-- DataTable Custom CSS -->
+    <link rel="stylesheet" th:href="@{/css/data-table.css}"/>
+</head>
+<body>
+<div class="min-h-full">
+    <!-- Nav Bar Fragment -->
+    <div th:replace="fragments :: navAdmin ('tutors')"></div>
+
+    <header class="bg-white shadow">
+        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+            <h1 class="text-3xl font-bold tracking-tight text-gray-900">Tutors</h1>
+        </div>
+    </header>
+
+    <main>
+        <!-- Content -->
+        <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+            <div class="tableDiv bg-white shadow rounded-lg max-h-fit">
+                <div class="px-4 py-5 flex justify-between items-center">
+                    <h2 class="text-lg font-medium leading-6 text-gray-900">All Tutors</h2>
+                    <!-- Search Bar -->
+                    <div class="w-1/3">
+                        <input type="search"
+                               class="tableSearch block w-full rounded border border-gray-300 bg-white px-2 py-1"
+                               placeholder="Search" aria-label="Search"/>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto overflow-y-auto max-h-screen pb-5">
+                    <table class="w-full table-auto">
+                        <thead class="border border-y border-gray-300">
+                        <tr class="bg-gray-200">
+                            <th scope="col" class="text-xs px-4 py-1 text-gray-600">
+                                Username
+                            </th>
+                            <th scope="col" class="text-xs px-4 py-1 text-gray-600">
+                                Name
+                            </th>
+                            <th scope="col" class="text-xs px-4 py-1 text-gray-600">
+                                Email
+                            </th>
+                            <th scope="col" class="text-xs px-4 py-1 text-gray-600">
+                                Number of Placements
+                            </th>
+                            <th scope="col" class="text-xs px-4 py-1 text-gray-600">
+                                View Current Placements
+                            </th>
+                        </tr>
+                        </thead>
+
+                        <tbody class="divide-y divide-gray-300 border-b border-b-gray-100">
+                        <tr th:each="tutor : ${tutors}" class="hover:bg-gray-50">
+                            <td th:text="${tutor.username}"
+                                class="px-4 py-3 text-sm text-gray-900">
+                            </td>
+                            <td th:text="${tutor.firstName + ' ' + tutor.lastName}"
+                                class="px-4 py-3 text-sm text-gray-900">
+                            </td>
+                            <td th:text="${tutor.email}"
+                                class="px-4 py-3 text-sm text-gray-900">
+                            </td>
+                            <td th:text="${#lists.size(tutor.placements)}"
+                                class="px-4 py-3 text-sm text-gray-900">
+                            </td>
+                            <td class="px-4 py-3 text-sm text-gray-900">
+                                <a th:attr="data-tutor-username=${tutor.username}, data-tutor-name=${tutor.firstName + ' ' + tutor.lastName}"
+                                   class="viewPlacementsButton hover:cursor-pointer">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                         stroke-width="1.5" stroke="currentColor"
+                                         class="h-6 w-6 text-teal-600 hover:text-teal-400 inline-block">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                              d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                              d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                                    </svg>
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Placements Modal -->
+<div id="placementsModal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
+    <div class="w-3/4 max-h-3/4 bg-white shadow rounded-lg">
+        <div class="px-4 py-5">
+            <h2 class="text-lg font-medium leading-6 text-gray-900" id="placementsModalTitle"></h2>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table id="placementsModalTable" class="w-full table-auto">
+                <thead class="border border-y border-gray-300">
+                <tr class="bg-gray-200">
+                    <th scope="col" class="text-center text-sm px-4 py-1 text-gray-600">
+                        ID
+                    </th>
+                    <th scope="col" class="text-left text-sm px-4 py-1 text-gray-600">
+                        Student Name
+                    </th>
+                    <th scope="col" class="text-left text-sm px-4 py-1 text-gray-600">
+                        Company
+                    </th>
+                    <th scope="col" class="text-left text-sm px-4 py-1 text-gray-600">
+                        Start Date
+                    </th>
+                    <th scope="col" class="text-left text-sm px-4 py-1 text-gray-600">
+                        End Date
+                    </th>
+                    <th scope="col" class="text-center text-sm px-4 py-1 text-gray-600">
+                        Status
+                    </th>
+                    <th scope="col" class="text-center text-sm px-4 py-1 text-gray-600">
+                        View
+                    </th>
+                </tr>
+                </thead>
+
+                <tbody id="placementsModalTableBody" class="divide-y divide-gray-300 border-b border-b-gray-100"></tbody>
+            </table>
+        </div>
+
+        <!-- Show a message for number of rows -->
+        <div
+                id="placementsModalTableInfo"
+                class="text-center text-xs text-gray-500 py-2">
+        </div>
+
+        <div class="flex justify-center my-6">
+            <button id="placementsModalCloseButton" type="button" class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-400">
+                Close
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<script src="/js/app.js" defer></script>
+<script src="/js/utilities.js" defer></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/2.2.1/js/dataTables.min.js" defer></script>
+<script src="/js/dataTableSetup.js" defer></script>
+<script src="/js/admin/tutors.js" defer></script>
+
+</body>
+</html>

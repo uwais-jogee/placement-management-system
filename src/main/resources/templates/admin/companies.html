@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" class="h-full bg-gray-100">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Companies | PMS</title>
+    <link rel="stylesheet" href="/css/main.css"/>
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.2.1/css/dataTables.dataTables.min.css">
+    <!-- DataTable Custom CSS -->
+    <link rel="stylesheet" th:href="@{/css/data-table.css}"/>
+</head>
+<body>
+<div class="min-h-full">
+    <!-- Nav Bar Fragment -->
+    <div th:replace="fragments :: navAdmin ('companies')"></div>
+
+    <header class="bg-white shadow">
+        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+            <h1 class="text-3xl font-bold tracking-tight text-gray-900">Companies</h1>
+        </div>
+    </header>
+
+    <main>
+        <!-- Content -->
+        <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+
+            <!-- Success Toast Fragment -->
+            <div th:if="${successMessage}">
+                <div th:replace="fragments :: successToast (${successMessage})"></div>
+            </div>
+
+            <div class="grid grid-cols-6 gap-x-12 gap-y-12 sm:grid-cols-6">
+                <div class="tableDiv col-span-6 sm:col-span-6 bg-white shadow rounded-lg max-h-fit">
+                    <div class="px-4 py-5 flex justify-between items-center">
+                        <h2 class="text-lg font-medium leading-6 text-gray-900">All Companies</h2>
+                        <!-- Search Bar -->
+                        <div class="w-1/3">
+                            <input type="search"
+                                   class="tableSearch block w-full rounded border border-gray-300 bg-white px-2 py-1"
+                                   placeholder="Search" aria-label="Search"/>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto overflow-y-auto max-h-screen pb-5">
+                        <table class="w-full table-auto">
+                            <thead class="border border-y border-gray-300">
+                            <tr class="bg-gray-200">
+                                <th scope="col" class="text-xs px-4 py-1 text-gray-600">
+                                    ID
+                                </th>
+                                <th scope="col" class="text-xs px-4 py-1 text-gray-600">
+                                    Name
+                                </th>
+                                <th scope="col" class="text-xs px-4 py-1 text-gray-600">
+                                    Address
+                                </th>
+                                <th scope="col" class="text-xs px-4 py-1 text-gray-600">
+                                    Average Rating
+                                </th>
+                                <th scope="col" class="text-xs px-4 py-1 text-gray-600">
+                                    Number of Current Placements
+                                </th>
+                                <th scope="col" class="text-xs px-4 py-1 text-gray-600">
+                                    View Current Placements
+                                </th>
+                                <th scope="col" class="text-xs px-4 py-1 text-gray-600">
+                                    View
+                                </th>
+                            </tr>
+                            </thead>
+
+                            <tbody class="divide-y divide-gray-300 border-b border-b-gray-100">
+                            <tr th:each="company : ${companies}" class="hover:bg-gray-50">
+                                <td th:text="${'#' + company.id}"
+                                    class="px-4 py-3 text-sm text-gray-900">
+                                </td>
+                                <td th:text="${company.companyName}"
+                                    class="px-4 py-3 text-sm text-gray-900">
+                                </td>
+                                <td th:text="${company.address.formattedAddress}"
+                                    class="px-4 py-3 text-sm text-gray-900">
+                                </td>
+                                <td th:text="${#numbers.formatDecimal(company.getAverageOverallRating(), 1, 2, 'POINT')}"
+                                    class="px-4 py-3 text-sm text-gray-900 ">
+                                </td>
+                                <td th:text="${#lists.size(company.getCurrentPlacements())}"
+                                    class="px-4 py-3 text-sm text-gray-900 ">
+                                </td>
+                                <td class="px-4 py-3 text-sm text-gray-900">
+                                    <a th:attr="data-company-id=${company.id}, data-company-name=${company.companyName}"
+                                       class="viewPlacementsButton hover:cursor-pointer">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                             stroke-width="1.5" stroke="currentColor"
+                                             class="h-6 w-6 text-teal-600 hover:text-teal-400 inline-block">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                  d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"/>
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                  d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                                        </svg>
+                                    </a>
+                                </td>
+                                <td class="px-4 py-3 text-sm text-gray-900 text-center">
+                                    <a th:href="@{/admin/company/view(id=${company.id})}" class="block">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                             stroke-width="1.5" stroke="currentColor"
+                                             class="h-6 w-6 text-teal-600 hover:text-teal-400 inline-block">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                  d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/>
+                                        </svg>
+                                    </a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="px-4 pt-2 pb-5 flex justify-end">
+                        <button id="createCompanyButton"
+                                class="rounded-md bg-teal-600 px-6 py-2 text-sm font-semibold text-white hover:bg-teal-500">
+                            Create a New Company
+                        </button>
+                    </div>
+
+                </div>
+
+                <!-- Companies Map -->
+                <div class="col-span-6 sm:col-span-3 bg-white shadow rounded-lg max-h-fit">
+                    <div class="px-4 py-5">
+                        <h2 class="text-lg font-medium leading-6 text-gray-900">Map - All Companies</h2>
+                        <p class="mt-1 text-sm text-gray-500">View the locations of all placement providing
+                            companies.</p>
+                    </div>
+                    <div class="border-t border-gray-200 p-6">
+                        <div id="map" th:attr="data-company-addresses=${companyAddresses}"
+                             class="w-full h-96"></div>
+                    </div>
+                </div>
+
+                <!-- Chart -->
+                <div class="col-span-6 sm:col-span-3 bg-white shadow rounded-lg">
+                    <div class="px-4 py-5">
+                        <h2 class="text-lg font-medium leading-6 text-gray-900">Top Companies by Feedback Category</h2>
+                        <!-- Filter buttons -->
+                        <div class="mt-2 space-x-2 space-y-2">
+                            <button type="button" id="overallButton"
+                                    class="filterButtons rounded-lg px-2 py-1 text-sm font-medium border border-gray-200 bg-gray-100 text-gray-600 hover:bg-gray-50"
+                                    th:attr="data-category='overall_rating'">Overall</button>
+                            <button type="button" id="trainingButton"
+                                    class="filterButtons rounded-lg px-2 py-1 text-sm font-medium border border-gray-200 bg-gray-100 text-gray-600 hover:bg-gray-50"
+                                    th:attr="data-category='training_rating'">Training</button>
+                            <button type="button" id="supportButton"
+                                    class="filterButtons rounded-lg px-2 py-1 text-sm font-medium border border-gray-200 bg-gray-100 text-gray-600 hover:bg-gray-50"
+                                    th:attr="data-category='support_rating'">Support</button>
+                            <button type="button" id="feedbackButton"
+                                    class="filterButtons rounded-lg px-2 py-1 text-sm font-medium border border-gray-200 bg-gray-100 text-gray-600 hover:bg-gray-50"
+                                    th:attr="data-category='feedback_rating'">Feedback</button>
+                            <button type="button" id="industrySkillsButton"
+                                    class="filterButtons rounded-lg px-2 py-1 text-sm font-medium border border-gray-200 bg-gray-100 text-gray-600 hover:bg-gray-50"
+                                    th:attr="data-category='industry_skills_rating'">Industry Skills</button>
+                            <button type="button" id="softSkillsButton"
+                                    class="filterButtons rounded-lg px-2 py-1 text-sm font-medium border border-gray-200 bg-gray-100 text-gray-600 hover:bg-gray-50"
+                                    th:attr="data-category='soft_skills_rating'">Soft Skills</button>
+                            <button type="button" id="resourcesButton"
+                                    class="filterButtons rounded-lg px-2 py-1 text-sm font-medium border border-gray-200 bg-gray-100 text-gray-600 hover:bg-gray-50"
+                                    th:attr="data-category='resources_rating'">Resources</button>
+                            <button type="button" id="workEnvironmentButton"
+                                    class="filterButtons rounded-lg px-2 py-1 text-sm font-medium border border-gray-200 bg-gray-100 text-gray-600 hover:bg-gray-50"
+                                    th:attr="data-category='work_environment_rating'">Work Environment</button>
+                            <button type="button" id="recommendationButton"
+                                    class="filterButtons rounded-lg px-2 py-1 text-sm font-medium border border-gray-200 bg-gray-100 text-gray-600 hover:bg-gray-50"
+                                    th:attr="data-category='recommendation_rating'">Recommendation</button>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-gray-200 p-6">
+                        <div id="topCompaniesDiv">
+                            <canvas id="topCompaniesChart" class="w-full h-96"></canvas>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Placements Modal -->
+<div id="placementsModal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
+    <div class="w-3/4 max-h-3/4 bg-white shadow rounded-lg">
+        <div class="px-4 py-5">
+            <h2 class="text-lg font-medium leading-6 text-gray-900" id="placementsModalTitle"></h2>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table id="placementsModalTable" class="w-full table-auto">
+                <thead class="border border-y border-gray-300">
+                <tr class="bg-gray-200">
+                    <th scope="col" class="text-center text-sm px-4 py-1 text-gray-600">
+                        ID
+                    </th>
+                    <th scope="col" class="text-left text-sm px-4 py-1 text-gray-600">
+                        Student Name
+                    </th>
+                    <th scope="col" class="text-left text-sm px-4 py-1 text-gray-600">
+                        Company
+                    </th>
+                    <th scope="col" class="text-left text-sm px-4 py-1 text-gray-600">
+                        Start Date
+                    </th>
+                    <th scope="col" class="text-left text-sm px-4 py-1 text-gray-600">
+                        End Date
+                    </th>
+                    <th scope="col" class="text-center text-sm px-4 py-1 text-gray-600">
+                        Status
+                    </th>
+                    <th scope="col" class="text-center text-sm px-4 py-1 text-gray-600">
+                        View
+                    </th>
+                </tr>
+                </thead>
+
+                <tbody id="placementsModalTableBody"
+                       class="divide-y divide-gray-300 border-b border-b-gray-100"></tbody>
+            </table>
+        </div>
+
+        <!-- Show a message for number of rows -->
+        <div
+                id="placementsModalTableInfo"
+                class="text-center text-xs text-gray-500 py-2">
+        </div>
+
+        <div class="flex justify-center my-6">
+            <button id="placementsModalCloseButton" type="button"
+                    class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-400">
+                Close
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<!-- Create Company Modal -->
+<div id="createCompanyModal"
+     class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
+    <form id="createCompanyForm" th:action="@{/admin/company/new/submit}" method="POST" th:object="${newCompany}"
+          class="bg-white rounded-lg p-6 max-w-lg w-full text-center shadow-lg">
+        <h2 class="text-lg font-semibold text-gray-800">Create New Company</h2>
+        <p class="mt-4 text-sm text-gray-800 text-center">Fill in the details below to create a new company profile.</p>
+        <p class="mt-2 mb-6 text-sm text-gray-800 text-center">Please ensure all information is accurate before
+            submission, as the entry cannot be changed later.</p>
+
+        <!-- Input field for Company Name -->
+        <div class="mb-4 text-left">
+            <label for="companyName" class="block text-sm font-medium text-gray-900">Company Name</label>
+            <input type="text" id="companyName" name="name" maxlength="255"
+                   class="mt-2 w-full rounded-md text-sm text-gray-900 px-2 py-1.5 placeholder:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 leading-6"
+                   required/>
+        </div>
+
+        <!-- Input field for Address -->
+        <div class="mb-4 text-left">
+            <label for="companyAddress" class="block text-sm font-medium text-gray-900">Address</label>
+            <input type="text" id="companyAddress" name="address" maxlength="255"
+                   class="mt-2 w-full rounded-md text-sm text-gray-900 px-2 py-1.5 placeholder:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 leading-6"
+                   placeholder="Start typing an address..."
+                   required/>
+        </div>
+
+        <!-- Input field for Industry -->
+        <div class="mb-4 text-left">
+            <label for="companyIndustry" class="block text-sm font-medium text-gray-900">Industry</label>
+            <select id="companyIndustry" name="industry" style="opacity: 1 !important;"
+                    class="mt-2 block w-full rounded-md border-0 text-gray-900 px-2 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-teal-600 text-sm leading-6 h-9 disabled:bg-gray-200 disabled:text-gray-900 disabled:cursor-not-allowed"
+                    required>
+                <option class value="" selected disabled>Select an option</option>
+                <option value="Agriculture">Agriculture</option>
+                <option value="Automotive">Automotive</option>
+                <option value="Banking and Financial Services">Banking and Financial Services
+                </option>
+                <option value="Construction">Construction</option>
+                <option value="Consumer Goods">Consumer Goods</option>
+                <option value="Education">Education</option>
+                <option value="Energy and Utilities">Energy and Utilities</option>
+                <option value="Entertainment and Media">Entertainment and Media</option>
+                <option value="Environmental Services">Environmental Services</option>
+                <option value="Fashion and Apparel">Fashion and Apparel</option>
+                <option value="Financial Technology">Financial Technology
+                </option>
+                <option value="Food and Beverage">Food and Beverage</option>
+                <option value="Healthcare and Pharmaceuticals">Healthcare and Pharmaceuticals
+                </option>
+                <option value="Hospitality and Travel">Hospitality and Travel</option>
+                <option value="Human Resources and Recruitment">Human Resources and
+                    Recruitment
+                </option>
+                <option value="Insurance">Insurance</option>
+                <option value="Information Technology">Information Technology</option>
+                <option value="Legal Services">Legal Services</option>
+                <option value="Manufacturing">Manufacturing</option>
+                <option value="Marketing and Advertising">Marketing and Advertising</option>
+                <option value="Mining and Metals">Mining and Metals</option>
+                <option value="Non-Profit">Non-Profit</option>
+                <option value="Professional Services">Professional Services</option>
+                <option value="Real Estate">Real Estate</option>
+                <option value="Retail and E-commerce">Retail and E-commerce</option>
+                <option value="Telecommunications">Telecommunications</option>
+                <option value="Transportation and Logistics">Transportation and Logistics
+                </option>
+                <option value="Technology">Technology</option>
+                <option value="Wholesale Trade">Wholesale Trade</option>
+                <option value="Renewable Energy">Renewable Energy</option>
+                <option value="Government">Government</option>
+                <option value="Aerospace">Aerospace</option>
+                <option value="Luxury Goods">Luxury Goods</option>
+                <option value="Sports and Recreation">Sports and Recreation</option>
+                <option value="Media and Publishing">Media and Publishing</option>
+                <option value="Biotechnology">Biotechnology</option>
+                <option value="Chemicals">Chemicals</option>
+                <option value="Blockchain and Cryptocurrency">Blockchain and Cryptocurrency
+                </option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+
+        <!-- Input field for Web Address -->
+        <div class="text-left">
+            <label for="companyWebAddress" class="block text-sm font-medium text-gray-900">Web Address</label>
+            <input type="text" id="companyWebAddress" name="webAddress" maxlength="255"
+                   pattern="^[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&//=]*)$"
+                   class="mt-2 w-full rounded-md text-sm text-gray-900 px-2 py-1.5 placeholder:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 leading-6"
+                   placeholder="e.g. www.example.com"
+                   required/>
+        </div>
+
+        <!-- Hidden input for Place ID -->
+        <input type="hidden" id="companyPlaceId" name="placeId" required/>
+
+        <!-- Hidden input for formatted address -->
+        <input type="hidden" id="companyFormattedAddress" name="formattedAddress" required/>
+
+        <div class="mt-6 flex justify-between">
+            <button type="button" id="createCompanyModalCancelButton"
+                    class="rounded-md bg-gray-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">
+                Cancel
+            </button>
+            <button type="submit" id="submitCreateCompanyModal"
+                    class="rounded-md bg-teal-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">
+                Create Company
+            </button>
+        </div>
+    </form>
+</div>
+
+<script src="/js/app.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" defer></script>
+<script src="/js/utilities.js" defer></script>
+<script src="/js/admin/companies.js" defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCWEiwbCY0v7DjfGIs9BsPrFbpMa0Tb8fQ&libraries=places&callback=initGoogle"
+        defer></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/2.2.1/js/dataTables.min.js" defer></script>
+<script src="/js/dataTableSetup.js" defer></script>
+
+</body>
+</html>

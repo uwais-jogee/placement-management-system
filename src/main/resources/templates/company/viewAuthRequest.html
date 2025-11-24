@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" class="h-full bg-gray-100">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Placement Authorisation Request - Company | PMS</title>
+    <link rel="stylesheet" href="/css/main.css"/>
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+</head>
+<body>
+<div class="min-h-full">
+    <!-- Nav Bar Fragment -->
+    <div th:replace="fragments :: navEmpty"></div>
+
+    <header class="bg-white shadow">
+        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+            <h1 class="text-3xl font-bold tracking-tight text-gray-900">Placement Authorisation Request</h1>
+        </div>
+    </header>
+
+    <main>
+        <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+            <!-- Content -->
+            <div class="grid grid-cols-1 gap-x-12 gap-y-12">
+
+                <!-- Intro Section -->
+                <div class="col-span-1">
+                    <p class="leading-6 text-gray-900 text-center">
+                        You are reviewing a placement authorisation request from a student.<br/>Please verify the details
+                        below, then click either "Approve" or "Reject" placement, based on the accuracy of the
+                        information provided.
+                    </p>
+                </div>
+
+                <!-- Student Details Card -->
+                <div class="col-span-1 bg-white shadow rounded-lg max-h-fit">
+                    <div class="px-4 py-5">
+                        <h2 class="text-lg font-medium leading-6 text-gray-900">Student Details</h2>
+                    </div>
+                    <div class="border-t border-gray-200 px-6 py-5">
+                        <div class="grid grid-cols-1 gap-y-6 sm:grid-cols-6">
+                            <!-- Student Name -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">Name</label>
+                                <p class="text-sm text-gray-800"
+                                   th:text="${authRequest.student.firstName + ' ' + authRequest.student.lastName}"></p>
+                            </div>
+
+                            <!-- Student Email -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">Email</label>
+                                <p class="text-sm text-gray-800" th:text="${authRequest.student.email}"></p>
+                            </div>
+
+                            <!-- Student Phone -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">Contact Number</label>
+                                <p class="text-sm text-gray-800" th:text="${authRequest.studentPhone}"></p>
+                            </div>
+
+                            <!-- Programme of Study -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">Programme of Study</label>
+                                <p class="text-sm text-gray-800" th:text="${authRequest.programmeOfStudy}"></p>
+                            </div>
+
+                            <!-- International Student -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">International Student</label>
+                                <p class="text-sm text-gray-800" th:text="${authRequest.internationStudent}"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Company Details Card -->
+                <div class="col-span-1 bg-white shadow rounded-lg max-h-fit">
+                    <div class="px-4 py-5">
+                        <h2 class="text-lg font-medium leading-6 text-gray-900">Company Details</h2>
+                    </div>
+                    <div class="border-t border-gray-200 px-6 py-5">
+                        <div class="grid grid-cols-1 gap-y-6 sm:grid-cols-6">
+                            <!-- Company Name -->
+                            <div class="sm:col-span-6">
+                                <label class="text-sm font-medium text-gray-500">Company Name</label>
+                                <p class="text-sm text-gray-800"
+                                   th:if="${authRequest.companySelect == 'Other'}"
+                                   th:text="${authRequest.companyNameOther}"></p>
+                                <p class="text-sm text-gray-800"
+                                   th:if="${authRequest.companySelect != 'Other'}"
+                                   th:text="${authRequest.company.companyName}"></p>
+                            </div>
+
+                            <!-- Company Address -->
+                            <div class="sm:col-span-6">
+                                <label class="text-sm font-medium text-gray-500">Address</label>
+                                <p class="text-sm text-gray-800" th:text="${authRequest.companyFormattedAddress}"></p>
+                            </div>
+
+                            <!-- Company Industry -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">Industry</label>
+                                <p class="text-sm text-gray-800" th:text="${authRequest.companyIndustry}"></p>
+                            </div>
+
+                            <!-- Company Web Address -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">Web Address</label>
+                                <p class="text-sm text-gray-800" th:text="${authRequest.companyWebAddress}"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Point of Contact Details Card -->
+                <div class="col-span-1 bg-white shadow rounded-lg max-h-fit">
+                    <div class="px-4 py-5">
+                        <h2 class="text-lg font-medium leading-6 text-gray-900">Company Details</h2>
+                    </div>
+                    <div class="border-t border-gray-200 px-6 py-5">
+                        <div class="grid grid-cols-1 gap-y-6 sm:grid-cols-6">
+                            <!-- Company Contact Name -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">Company Contact Name</label>
+                                <p class="text-sm text-gray-800" th:text="${authRequest.companyContactName}"></p>
+                            </div>
+
+                            <!-- Company Contact Email -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">Contact Email</label>
+                                <p class="text-sm text-gray-800" th:text="${authRequest.companyContactEmail}"></p>
+                            </div>
+
+                            <!-- Company Contact Phone -->
+                            <div class="sm:col-span-3">
+                                <div>
+                                    <label class="text-sm font-medium text-gray-500">Company Contact Phone</label>
+                                    <p class="text-sm text-gray-800" th:text="${authRequest.companyContactPhone}"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Placement Details Card -->
+                <div class="col-span-1 bg-white shadow rounded-lg max-h-fit">
+                    <div class="px-4 py-5">
+                        <h2 class="text-lg font-medium leading-6 text-gray-900">Placement Details</h2>
+                    </div>
+                    <div class="border-t border-gray-200 px-6 py-5">
+                        <div class="grid grid-cols-1 gap-y-6 sm:grid-cols-6">
+                            <!-- Role Title -->
+                            <div class="sm:col-span-6">
+                                <label class="text-sm font-medium text-gray-500">Role Title</label>
+                                <p class="text-sm text-gray-800" th:text="${authRequest.roleTitle}"></p>
+                            </div>
+
+                            <!-- Placement Start Date -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">Start Date</label>
+                                <p class="text-sm text-gray-800"
+                                   th:text="${#temporals.format(authRequest.placementStartDate, 'dd/MM/yy')}"></p>
+                            </div>
+
+                            <!-- Placement End Date -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">End Date</label>
+                                <p class="text-sm text-gray-800"
+                                   th:text="${#temporals.format(authRequest.placementEndDate, 'dd/MM/yy')}"></p>
+                            </div>
+
+                            <!-- Working Hours per Week -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">Working Hours</label>
+                                <p class="text-sm text-gray-800" th:text="${authRequest.hoursPerWeek}"></p>
+                            </div>
+
+                            <!-- Annual Salary -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">Salary</label>
+                                <p class="text-sm text-gray-800" th:text="'£' + ${#numbers.formatDecimal(authRequest.salary, 1, 'COMMA', 2, 'POINT')}"></p>
+                            </div>
+
+                            <!-- Role Description -->
+                            <div class="sm:col-span-6">
+                                <label class="text-sm font-medium text-gray-500">Role Description</label>
+                                <p class="text-sm text-gray-800" th:text="${authRequest.roleDescription}"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Button Section -->
+                <div class="flex items-center justify-center gap-x-12 sm:gap-x-24">
+                    <button class="bg-red-600 text-white px-8 py-2 rounded-md hover:bg-red-400 disabled:bg-red-600/50 disabled:text-white disabled:cursor-not-allowed"
+                            id="rejectButton">Reject Placement
+                    </button>
+                    <button class="bg-teal-600 text-white px-8 py-2 rounded-md hover:bg-teal-500 disabled:bg-teal-600/50 disabled:text-white disabled:cursor-not-allowed"
+                            id="approveButton">Approve Placement
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Company approve modal -->
+<div id="approveModal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
+    <form th:action="@{/company/auth-request/company-approve}" method="POST"
+          class="bg-white rounded-lg p-6 max-w-md w-full text-center shadow-lg">
+        <h2 class="text-lg font-semibold text-gray-800">Are you sure you want to approve this placement?</h2>
+        <!-- Hidden input for ID and Token -->
+        <input type="hidden" name="id" th:value="${authRequest.id}">
+        <input type="hidden" name="token" th:value="${token}">
+
+        <div class="mt-6 flex justify-between">
+            <button id="goBackApproveModal"
+                    type="button"
+                    class="rounded-md bg-gray-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">
+                Go Back
+            </button>
+            <button type="submit" id="confirmApproveModal"
+                    class="rounded-md bg-teal-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">
+                Approve
+            </button>
+        </div>
+    </form>
+</div>
+
+
+<!-- Company reject modal -->
+<div id="rejectModal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
+    <form id="rejectForm" th:action="@{/company/auth-request/company-reject}" method="POST"
+          class="bg-white rounded-lg p-6 max-w-lg w-full text-center shadow-lg">
+        <h2 class="text-lg font-semibold text-gray-800">Are you sure you want to reject this placement request?</h2>
+
+        <!-- Hidden input for ID and Token -->
+        <input type="hidden" name="id" th:value="${authRequest.id}">
+        <input type="hidden" name="token" th:value="${token}">
+
+        <p class="mt-4 mb-6 text-sm text-gray-800">Please provide a reason for rejection before confirming.</p>
+
+        <label for="rejectReason" class="hidden">Rejection Reason</label>
+        <!-- Input field for rejection reason -->
+        <textarea id="rejectReason"
+                  name="rejectionReason"
+                  class="mt-2 w-full rounded-md text-sm text-gray-900 p-2 placeholder:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 leading-6"
+                  rows="4"
+                  placeholder="Enter your reason for rejecting this placement request..." maxlength="65535"
+                  required
+        ></textarea>
+
+        <div class="mt-6 flex justify-between">
+            <button type="button" id="goBackRejectModal"
+                    class="rounded-md bg-gray-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">
+                Go Back
+            </button>
+            <button type="submit" id="confirmRejectModal"
+                    class="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">
+                Reject Placement Request
+            </button>
+        </div>
+    </form>
+</div>
+
+<script src="/js/utilities.js" defer></script>
+<script src="/js/company/viewAuthRequest.js" defer></script>
+
+</body>
+</html>

@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" class="h-full bg-gray-100">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management | PMS</title>
+    <link rel="stylesheet" href="/css/main.css"/>
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.2.1/css/dataTables.dataTables.min.css">
+    <!-- DataTable Custom CSS -->
+    <link rel="stylesheet" th:href="@{/css/data-table.css}"/>
+</head>
+<body>
+<div class="min-h-full">
+    <!-- Nav Bar Fragment -->
+    <div th:replace="fragments :: navUserManager ('userManagement')"></div>
+
+    <header class="bg-white shadow">
+        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+            <h1 class="text-3xl font-bold tracking-tight text-gray-900">User Management</h1>
+        </div>
+    </header>
+
+    <main>
+        <!-- Content -->
+        <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+
+            <!-- Success Toast Fragment -->
+            <div th:if="${successMessage}">
+                <div th:replace="fragments :: successToast (${successMessage})"></div>
+            </div>
+
+            <!-- Table Tabs - styled based on the current tab -->
+            <div class="flex max-w-fit shadow overflow-x-auto text-center">
+                <a th:class="${tab == 'All' ? 'px-6 py-3 text-xs sm:text-sm border border-gray-300 font-semibold bg-white text-gray-900 border-t-2 border-t-teal-600' : 'px-6 py-3 text-xs sm:text-sm border border-gray-300 bg-gray-200 text-gray-600 font-semibold'}"
+                   th:href="@{/user-manager/user-management/all}">
+                    All
+                </a>
+                <a th:class="${tab == 'Student' ? 'px-6 py-3 text-xs sm:text-sm border border-gray-300 font-semibold bg-white text-gray-900 border-t-2 border-t-teal-600' : 'px-6 py-3 text-xs sm:text-sm border border-gray-300 bg-gray-200 text-gray-600 font-semibold'}"
+                   th:href="@{/user-manager/user-management/student}">
+                   Students
+                </a>
+                <a th:class="${tab == 'Tutor' ? 'px-6 py-3 text-xs sm:text-sm border border-gray-300 font-semibold bg-white text-gray-900 border-t-2 border-t-teal-600' : 'px-6 py-3 text-xs sm:text-sm border border-gray-300 bg-gray-200 text-gray-600 font-semibold'}"
+                   th:href="@{/user-manager/user-management/tutor}">
+                    Tutors
+                </a>
+                <a th:class="${tab == 'Admin' ? 'px-6 py-3 text-xs sm:text-sm border border-gray-300 font-semibold bg-white text-gray-900 border-t-2 border-t-teal-600' : 'px-6 py-3 text-xs sm:text-sm border border-gray-300 bg-gray-200 text-gray-600 font-semibold'}"
+                   th:href="@{/user-manager/user-management/admin}">
+                    Admins
+                </a>
+            </div>
+
+            <div class="tableDiv bg-white shadow rounded-lg rounded-t-none sm:rounded-tr-lg max-h-fit">
+                <div class="px-4 py-5 flex justify-between items-center">
+                    <h2 class="text-lg font-medium leading-6 text-gray-900" th:text="${tab} + ' Users'"></h2>
+                    <div class="flex items-center space-x-5 ml-2">
+                        <div class="relative">
+                            <!-- Filter Button -->
+                            <button
+                                    type="button"
+                                    id="filterButton"
+                                    class="bg-white border-2 border-teal-600 text-teal-600 px-3 py-1 rounded-md hover:bg-gray-100">
+                                Filter
+                            </button>
+
+                            <!-- Filter Pop-up Box -->
+                            <div id="filterBox"
+                                 class="absolute left-0 mt-2 w-48 bg-white border border-gray-300 rounded shadow-lg z-[999999] hidden">
+                                <div class="pt-3 pb-4 px-4">
+                                    <p class="text-sm font-medium text-gray-800">Filter by Status</p>
+                                    <div class="mt-2 space-y-2 border-b border-gray-300 pb-3">
+                                        <label class="flex items-center space-x-2">
+                                            <input type="checkbox" name="statusFilter" value="enabled"
+                                                   id="enabledFilterCheckbox"
+                                                   class="accent-teal-600" checked>
+                                            <span class="text-sm text-gray-700">Enabled</span>
+                                        </label>
+                                        <label class="flex items-center space-x-2">
+                                            <input type="checkbox" name="statusFilter" value="disabled"
+                                                   id="disabledFilterCheckbox"
+                                                   class="accent-teal-600" checked>
+                                            <span class="text-sm text-gray-700">Disabled</span>
+                                        </label>
+                                    </div>
+                                    <div class="mt-3 space-y-2">
+                                        <label class="flex items-center space-x-2">
+                                            <input type="checkbox" name="activeFilter" value="active"
+                                                   id="activeFilterCheckbox"
+                                                   class="accent-teal-600" checked>
+                                            <span class="text-sm text-gray-700">Active</span>
+                                        </label>
+                                        <label class="flex items-center space-x-2">
+                                            <input type="checkbox" name="activeFilter" value="inactive"
+                                                   id="inactiveFilterCheckbox"
+                                                   class="accent-teal-600" checked>
+                                            <span class="text-sm text-gray-700">Inactive</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Search Bar -->
+                        <div class="w-full">
+                            <input type="search"
+                                   class="tableSearch block w-full rounded border border-gray-300 bg-white px-2 py-1"
+                                   placeholder="Search" aria-label="Search"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto overflow-y-auto max-h-screen pb-5">
+                    <table id="userTable" class="w-full table-auto">
+                        <thead class="border border-y border-gray-300">
+                        <tr class="bg-gray-200">
+                            <th scope="col" class="text-xs px-4 py-1 text-gray-600">
+                                Username
+                            </th>
+                            <th scope="col" class="text-xs px-4 py-1 text-gray-600">
+                                Name
+                            </th>
+                            <th scope="col" class="text-xs px-4 py-1 text-gray-600">
+                                Role
+                            </th>
+                            <th scope="col" class="text-xs px-4 py-1 text-gray-600">
+                                Activated Status
+                            </th>
+                            <th scope="col" class="text-xs px-4 py-1 text-gray-600">
+                                Enabled Status
+                            </th>
+                            <th scope="col" class="text-xs px-4 py-1 text-gray-600">
+                                Created On
+                            </th>
+                            <th scope="col" class="text-xs px-4 py-1 text-gray-600">
+                                Last Login
+                            </th>
+                            <th scope="col" class="text-xs px-4 py-1 text-gray-600">
+                                View
+                            </th>
+                            <th scope="col" class="text-xs px-4 py-1 text-gray-600">
+                                Filter Status
+                            </th>
+                        </tr>
+                        </thead>
+
+                        <tbody class="divide-y divide-gray-300 border-b border-b-gray-100">
+                        <tr th:each="user : ${users}" class="hover:bg-gray-50">
+                            <td th:text="${user.username}"
+                                class="px-4 py-3 text-sm text-gray-900">
+                            </td>
+                            <td th:text="${user.firstName + ' ' + user.lastName}"
+                                class="px-4 py-3 text-sm text-gray-900">
+                            </td>
+                            <td th:text="${user.role.getFormattedRole()}"
+                                class="px-4 py-3 text-sm text-gray-900">
+                            </td>
+                            <td class="px-4 py-3 text-sm text-gray-900">
+                                <span th:if="${user.accountNonLocked}"
+                                      class="text-nowrap px-2 py-1 text-sm font-medium rounded-full bg-blue-100 text-blue-800">
+                                    Active
+                                </span>
+                                <span th:unless="${user.accountNonLocked}"
+                                      class="text-nowrap px-2 py-1 text-sm font-medium rounded-full bg-yellow-100 text-yellow-800">
+                                    Inactive
+                                </span>
+                            </td>
+                            <td class="px-4 py-3 text-sm text-gray-900">
+                                <span th:if="${user.enabled}"
+                                      class="text-nowrap px-2 py-1 text-sm font-medium rounded-full bg-green-100 text-green-800">
+                                    Enabled
+                                </span>
+                                <span th:unless="${user.enabled}"
+                                      class="text-nowrap px-2 py-1 text-sm font-medium rounded-full bg-red-100 text-red-800">
+                                    Disabled
+                                </span>
+                            </td>
+                            <td th:text="${#temporals.format(user.created, 'dd/MM/yyyy HH:mm')}"
+                                class="px-4 py-3 text-sm text-gray-900">
+                            </td>
+                            <td class="px-4 py-3 text-sm text-gray-900">
+                                <span th:if="${user.lastLogin}"
+                                      th:text="${#temporals.format(user.lastLogin, 'dd/MM/yyyy HH:mm')}"></span>
+                                <span th:unless="${user.lastLogin}">Never</span>
+                            </td>
+                            <td class="px-4 py-3 text-sm text-gray-900">
+                                <a class="viewUserButton"
+                                   th:href="@{/user-manager/user/view(username=${user.username})}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                         stroke-width="1.5" stroke="currentColor"
+                                         class="h-6 w-6 text-teal-600 hover:text-teal-400 inline-block">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                              d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/>
+                                    </svg>
+                                </a>
+                            </td>
+                            <td th:text="${user.accountNonLocked + ' ' + user.enabled}"
+                                class="px-4 py-3 text-sm text-gray-900">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="px-4 pt-2 pb-5 flex justify-end">
+                    <button id="createUserButton"
+                            class="rounded-md bg-teal-600 px-6 py-2 text-sm font-semibold text-white hover:bg-teal-500">
+                        Create a New User
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Create User Modal -->
+<div id="createUserModal"
+     class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
+    <form id="createUserForm" th:action="@{/user-manager/user/new/submit}" method="POST" th:object="${newUserDTO}"
+          class="bg-white rounded-lg p-6 max-w-xl w-full text-center shadow-lg">
+        <h2 class="text-lg font-semibold text-gray-800">Create New User</h2>
+        <p class="mt-4 mb-6 text-sm text-gray-800 text-center">Fill in the details below to create a new user
+            profile.<br/>An email will be sent to the user to set their password and activate their account.</p>
+
+        <div class="grid sm:grid-cols-2 gap-x-12 gap-y-4">
+            <!-- Input field for Username -->
+            <div class="col-span-2 mb-4 text-left">
+                <label for="username" class="block text-sm font-medium text-gray-900">Username</label>
+                <input type="text" id="username" name="username" maxlength="255"
+                       class="mt-2 w-full rounded-md text-sm text-gray-900 p-2 placeholder:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 leading-6"
+                       required/>
+                <p id="usernameError" class="text-sm text-red-600 mt-1 hidden">Username already in use</p>
+            </div>
+
+            <!-- Input field for first name -->
+            <div class="col-span-1 mb-4 text-left">
+                <label for="firstName" class="block text-sm font-medium text-gray-900">First Name</label>
+                <input type="text" id="firstName" name="firstName" maxlength="255"
+                       class="mt-2 w-full rounded-md text-sm text-gray-900 p-2 placeholder:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 leading-6"
+                       required/>
+            </div>
+
+            <!-- Input field for last name -->
+            <div class="col-span-1 mb-4 text-left">
+                <label for="lastName" class="block text-sm font-medium text-gray-900">Last Name</label>
+                <input type="text" id="lastName" name="lastName" maxlength="255"
+                       class="mt-2 w-full rounded-md text-sm text-gray-900 p-2 placeholder:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 leading-6"
+                       required/>
+            </div>
+
+            <!-- Input field for email -->
+            <div class="col-span-2 mb-4 text-left">
+                <label for="email" class="block text-sm font-medium text-gray-900">Email</label>
+                <input type="email" pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$" id="email" name="email" maxlength="255"
+                       class="mt-2 w-full rounded-md text-sm text-gray-900 p-2 placeholder:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 leading-6"
+                       required/>
+                <p id="emailError" class="text-sm text-red-600 mt-1 hidden">Email already in use</p>
+            </div>
+
+            <!-- Dropdown to select role -->
+            <div class="col-span-1 text-left">
+                <label for="role" class="block text-sm font-medium text-gray-900">Select Role</label>
+                <select id="role" name="role" required
+                        class="mt-2 w-full rounded-md text-sm text-gray-900 px-2 py-2.5 placeholder:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 leading-6">
+                    <option value="" disabled selected>Select Role</option>
+                    <option value="ROLE_STUDENT">Student</option>
+                    <option value="ROLE_TUTOR">Tutor</option>
+                    <option value="ROLE_ADMIN">Admin</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="mt-6 flex justify-between">
+            <button type="button" id="cancelCreateUserModal"
+                    class="rounded-md bg-gray-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-400">
+                Cancel
+            </button>
+            <button type="submit" id="submitCreateUserModal"
+                    class="rounded-md bg-teal-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-500 disabled:bg-teal-600/50 disabled:text-white disabled:cursor-not-allowed">
+                Create User
+            </button>
+        </div>
+
+        <!-- Hidden div to ensure that Tailwind CSS includes the ring-red-300 class used in JS -->
+        <div class="ring-red-300 hidden"></div>
+    </form>
+</div>
+
+
+<script src="/js/app.js" defer></script>
+<script src="/js/utilities.js" defer></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/2.2.1/js/dataTables.min.js" defer></script>
+<script src="/js/dataTableSetup.js" defer></script>
+<script src="/js/userManager/userManagement.js" defer></script>
+
+</body>
+</html>

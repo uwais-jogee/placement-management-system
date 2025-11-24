@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" class="h-full bg-gray-100">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Cover Letter Generator | PMS</title>
+    <link rel="stylesheet" href="/css/main.css"/>
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+</head>
+<body>
+<div class="min-h-full">
+    <!-- Nav Bar Fragment -->
+    <div th:replace="fragments :: navStudent ('')"></div>
+
+    <header class="bg-white shadow">
+        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+            <h1 class="text-3xl font-bold tracking-tight text-gray-900">AI Cover Letter Generator</h1>
+        </div>
+    </header>
+
+    <main>
+        <!-- Content -->
+        <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+            <div class="space-y-12">
+                <div class="border-b border-gray-300 pb-12">
+                    <p class="mt-4 leading-6 text-gray-900 text-center">
+                        Easily create a personalised cover letter for your placement applications. Simply upload
+                        your CV, enter the company name and job details, and let Google Gemini AI generate a tailored
+                        cover letter to help you stand out to potential employers.
+                    </p>
+                </div>
+
+                <!-- Cover Letter Details -->
+                <div class="bg-white shadow rounded-lg px-8 py-8">
+                    <form id="coverLetterForm" class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-6">
+
+                        <!-- CV Input -->
+                        <div class="col-span-1 sm:col-span-1">
+                            <label for="cv" class="block text-sm font-medium leading-6 text-gray-900">Upload CV
+                                (PDF/DOCX)</label>
+                            <input type="file" id="cv" name="cv" accept=".pdf,.docx"
+                                   class="file:h-9 file:mr-4 file:px-8 file:bg-teal-600 file:text-white file:font-semibold file:rounded-l-md file:hover:bg-teal-500 file:border-0 file:cursor-pointer pr-3 h-9 w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-teal-600 text-sm leading-6"
+                                   required/>
+                        </div>
+
+                        <br class="hidden sm:block"/> <!-- Line Break for non-mobile -->
+
+                        <!-- Company Name -->
+                        <div class="col-span-1 sm:col-span-1">
+                            <label for="companyName" class="block text-sm font-medium leading-6 text-gray-900">Company
+                                Name</label>
+                            <input type="text" id="companyName" name="companyName"
+                                   class="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-teal-600 text-sm leading-6"
+                                   placeholder="Enter the company name..." maxlength="50"
+                                   required/>
+                        </div>
+
+                        <!-- Job Title -->
+                        <div class="col-span-1 sm:col-span-1">
+                            <label for="jobTitle" class="block text-sm font-medium leading-6 text-gray-900">Job
+                                Title</label>
+                            <input type="text" id="jobTitle" name="jobTitle"
+                                   class="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-teal-600 text-sm leading-6"
+                                   placeholder="E.g. Software Engineer" maxlength="50"
+                                   required/>
+                        </div>
+
+                        <!-- Job Description -->
+                        <div class="col-span-1 sm:col-span-2">
+                            <label for="jobDescription" class="block text-sm font-medium leading-6 text-gray-900">Job
+                                Description</label>
+                            <textarea id="jobDescription" name="jobDescription" rows="8" maxlength="6000"
+                                      class="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-teal-600 text-sm leading-6"
+                                      placeholder="Provide the placement job description..." required></textarea>
+                        </div>
+
+                        <!-- Disclaimer Checkbox -->
+                        <div class="col-span-1 sm:col-span-2 flex items-center">
+                            <input type="checkbox" id="disclaimer" name="disclaimer"
+                                   class="h-5 w-5 text-teal-600 border-gray-300 rounded focus:ring-teal-500 accent-teal-600"
+                                   required/>
+                            <label for="disclaimer" class="ml-2 text-sm leading-6 text-gray-900">I agree for
+                                the details
+                                provided to be used by Google Gemini AI to generate a customised cover
+                                letter</label>
+                        </div>
+
+                        <!-- Generate Button -->
+                        <div class="col-span-1 sm:col-span-2 flex justify-center">
+                            <button id="generateButton" type="button"
+                                    class="rounded-md bg-teal-600 px-10 py-2 text-sm font-semibold text-white hover:bg-teal-500 disabled:bg-teal-600/50 disabled:text-white disabled:cursor-not-allowed">
+                                Generate Cover Letter
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Cover Letter Output -->
+                <div id="coverLetterDiv" class="bg-white shadow rounded-lg hidden">
+                    <div class="px-4 py-5 flex justify-between">
+                        <h2 class="text-lg font-medium leading-6 text-gray-900">Generated Cover Letter</h2>
+                        <div class="relative inline-block">
+                            <!-- Copy button -->
+                            <button id="copyCoverLetterButton" title="Copy Cover Letter">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                     stroke-width="1.5"
+                                     stroke="currentColor"
+                                     class="w-6 h-6 text-teal-600 hover:text-teal-400 hover:cursor-pointer">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="M8.25 7.5V6.108c0-1.135.845-2.098 1.976-2.192.373-.03.748-.057 1.123-.08M15.75 18H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08M15.75 18.75v-1.875a3.375 3.375 0 0 0-3.375-3.375h-1.5a1.125 1.125 0 0 1-1.125-1.125v-1.5A3.375 3.375 0 0 0 6.375 7.5H5.25m11.9-3.664A2.251 2.251 0 0 0 15 2.25h-1.5a2.251 2.251 0 0 0-2.15 1.586m5.8 0c.065.21.1.433.1.664v.75h-6V4.5c0-.231.035-.454.1-.664M6.75 7.5H4.875c-.621 0-1.125.504-1.125 1.125v12c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V16.5a9 9 0 0 0-9-9Z"/>
+                                </svg>
+                            </button>
+                            <!-- Copy tooltip -->
+                            <span id="copyCoverLetterTooltip"
+                                  class="absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 transition-opacity duration-300 z-[99999]">
+                                Copied!
+                            </span>
+                        </div>
+                    </div>
+                    <div class="border-t border-gray-200 px-10 py-6">
+                        <p id="coverLetter" class="text-gray-900 text-sm"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Loading Overlay -->
+<div id="loadingOverlay"
+     class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-75 z-[99999] hidden">
+    <div class="flex flex-col items-center">
+        <!-- Spinner -->
+        <div class="w-20 h-20 border-8 border-teal-600 border-t-transparent rounded-full animate-spin"></div>
+        <!-- Loading Text -->
+        <p class="mt-4 text-white text-lg font-semibold">Generating your cover letter...</p>
+    </div>
+</div>
+
+<script src="/js/app.js" defer></script>
+<script src="/js/student/aiCoverLetter.js" defer></script>
+
+</body>
+</html>
+
+

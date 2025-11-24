@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" class="h-full bg-gray-100">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error | PMS</title>
+    <link rel="stylesheet" href="/css/main.css"/>
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+</head>
+<body>
+<div class="min-h-full">
+    <!-- Nav Bar Fragment -->
+    <div th:replace="fragments :: navEmpty"></div>
+
+    <header class="bg-white shadow">
+        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+            <h1 class="text-3xl font-bold tracking-tight text-gray-900">Error</h1>
+        </div>
+    </header>
+
+    <main>
+        <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+            <!-- Content -->
+            <div class="space-y-6">
+                <!-- Error Message -->
+                <div class="flex flex-col items-center justify-center text-center">
+                    <!-- Error Icon -->
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                         stroke="currentColor" class="h-24 w-24 text-red-600">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"/>
+                    </svg>
+                    <h2 class="text-xl font-semibold text-gray-800 mt-4 mb-4">Something went wrong!</h2>
+                    <h3 class="text-lg font-semibold text-gray-800 mt-4" th:text="${errorCode}"></h3>
+                    <p class="text-sm text-gray-600 mt-2" th:text="${errorMessage}"></p>
+                    <p class="text-sm text-gray-600 mt-2" th:text="${errorDetails}"></p>
+                    <p class="text-sm text-gray-600 mt-2" th:text="${path}"></p>
+                </div>
+
+                <!-- Button Section -->
+                <div class="mt-6 flex items-center justify-center">
+                    <!-- Back Button -->
+                    <button
+                            type="button"
+                            onclick="window.history.back()"
+                            class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-400">
+                        Back
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+</html>

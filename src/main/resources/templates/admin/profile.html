@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" class="h-full bg-gray-100">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile | PMS</title>
+    <link rel="stylesheet" href="/css/main.css"/>
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+</head>
+<body>
+<div class="min-h-full">
+    <!-- Nav Bar Fragment -->
+    <div th:replace="fragments :: navAdmin ('profile')"></div>
+
+    <header class="bg-white shadow">
+        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+            <h1 class="text-3xl font-bold tracking-tight text-gray-900">Profile</h1>
+        </div>
+    </header>
+
+    <main>
+        <!-- Content -->
+        <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+
+            <!-- Success Toast Fragment -->
+            <div th:if="${successMessage}">
+                <div th:replace="fragments :: successToast (${successMessage})"></div>
+            </div>
+
+            <!-- Error Toast Fragment -->
+            <div th:if="${errorMessage}">
+                <div th:replace="fragments :: errorToasst (${errorMessage})"></div>
+            </div>
+
+            <div class="bg-white shadow rounded-lg max-w-sm mx-auto">
+                <div class="flex flex-col items-center px-5 pb-5 pt-7">
+                    <div class="bg-teal-100 text-teal-600 p-4 rounded-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                             class="w-12 h-12">
+                            <path fill-rule="evenodd"
+                                  d="M18.685 19.097A9.723 9.723 0 0 0 21.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 0 0 3.065 7.097A9.716 9.716 0 0 0 12 21.75a9.716 9.716 0 0 0 6.685-2.653Zm-12.54-1.285A7.486 7.486 0 0 1 12 15a7.486 7.486 0 0 1 5.855 2.812A8.224 8.224 0 0 1 12 20.25a8.224 8.224 0 0 1-5.855-2.438ZM15.75 9a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"
+                                  clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <!-- Name and role -->
+                    <h2 class="text-2xl font-medium text-gray-900 mt-4 mb-2"
+                        th:text="${#authentication.principal.firstName + ' ' + #authentication.principal.lastName}"></h2>
+                    <p class="text-sm text-gray-600" th:text="${#authentication.principal.role.getFormattedRole()}"></p>
+                </div>
+                <div class="border-t border-gray-200 px-5 py-5 space-y-4">
+
+                    <!-- Username -->
+                    <div>
+                        <label class="font-medium text-gray-600">Username</label>
+                        <p class="text-gray-800" th:text="${#authentication.principal.username}"></p>
+                    </div>
+
+                    <!-- Name -->
+                    <div>
+                        <label class="font-medium text-gray-600">Name</label>
+                        <p class="text-gray-800"
+                           th:text="${#authentication.principal.firstName + ' ' + #authentication.principal.lastName}"></p>
+                    </div>
+
+                    <!-- Email -->
+                    <div>
+                        <label class="font-medium text-gray-600">Email</label>
+                        <p class="text-gray-800" th:text="${#authentication.principal.email}"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Change Password -->
+            <div class="flex justify-center mt-8">
+                <button class="bg-teal-600 text-white px-10 py-2 w-fit rounded-md hover:bg-teal-500"
+                        id="changePasswordButton">Change Password
+                </button>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Change Password Modal -->
+<div id="changePasswordModal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
+    <form id="changePasswordForm" th:action="@{/admin/profile/change-password}" method="POST"
+          class="bg-white rounded-lg p-6 max-w-lg w-full text-center shadow-lg">
+        <h2 class="text-lg font-semibold text-gray-800 mb-6">Change Password</h2>
+
+        <div class="flex flex-col space-y-4">
+            <!-- Input field for current password -->
+            <div class="text-left">
+                <label for="currentPassword" class="block text-sm font-medium text-gray-900">Current Password</label>
+                <div class="mt-2 relative">
+                    <input type="password" id="currentPassword" name="currentPassword" maxlength="255"
+                           class="w-full rounded-md text-sm text-gray-900 p-2 placeholder:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 leading-6"
+                           required/>
+                    <button type="button" id="toggleCurrentPassword"
+                            class="absolute inset-y-0 right-2 flex items-center p-1">
+                        <svg id="currentEyeIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                             fill="currentColor"
+                             class="size-4 text-gray-300 hover:text-gray-400 hover:cursor-pointer">
+                            <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
+                            <path fill-rule="evenodd"
+                                  d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z"
+                                  clip-rule="evenodd"/>
+                        </svg>
+                        <svg id="currentEyeSlashIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                             fill="currentColor"
+                             class="size-4 text-gray-300 hover:text-gray-400 hover:cursor-pointer hidden">
+                            <path d="M3.53 2.47a.75.75 0 0 0-1.06 1.06l18 18a.75.75 0 1 0 1.06-1.06l-18-18ZM22.676 12.553a11.249 11.249 0 0 1-2.631 4.31l-3.099-3.099a5.25 5.25 0 0 0-6.71-6.71L7.759 4.577a11.217 11.217 0 0 1 4.242-.827c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113Z"/>
+                            <path d="M15.75 12c0 .18-.013.357-.037.53l-4.244-4.243A3.75 3.75 0 0 1 15.75 12ZM12.53 15.713l-4.243-4.244a3.75 3.75 0 0 0 4.244 4.243Z"/>
+                            <path d="M6.75 12c0-.619.107-1.213.304-1.764l-3.1-3.1a11.25 11.25 0 0 0-2.63 4.31c-.12.362-.12.752 0 1.114 1.489 4.467 5.704 7.69 10.675 7.69 1.5 0 2.933-.294 4.242-.827l-2.477-2.477A5.25 5.25 0 0 1 6.75 12Z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Input field for new password -->
+            <div class="text-left">
+                <label for="newPassword" class="block text-sm font-medium text-gray-900">New Password</label>
+                <div class="mt-2 relative">
+                    <input type="password" id="newPassword" name="newPassword" maxlength="255"
+                           pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$"
+                           title="Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character."
+                           class="w-full rounded-md text-sm text-gray-900 p-2 placeholder:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 leading-6"
+                           required/>
+                    <button type="button" id="toggleNewPassword"
+                            class="absolute inset-y-0 right-2 flex items-center p-1">
+                        <svg id="newEyeIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                             class="size-4 text-gray-300 hover:text-gray-400 hover:cursor-pointer">
+                            <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
+                            <path fill-rule="evenodd"
+                                  d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z"
+                                  clip-rule="evenodd"/>
+                        </svg>
+                        <svg id="newEyeSlashIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                             fill="currentColor"
+                             class="size-4 text-gray-300 hover:text-gray-400 hover:cursor-pointer hidden">
+                            <path d="M3.53 2.47a.75.75 0 0 0-1.06 1.06l18 18a.75.75 0 1 0 1.06-1.06l-18-18ZM22.676 12.553a11.249 11.249 0 0 1-2.631 4.31l-3.099-3.099a5.25 5.25 0 0 0-6.71-6.71L7.759 4.577a11.217 11.217 0 0 1 4.242-.827c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113Z"/>
+                            <path d="M15.75 12c0 .18-.013.357-.037.53l-4.244-4.243A3.75 3.75 0 0 1 15.75 12ZM12.53 15.713l-4.243-4.244a3.75 3.75 0 0 0 4.244 4.243Z"/>
+                            <path d="M6.75 12c0-.619.107-1.213.304-1.764l-3.1-3.1a11.25 11.25 0 0 0-2.63 4.31c-.12.362-.12.752 0 1.114 1.489 4.467 5.704 7.69 10.675 7.69 1.5 0 2.933-.294 4.242-.827l-2.477-2.477A5.25 5.25 0 0 1 6.75 12Z"/>
+                        </svg>
+                    </button>
+                </div>
+                <!-- Password validation checks -->
+                <div class="mt-3 text-xs sm:text-sm text-gray-600 pointer-events-none hover:pointer-events-none"
+                     id="passwordValidation">
+                    <div>
+                        <input type="checkbox" id="lengthCheck" class="accent-teal-600 mr-1">
+                        <label for="lengthCheck"> At least 8 characters</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="upperCheck" class="accent-teal-600 mr-1">
+                        <label for="upperCheck"> At least one uppercase letter</label>
+                    </div>
+                    <div><input type="checkbox" id="lowerCheck" class="accent-teal-600 mr-1">
+                        <label for="lowerCheck"> At least one lowercase letter</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="numberCheck" class="accent-teal-600 mr-1">
+                        <label for="numberCheck"> At least one number</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="specialCheck" class="accent-teal-600 mr-1">
+                        <label for="specialCheck"> At least one special character (@$!%*?&#)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input field for repeat password -->
+            <div class="text-left">
+                <label for="repeatNewPassword" class="block text-sm font-medium text-gray-900">Confirm New
+                    Password</label>
+                <div class="mt-2 relative">
+                    <input type="password" id="repeatNewPassword" name="repeatNewPassword" maxlength="255" minlength="8"
+                           class="w-full rounded-md text-sm text-gray-900 p-2 placeholder:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 leading-6"
+                           required/>
+                    <button type="button" id="toggleRepeatNewPassword"
+                            class="absolute inset-y-0 right-2 flex items-center p-1">
+                        <svg id="repeatNewEyeIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                             fill="currentColor"
+                             class="size-4 text-gray-300 hover:text-gray-400 hover:cursor-pointer">
+                            <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
+                            <path fill-rule="evenodd"
+                                  d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z"
+                                  clip-rule="evenodd"/>
+                        </svg>
+                        <svg id="repeatNewEyeSlashIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                             fill="currentColor"
+                             class="size-4 text-gray-300 hover:text-gray-400 hover:cursor-pointer hidden">
+                            <path d="M3.53 2.47a.75.75 0 0 0-1.06 1.06l18 18a.75.75 0 1 0 1.06-1.06l-18-18ZM22.676 12.553a11.249 11.249 0 0 1-2.631 4.31l-3.099-3.099a5.25 5.25 0 0 0-6.71-6.71L7.759 4.577a11.217 11.217 0 0 1 4.242-.827c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113Z"/>
+                            <path d="M15.75 12c0 .18-.013.357-.037.53l-4.244-4.243A3.75 3.75 0 0 1 15.75 12ZM12.53 15.713l-4.243-4.244a3.75 3.75 0 0 0 4.244 4.243Z"/>
+                            <path d="M6.75 12c0-.619.107-1.213.304-1.764l-3.1-3.1a11.25 11.25 0 0 0-2.63 4.31c-.12.362-.12.752 0 1.114 1.489 4.467 5.704 7.69 10.675 7.69 1.5 0 2.933-.294 4.242-.827l-2.477-2.477A5.25 5.25 0 0 1 6.75 12Z"/>
+                        </svg>
+                    </button>
+                </div>
+                <p id="repeatNewPasswordError" class="text-sm text-red-600 mt-1 hidden">Passwords do not match</p></div>
+        </div>
+
+        <div class="mt-6 flex justify-between">
+            <button type="button" id="cancelChangePasswordModal"
+                    class="rounded-md bg-gray-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-400">
+                Cancel
+            </button>
+            <button type="submit" id="submitChangePasswordModal" disabled
+                    class="rounded-md bg-teal-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-500 disabled:bg-teal-600/50 disabled:text-white disabled:cursor-not-allowed">
+                Confirm New Password
+            </button>
+        </div>
+
+        <!-- Hidden div to ensure that Tailwind CSS includes the ring-red-300 class used in JS -->
+        <div class="ring-red-300 hidden"></div>
+    </form>
+</div>
+
+<script src="/js/app.js" defer></script>
+<script src="/js/utilities.js" defer></script>
+<script src="/js/profile.js" defer></script>
+
+</body>
+</html>

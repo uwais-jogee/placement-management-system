@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<!--suppress ALL -->
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fragments</title>
+    <link rel="stylesheet" href="/css/main.css"/>
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+</head>
+<body>
+
+<!-- Admin Navigation Bar -->
+<div th:fragment="navAdmin (currentPage)">
+    <nav class="bg-gray-800">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="flex h-16 items-center justify-between">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <a th:href="@{/}" class="hover:text-teal-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                 stroke="currentColor"
+                                 class="mx-auto h-10 w-auto text-teal-600 hover:text-teal-400">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                      d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5"/>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="hidden md:block">
+                        <div class="ml-10 flex items-center space-x-4 text-center">
+                            <a th:href="@{/admin/dashboard}"
+                               th:class="${currentPage == 'dashboard' ? 'rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white' : 'rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white'}">
+                                Dashboard
+                            </a>
+                            <a th:href="@{/admin/auth-requests/all}"
+                               th:class="${currentPage == 'authRequests' ? 'rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white' : 'rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white'}">
+                                Authorisation Requests
+                            </a>
+                            <a th:href="@{/admin/placements/all}"
+                               th:class="${currentPage == 'placements' ? 'rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white' : 'rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white'}">
+                                Placements
+                            </a>
+                            <a th:href="@{/admin/tutors/all}"
+                               th:class="${currentPage == 'tutors' ? 'rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white' : 'rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white'}">
+                                Tutors
+                            </a>
+                            <a th:href="@{/admin/companies/all}"
+                               th:class="${currentPage == 'companies' ? 'rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white' : 'rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white'}">
+                                Companies
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-4 flex items-center md:ml-6">
+                        <!-- User -->
+                        <div class="hidden md:block relative">
+                            <div>
+                                <button type="button"
+                                        class="flex items-center rounded-md bg-transparent text-sm text-gray-300 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 px-3 py-2"
+                                        id="userMenuButton" aria-expanded="false" aria-haspopup="true">
+                                    <span class="absolute -inset-1.5"></span>
+                                    <span class="sr-only">Open user menu</span>
+                                    <div class="flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                             stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                  d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                                        </svg>
+                                        <span class="ml-2 text-center"
+                                              th:text="${#authentication.principal.firstName + ' ' + #authentication.principal.lastName}"></span>
+                                    </div>
+                                </button>
+                            </div>
+
+                            <!-- User dropdown menu -->
+                            <div class="hidden absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                                 role="menu" aria-orientation="vertical" aria-labelledby="userMenuButton"
+                                 tabindex="-1" id="userMenu">
+                                <a th:href="@{/admin/profile}"
+                                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem"
+                                   tabindex="-1">
+                                    Profile</a>
+                                <a th:href="@{/logout}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                   role="menuitem" tabindex="-1">
+                                    Log out</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="-mr-2 flex md:hidden">
+                    <!-- Mobile menu button -->
+                    <button type="button" id="mobileMenuButton"
+                            class="relative inline-flex items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                            aria-controls="mobile-menu" aria-expanded="false">
+                        <span class="absolute -inset-0.5"></span>
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                             stroke="currentColor" aria-hidden="true" data-slot="icon">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
+                        </svg>
+                        <svg class="hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                             stroke="currentColor" aria-hidden="true" data-slot="icon">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile menu -->
+        <div class="hidden md:hidden" id="mobileMenu">
+            <div class="space-y-1 px-2 pb-3 pt-2 sm:px-3">
+                <a th:href="@{/admin/dashboard}"
+                   th:class="${currentPage == 'dashboard' ? 'block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white' : 'block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white'}">
+                    Dashboard
+                </a>
+                <a th:href="@{/admin/auth-requests/all}"
+                   th:class="${currentPage == 'authRequests' ? 'block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white' : 'block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white'}">
+                    Authorisation Requests
+                </a>
+                <a th:href="@{/admin/placements/all}"
+                   th:class="${currentPage == 'placements' ? 'block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white' : 'block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white'}">
+                    Placements
+                </a>
+                <a th:href="@{/admin/tutors/all}"
+                   th:class="${currentPage == 'tutors' ? 'block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white' : 'block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white'}">
+                    Tutors
+                </a>
+                <a th:href="@{/admin/companies/all}"
+                   th:class="${currentPage == 'companies' ? 'block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white' : 'block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white'}">
+                    Companies
+                </a>
+            </div>
+
+            <div class="border-t border-gray-700 pb-3 pt-4">
+                <div class="flex items-center px-5">
+                    <div class="flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                             stroke-width="1.5" stroke="currentColor" class="h-8 w-8 text-white">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <div class="text-base font-medium leading-none text-white">
+                            <span th:text="${#authentication.principal.firstName + ' ' + #authentication.principal.lastName}"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-3 space-y-1 px-2">
+                    <a th:href="@{/admin/profile}"
+                       th:class="${currentPage == 'profile' ? 'block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white' : 'block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white'}">
+                        Profile
+                    </a>
+                    <a th:href="@{/logout}"
+                       class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">
+                        Log out</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<!-- Tutor Navigation Bar -->
+<div th:fragment="navTutor (currentPage)">
+    <nav class="bg-gray-800">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="flex h-16 items-center justify-between">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <a th:href="@{/}" class="hover:text-teal-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                 stroke="currentColor"
+                                 class="mx-auto h-10 w-auto text-teal-600 hover:text-teal-400">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                      d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5"/>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="hidden md:block">
+                        <div class="ml-10 flex items-center space-x-4 text-center">
+                            <a th:href="@{/tutor/dashboard}"
+                               th:class="${currentPage == 'dashboard' ? 'rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white' : 'rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white'}">
+                                Dashboard
+                            </a>
+                            <a th:href="@{/tutor/placements}"
+                               th:class="${currentPage == 'placements' ? 'rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white' : 'rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white'}">
+                                Placements
+                            </a>
+                            <a th:href="@{/tutor/visits}"
+                               th:class="${currentPage == 'visits' ? 'rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white' : 'rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white'}">
+                                Visits
+                            </a>
+                            <a th:href="@{/tutor/messages}"
+                               th:class="${currentPage == 'messages' ? 'rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white' : 'rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white'}">
+                                Messages
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-4 flex items-center md:ml-6">
+                        <!-- User -->
+                        <div class="hidden md:block relative">
+                            <div>
+                                <button type="button"
+                                        class="flex items-center rounded-md bg-transparent text-sm text-gray-300 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 px-3 py-2"
+                                        id="userMenuButton" aria-expanded="false" aria-haspopup="true">
+                                    <span class="absolute -inset-1.5"></span>
+                                    <span class="sr-only">Open user menu</span>
+                                    <div class="flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                             stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                  d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                                        </svg>
+                                        <span class="ml-2 text-center"
+                                              th:text="${#authentication.principal.firstName + ' ' + #authentication.principal.lastName}"></span>
+                                    </div>
+                                </button>
+                            </div>
+
+                            <!-- User dropdown menu -->
+                            <div class="hidden absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                                 role="menu" aria-orientation="vertical" aria-labelledby="userMenuButton"
+                                 tabindex="-1" id="userMenu">
+                                <a th:href="@{/tutor/profile}"
+                                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem"
+                                   tabindex="-1">
+                                    Profile</a>
+                                <a th:href="@{/logout}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                   role="menuitem" tabindex="-1">
+                                    Log out</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="-mr-2 flex md:hidden">
+                    <!-- Mobile menu button -->
+                    <button type="button" id="mobileMenuButton"
+                            class="relative inline-flex items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                            aria-controls="mobile-menu" aria-expanded="false">
+                        <span class="absolute -inset-0.5"></span>
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                             stroke="currentColor" aria-hidden="true" data-slot="icon">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
+                        </svg>
+                        <svg class="hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                             stroke="currentColor" aria-hidden="true" data-slot="icon">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile menu -->
+        <div class="hidden md:hidden" id="mobileMenu">
+            <div class="space-y-1 px-2 pb-3 pt-2 sm:px-3">
+                <a th:href="@{/tutor/dashboard}"
+                   th:class="${currentPage == 'dashboard' ? 'block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white' : 'block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white'}">
+                    Dashboard
+                </a>
+                <a th:href="@{/tutor/placements}"
+                   th:class="${currentPage == 'placements' ? 'block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white' : 'block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white'}">
+                    Placements
+                </a>
+                <a th:href="@{/tutor/visits}"
+                   th:class="${currentPage == 'visits' ? 'block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white' : 'block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white'}">
+                    Visits
+                </a>
+                <a th:href="@{/tutor/messages}"
+                   th:class="${currentPage == 'messages' ? 'block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white' : 'block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white'}">
+                    Messages
+                </a>
+            </div>
+
+            <div class="border-t border-gray-700 pb-3 pt-4">
+                <div class="flex items-center px-5">
+                    <div class="flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                             stroke-width="1.5" stroke="currentColor" class="h-8 w-8 text-white">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <div class="text-base font-medium leading-none text-white">
+                            <span th:text="${#authentication.principal.firstName + ' ' + #authentication.principal.lastName}"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-3 space-y-1 px-2">
+                    <a th:href="@{/tutor/profile}"
+                       th:class="${currentPage == 'profile' ? 'block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white' : 'block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white'}">
+                        Profile
+                    </a>
+                    <a th:href="@{/logout}"
+                       class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">
+                        Log out</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<!-- Student Navigation Bar -->
+<div th:fragment="navStudent (currentPage)">
+    <nav class="bg-gray-800">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="flex h-16 items-center justify-between">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <a th:href="@{/}" class="hover:text-teal-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                 stroke="currentColor"
+                                 class="mx-auto h-10 w-auto text-teal-600 hover:text-teal-400">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                      d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5"/>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="hidden md:block">
+                        <div class="ml-10 flex items-center space-x-4 text-center">
+                            <a th:href="@{/student/dashboard}"
+                               th:class="${currentPage == 'dashboard' ? 'rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white' : 'rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white'}">
+                                Dashboard
+                            </a>
+                            <a th:href="@{/student/placement}"
+                               th:class="${currentPage == 'myPlacement' ? 'rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white' : 'rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white'}">
+                                My Placement
+                            </a>
+                            <a th:href="@{/student/tutor}"
+                               th:class="${currentPage == 'myTutor' ? 'rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white' : 'rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white'}">
+                                My Tutor
+                            </a>
+                            <a th:href="@{/student/resources/all}"
+                               th:class="${currentPage == 'resources' ? 'rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white' : 'rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white'}">
+                                Resources
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-4 flex items-center md:ml-6">
+                        <!-- User -->
+                        <div class="hidden md:block relative">
+                            <div>
+                                <button type="button"
+                                        class="flex items-center rounded-md bg-transparent text-sm text-gray-300 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 px-3 py-2"
+                                        id="userMenuButton" aria-expanded="false" aria-haspopup="true">
+                                    <span class="absolute -inset-1.5"></span>
+                                    <span class="sr-only">Open user menu</span>
+                                    <div class="flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                             stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                  d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                                        </svg>
+                                        <span class="ml-2 text-center"
+                                              th:text="${#authentication.principal.firstName + ' ' + #authentication.principal.lastName}"></span>
+                                    </div>
+                                </button>
+                            </div>
+
+                            <!-- User dropdown menu -->
+                            <div class="hidden absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                                 role="menu" aria-orientation="vertical" aria-labelledby="userMenuButton"
+                                 tabindex="-1" id="userMenu">
+                                <a th:href="@{/student/profile}"
+                                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem"
+                                   tabindex="-1">
+                                    Profile</a>
+                                <a th:href="@{/logout}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                   role="menuitem" tabindex="-1">
+                                    Log out</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="-mr-2 flex md:hidden">
+                    <!-- Mobile menu button -->
+                    <button type="button" id="mobileMenuButton"
+                            class="relative inline-flex items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                            aria-controls="mobile-menu" aria-expanded="false">
+                        <span class="absolute -inset-0.5"></span>
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                             stroke="currentColor" aria-hidden="true" data-slot="icon">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
+                        </svg>
+                        <svg class="hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                             stroke="currentColor" aria-hidden="true" data-slot="icon">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile menu -->
+        <div class="hidden md:hidden" id="mobileMenu">
+            <div class="space-y-1 px-2 pb-3 pt-2 sm:px-3">
+                <a th:href="@{/student/dashboard}"
+                   th:class="${currentPage == 'dashboard' ? 'block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white' : 'block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white'}">
+                    Dashboard
+                </a>
+                <a th:href="@{/student/placement}"
+                   th:class="${currentPage == 'myPlacement' ? 'block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white' : 'block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white'}">
+                    My Placement
+                </a>
+                <a th:href="@{/student/tutor}"
+                   th:class="${currentPage == 'myTutor' ? 'block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white' : 'block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white'}">
+                    My Tutor
+                </a>
+                <a th:href="@{/student/resources/all}"
+                   th:class="${currentPage == 'resources' ? 'block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white' : 'block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white'}">
+                    Resources
+                </a>
+            </div>
+
+            <div class="border-t border-gray-700 pb-3 pt-4">
+                <div class="flex items-center px-5">
+                    <div class="flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                             stroke-width="1.5" stroke="currentColor" class="h-8 w-8 text-white">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <div class="text-base font-medium leading-none text-white">
+                            <span th:text="${#authentication.principal.firstName + ' ' + #authentication.principal.lastName}"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-3 space-y-1 px-2">
+                    <a th:href="@{/student/profile}"
+                       th:class="${currentPage == 'profile' ? 'block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white' : 'block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white'}">
+                        Profile
+                    </a>
+                    <a th:href="@{/logout}"
+                       class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">
+                        Log out</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<!-- User Manager Navigation Bar -->
+<div th:fragment="navUserManager (currentPage)">
+    <nav class="bg-gray-800">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="flex h-16 items-center justify-between">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <a th:href="@{/}" class="hover:text-teal-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                 stroke="currentColor"
+                                 class="mx-auto h-10 w-auto text-teal-600 hover:text-teal-400">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                      d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5"/>
+                            </svg>
+                        </a>
+                    </div>
+                    <p class="ml-3 text-sm sm:text-base font-semibold tracking-tight text-gray-100">Placement Management System</p>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-4 flex items-center md:ml-6">
+                        <!-- User -->
+                        <div class="hidden md:block relative ml-3">
+                            <div>
+                                <button type="button"
+                                        class="flex items-center rounded-md bg-transparent text-sm text-gray-300 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 px-3 py-2"
+                                        id="userMenuButton" aria-expanded="false" aria-haspopup="true">
+                                    <span class="absolute -inset-1.5"></span>
+                                    <span class="sr-only">Open user menu</span>
+                                    <div class="flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                             stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                  d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                                        </svg>
+                                        <span class="ml-2 text-center"
+                                              th:text="${#authentication.principal.firstName + ' ' + #authentication.principal.lastName}"></span>
+                                    </div>
+                                </button>
+                            </div>
+
+                            <!-- User dropdown menu -->
+                            <div class="hidden absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                                 role="menu" aria-orientation="vertical" aria-labelledby="userMenuButton"
+                                 tabindex="-1" id="userMenu">
+                                <a th:href="@{/user-manager/profile}"
+                                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem"
+                                   tabindex="-1">
+                                    Profile</a>
+                                <a th:href="@{/logout}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                   role="menuitem" tabindex="-1">
+                                    Log out</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="-mr-2 flex md:hidden">
+                    <!-- Mobile menu button -->
+                    <button type="button" id="mobileMenuButton"
+                            class="relative inline-flex items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                            aria-controls="mobile-menu" aria-expanded="false">
+                        <span class="absolute -inset-0.5"></span>
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                             stroke="currentColor" aria-hidden="true" data-slot="icon">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
+                        </svg>
+                        <svg class="hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                             stroke="currentColor" aria-hidden="true" data-slot="icon">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile menu -->
+        <div class="hidden md:hidden" id="mobileMenu">
+            <div class="border-t border-gray-700 pb-3 pt-4">
+                <div class="flex items-center px-5">
+                    <div class="flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                             stroke-width="1.5" stroke="currentColor" class="h-8 w-8 text-white">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <div class="text-base font-medium leading-none text-white">
+                            <span th:text="${#authentication.principal.firstName + ' ' + #authentication.principal.lastName}"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-3 space-y-1 px-2">
+                    <a th:href="@{/user-manager/profile}"
+                       th:class="${currentPage == 'profile' ? 'block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white' : 'block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white'}">
+                        Profile
+                    </a>
+                    <a th:href="@{/logout}"
+                       class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">
+                        Log out</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<!-- Empty Navigation Bar - for company approval email-->
+<div th:fragment="navEmpty">
+    <nav class="bg-gray-800">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="flex h-16 items-center justify-between">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                             stroke="currentColor" class="mx-auto h-10 w-auto text-teal-600">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5"/>
+                        </svg>
+                    </div>
+                    <p class="ml-3 text-sm sm:text-base font-semibold tracking-tight text-gray-100">Placement Management System</p>
+                </div>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<!-- Success Toast Notification -->
+<div th:fragment="successToast (successMessage)">
+    <div class="flex justify-center">
+        <div class="fixed bottom-8 bg-gray-800 shadow-lg rounded-xl px-6 py-4 flex items-center space-x-4 z-[999999] animate-fade-out-delay">
+            <!-- Tick Icon -->
+            <div class="flex-shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                     stroke="currentColor" class="h-8 w-8 text-teal-400">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                </svg>
+            </div>
+            <!-- Message -->
+            <div>
+                <p class="text-sm font-medium text-white" th:text="${successMessage}"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Error Toast Notification -->
+<div th:fragment="errorToasst (errorMessage)">
+    <div class="flex justify-center">
+        <div class="fixed bottom-8 bg-gray-800 shadow-lg rounded-xl px-6 py-4 flex items-center space-x-4 z-[999999] animate-fade-out-delay">
+            <!-- Error Icon -->
+            <div class="flex-shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                     stroke="currentColor" class="h-8 w-8 text-red-600">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"/>
+                </svg>
+            </div>
+            <!-- Message -->
+            <div>
+                <p class="text-sm font-medium text-white" th:text="${errorMessage}">Unable to change password. Incorrect current password</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

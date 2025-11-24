@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" class="h-full bg-gray-100">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resources | PMS</title>
+    <link rel="stylesheet" href="/css/main.css"/>
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+</head>
+<body>
+<div class="min-h-full">
+    <!-- Nav Bar Fragment -->
+    <div th:replace="fragments :: navStudent ('resources')"></div>
+
+    <header class="bg-white shadow">
+        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+            <h1 class="text-3xl font-bold tracking-tight text-gray-900">Resources</h1>
+        </div>
+    </header>
+
+    <main>
+        <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+
+            <!-- Category Tabs -->
+            <div class="flex justify-between items-center space-x-6 rounded-lg py-2 px-6 bg-white border border-teal-600 shadow-inner overflow-auto">
+                <a id="allButton" class="text-sm font-semibold rounded-md px-6 py-2 text-center"
+                   th:classappend="${category == 'all' ? 'text-white bg-teal-600 hover:bg-teal-500' : 'text-gray-700 hover:bg-gray-200'}"
+                   th:href="@{/student/resources/all}">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                         stroke="currentColor" class="h-6 w-6 inline-flex mr-1 align-middle">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"/>
+                    </svg>
+                    All
+                </a>
+                <a id="applyingForPlacementsButton"
+                   class="text-sm font-semibold text-grey-700 rounded-md px-6 py-2 text-center"
+                   th:classappend="${category == 'applying-for-placements' ? 'text-white bg-teal-600 hover:bg-teal-500' : 'text-gray-700 hover:bg-gray-200'}"
+                   th:href="@{/student/resources/applying-for-placements}">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                         stroke="currentColor" class="h-6 w-6 inline-flex mr-1 align-middle">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 0 0 .75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 0 0-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0 1 12 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 0 1-.673-.38m0 0A2.18 2.18 0 0 1 3 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 0 1 3.413-.387m7.5 0V5.25A2.25 2.25 0 0 0 13.5 3h-3a2.25 2.25 0 0 0-2.25 2.25v.894m7.5 0a48.667 48.667 0 0 0-7.5 0M12 12.75h.008v.008H12v-.008Z"/>
+                    </svg>
+                    Applying for Placements
+                </a>
+                <a id="guidesButton"
+                   class="text-sm font-semibold text-grey-700 rounded-md px-6 py-2 text-center"
+                   th:classappend="${category == 'guides' ? 'text-white bg-teal-600 hover:bg-teal-500' : 'text-gray-700 hover:bg-gray-200'}"
+                   th:href="@{/student/resources/guides}">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                         stroke="currentColor" class="h-6 w-6 inline-block mr-1 align-middle">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25"/>
+                    </svg>
+                    Guides
+                </a>
+                <a id="skillsDevelopmentButton"
+                   class="text-sm font-semibold text-grey-700 rounded-md px-6 py-2 text-center"
+                   th:classappend="${category == 'skills-development' ? 'text-white bg-teal-600 hover:bg-teal-500' : 'text-gray-700 hover:bg-gray-200'}"
+                   th:href="@{/student/resources/skills-development}">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                         stroke="currentColor" class="h-6 w-6 inline-block mr-1 align-middle">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M14.25 6.087c0-.355.186-.676.401-.959.221-.29.349-.634.349-1.003 0-1.036-1.007-1.875-2.25-1.875s-2.25.84-2.25 1.875c0 .369.128.713.349 1.003.215.283.401.604.401.959v0a.64.64 0 0 1-.657.643 48.39 48.39 0 0 1-4.163-.3c.186 1.613.293 3.25.315 4.907a.656.656 0 0 1-.658.663v0c-.355 0-.676-.186-.959-.401a1.647 1.647 0 0 0-1.003-.349c-1.036 0-1.875 1.007-1.875 2.25s.84 2.25 1.875 2.25c.369 0 .713-.128 1.003-.349.283-.215.604-.401.959-.401v0c.31 0 .555.26.532.57a48.039 48.039 0 0 1-.642 5.056c1.518.19 3.058.309 4.616.354a.64.64 0 0 0 .657-.643v0c0-.355-.186-.676-.401-.959a1.647 1.647 0 0 1-.349-1.003c0-1.035 1.008-1.875 2.25-1.875 1.243 0 2.25.84 2.25 1.875 0 .369-.128.713-.349 1.003-.215.283-.4.604-.4.959v0c0 .333.277.599.61.58a48.1 48.1 0 0 0 5.427-.63 48.05 48.05 0 0 0 .582-4.717.532.532 0 0 0-.533-.57v0c-.355 0-.676.186-.959.401-.29.221-.634.349-1.003.349-1.035 0-1.875-1.007-1.875-2.25s.84-2.25 1.875-2.25c.37 0 .713.128 1.003.349.283.215.604.401.96.401v0a.656.656 0 0 0 .658-.663 48.422 48.422 0 0 0-.37-5.36c-1.886.342-3.81.574-5.766.689a.578.578 0 0 1-.61-.58v0Z"/>
+                    </svg>
+                    Skills Development
+                </a>
+                <a id="placementPoliciesButton"
+                   class="text-sm font-semibold text-grey-700 rounded-md px-6 py-2 text-center"
+                   th:classappend="${category == 'placement-policies' ? 'text-white bg-teal-600 hover:bg-teal-500' : 'text-gray-700 hover:bg-gray-200'}"
+                   th:href="@{/student/resources/placement-policies}">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                         stroke="currentColor" class="h-6 w-6 inline-block mr-1 align-middle">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z"/>
+                    </svg>
+                    Placement Policies
+                </a>
+                <a id="supportButton"
+                   class="text-sm font-semibold text-grey-700 rounded-md px-6 py-2 text-center"
+                   th:classappend="${category == 'support' ? 'text-white bg-teal-600 hover:bg-teal-500' : 'text-gray-700 hover:bg-gray-200'}"
+                   th:href="@{/student/resources/support}">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                         stroke="currentColor" class="h-6 w-6 inline-block mr-1 align-middle">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"/>
+                    </svg>
+                    Support
+                </a>
+            </div>
+
+            <!-- Applying for Placements Category -->
+            <div id="applyingForPlacementsDiv" class="mt-12"
+                 th:classappend="${category != 'all' && category != 'applying-for-placements'  ? 'hidden' : ''}">
+                <h2 class="text-xl font-bold tracking-tight text-gray-900 border-b border-gray-200 pb-2">
+                    Applying for Placements
+                </h2>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-8 mt-4">
+                    <!-- AI Cover Letter Generator -->
+                    <div class="col-span-2 sm:col-span-1 p-6 bg-white rounded-lg shadow hover:shadow-lg">
+                        <h3 class="text-lg font-semibold text-gray-800">AI Cover Letter Generator</h3>
+                        <p class="text-gray-600 text-sm mt-2">Generate a personalised cover letter for your placement applications.</p>
+                        <button onclick="window.location.href='/student/resources/applying-for-placements/ai-cover-letter'" class="mt-4 rounded-md bg-teal-600 px-6 py-2 text-sm font-semibold text-white hover:bg-teal-500 align-bottom">
+                            AI Cover Letter Generator
+                        </button>
+                    </div>
+
+                    <!-- Job Boards -->
+                    <div class="col-span-2 sm:col-span-1 p-6 bg-white rounded-lg shadow hover:shadow-lg">
+                        <h3 class="text-lg font-semibold text-gray-800">Job Boards</h3>
+                        <p class="text-gray-600 text-sm mt-2">Explore these job boards to find placements tailored to
+                            your interests and career goals.</p>
+                        <ul class="text-teal-600 text-sm mt-4 space-y-1">
+                            <li><a href="https://www.prospects.ac.uk" target="_blank"
+                                   class="hover:underline">Prospects</a></li>
+                            <li><a href="https://www.gradcracker.com" target="_blank" class="hover:underline">GradCracker</a>
+                            </li>
+                            <li><a href="https://targetjobs.co.uk" target="_blank" class="hover:underline">Target
+                                Jobs</a></li>
+                            <li><a href="https://www.ratemyplacement.co.uk" target="_blank" class="hover:underline">RateMyPlacement</a>
+                            </li>
+                            <li><a href="https://sanctuarygraduates.co.uk" target="_blank" class="hover:underline">Sanctuary
+                                Graduates</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Application and CV Help -->
+                    <div class="col-span-2 sm:col-span-1 p-6 bg-white rounded-lg shadow hover:shadow-lg">
+                        <h3 class="text-lg font-semibold text-gray-800">Application and CV Help</h3>
+                        <p class="text-gray-600 text-sm mt-2">Access the University of Leicester's platform for tips,
+                            templates, and guidance on crafting your CV and applications.</p>
+                        <a href="https://uniofleicester.sharepoint.com/sites/MyEmployment/SitePages/Applications-and-CVs.aspx?web=1"
+                           target="_blank" class="text-teal-600 hover:underline mt-4 inline-block text-sm">Visit
+                            Application and CV Help</a>
+                    </div>
+
+                    <!-- CVs, Applications and Tests -->
+                    <div class="col-span-2 sm:col-span-1 p-6 bg-white rounded-lg shadow hover:shadow-lg">
+                        <h3 class="text-lg font-semibold text-gray-800">CVs, Applications and Tests</h3>
+                        <p class="text-gray-600 text-sm mt-2">Find comprehensive advice on CV writing, application
+                            processes, and test preparation from Target Jobs.</p>
+                        <a href="https://targetjobs.co.uk/careers-advice/cvs-applications-and-tests" target="_blank"
+                           class="text-teal-600 hover:underline mt-4 inline-block text-sm">Explore Target Jobs</a>
+                    </div>
+
+<!--                    &lt;!&ndash; CareerSet CV Feedback &ndash;&gt;-->
+<!--                    <div class="col-span-2 sm:col-span-1 p-6 bg-white rounded-lg shadow hover:shadow-lg">-->
+<!--                        <h3 class="text-lg font-semibold text-gray-800">CareerSet – CV Feedback</h3>-->
+<!--                        <p class="text-gray-600 text-sm mt-2">Get instant feedback on your CV through CareerSet. Improve-->
+<!--                            your CV with targeted suggestions and tips.</p>-->
+<!--                        <a href="https://careerset.com/leicester" target="_blank"-->
+<!--                           class="text-teal-600 hover:underline mt-4 inline-block text-sm">Access CareerSet</a>-->
+<!--                    </div>-->
+
+                    <!-- Example Interview Questions and Answers (Prospects) -->
+                    <div class="col-span-2 sm:col-span-1 p-6 bg-white rounded-lg shadow hover:shadow-lg">
+                        <h3 class="text-lg font-semibold text-gray-800">Example Interview Questions and Answers
+                            (Prospects)</h3>
+                        <p class="text-gray-600 text-sm mt-2">Prepare for interviews with example questions and detailed
+                            answer strategies from Prospects.</p>
+                        <a href="https://www.prospects.ac.uk/careers-advice/applying-for-jobs/example-questions-and-answers"
+                           target="_blank" class="text-teal-600 hover:underline mt-4 inline-block text-sm">Explore
+                            Interview Resources</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Guides -->
+            <div id="guidesDiv" class="mt-12"
+                 th:classappend="${category != 'all' && category != 'guides'  ? 'hidden' : ''}">
+                <h2 class="text-xl font-bold tracking-tight text-gray-900 border-b border-gray-200 pb-2">
+                    Guides
+                </h2>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-8 mt-4">
+                    <!-- UG Placement Handbook -->
+                    <div class="col-span-2 sm:col-span-1 p-6 bg-white rounded-lg shadow hover:shadow-lg">
+                        <h3 class="text-lg font-semibold text-gray-800">UG Placement Handbook</h3>
+                        <p class="text-gray-600 text-sm mt-2">Access the University of Leicester Placement Handbook,
+                            providing all the essential guidelines and requirements for your placement year.</p>
+                        <a href="https://blackboard.le.ac.uk/webapps/blackboard/execute/content/file?cmd=view&content_id=_3671081_1&course_id=_59451_1"
+                           target="_blank" class="text-teal-600 hover:underline mt-4 inline-block text-sm">View the
+                            Handbook</a>
+                    </div>
+
+                    <!-- The Student Placement Guide -->
+                    <div class="col-span-2 sm:col-span-1 p-6 bg-white rounded-lg shadow hover:shadow-lg">
+                        <h3 class="text-lg font-semibold text-gray-800">The Student Placement</h3>
+                        <p class="text-gray-600 text-sm mt-2">Explore this comprehensive guide for placements from Rate
+                            My Placement, offering tips and advice on succeeding in your work experience.</p>
+                        <a href="https://www.ratemyplacement.co.uk/blog/student-placement-survival-guide/"
+                           target="_blank" class="text-teal-600 hover:underline mt-4 inline-block text-sm">Read the
+                            Guide</a>
+                    </div>
+
+                    <!-- A Guide to Placements -->
+                    <div class="col-span-2 sm:col-span-1 p-6 bg-white rounded-lg shadow hover:shadow-lg">
+                        <h3 class="text-lg font-semibold text-gray-800">A Guide to Placements</h3>
+                        <p class="text-gray-600 text-sm mt-2">Learn how to prepare, succeed, and make the most out of
+                            your placement experience with this helpful guide from Unifrog.</p>
+                        <a href="https://www.unifrog.org/know-how/for-students-a-guide-to-placements-work-experience#:~:text=Starting%20your%20placement,the%20best%20of%20your%20ability."
+                           target="_blank" class="text-teal-600 hover:underline mt-4 inline-block text-sm">View the
+                            Guide</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Skills Development -->
+            <div id="skillsDevelopmentDiv" class="mt-12"
+                 th:classappend="${category != 'all' && category != 'skills-development'  ? 'hidden' : ''}">
+                <h2 class="text-xl font-bold tracking-tight text-gray-900 border-b border-gray-200 pb-2">
+                    Skills Development
+                </h2>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-8 mt-4">
+                    <!-- Learning Courses (National Careers Service) -->
+                    <div class="col-span-2 sm:col-span-1 p-6 bg-white rounded-lg shadow hover:shadow-lg">
+                        <h3 class="text-lg font-semibold text-gray-800">Learning Courses (National Careers Service)</h3>
+                        <p class="text-gray-600 text-sm mt-2">Explore free online learning opportunities provided by the
+                            National Careers Service. Find courses to enhance your skills and knowledge.</p>
+                        <a href="https://nationalcareers.service.gov.uk/find-a-course/where-to-find-free-online-learning"
+                           target="_blank" class="text-teal-600 hover:underline mt-4 inline-block text-sm">Explore
+                            Courses</a>
+                    </div>
+
+                    <!-- Future Learn -->
+                    <div class="col-span-2 sm:col-span-1 p-6 bg-white rounded-lg shadow hover:shadow-lg">
+                        <h3 class="text-lg font-semibold text-gray-800">Future Learn</h3>
+                        <p class="text-gray-600 text-sm mt-2">Discover a variety of free and premium online courses
+                            offered by organisations worldwide to develop your professional skills.</p>
+                        <a href="https://www.futurelearn.com/" target="_blank"
+                           class="text-teal-600 hover:underline mt-4 inline-block text-sm">Visit Future Learn</a>
+                    </div>
+
+                    <!-- Open Learn -->
+                    <div class="col-span-2 sm:col-span-1 p-6 bg-white rounded-lg shadow hover:shadow-lg">
+                        <h3 class="text-lg font-semibold text-gray-800">Open Learn</h3>
+                        <p class="text-gray-600 text-sm mt-2">Access a full catalogue of free online courses from The
+                            Open University, covering a wide range of topics and levels.</p>
+                        <a href="https://www.open.edu/openlearn/free-courses/full-catalogue" target="_blank"
+                           class="text-teal-600 hover:underline mt-4 inline-block text-sm">Browse Courses</a>
+                    </div>
+
+                    <!-- Coursera -->
+                    <div class="col-span-2 sm:col-span-1 p-6 bg-white rounded-lg shadow hover:shadow-lg">
+                        <h3 class="text-lg font-semibold text-gray-800">Coursera</h3>
+                        <p class="text-gray-600 text-sm mt-2">Gain access to a range of online courses and
+                            certifications from leading universities and companies worldwide to build job-ready
+                            skills.</p>
+                        <a href="https://www.coursera.org/" target="_blank"
+                           class="text-teal-600 hover:underline mt-4 inline-block text-sm">Explore Coursera</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Placement Policies -->
+            <div id="placementPoliciesDiv" class="mt-12"
+                 th:classappend="${category != 'all' && category != 'placement-policies'  ? 'hidden' : ''}">
+                <h2 class="text-xl font-bold tracking-tight text-gray-900 border-b border-gray-200 pb-2">
+                    Placement Policies
+                </h2>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-8 mt-4">
+                    <!-- Health and Safety (UoL Blackboard) -->
+                    <div class="col-span-2 sm:col-span-1 p-6 bg-white rounded-lg shadow hover:shadow-lg">
+                        <h3 class="text-lg font-semibold text-gray-800">Health and Safety (UoL Blackboard)</h3>
+                        <p class="text-gray-600 text-sm mt-2">Learn about essential health and safety practices relevant
+                            to your placement experience, ensuring a safe and secure work environment.</p>
+                        <a href="https://blackboard.le.ac.uk/ultra/courses/_76682_1/outline/edit/document/_4568315_1?courseId=_76682_1&view=content"
+                           target="_blank" class="text-teal-600 hover:underline mt-4 inline-block text-sm">Access Health
+                            and Safety</a>
+                    </div>
+
+                    <!-- Confidentiality and Data Protection (UoL Blackboard) -->
+                    <div class="col-span-2 sm:col-span-1 p-6 bg-white rounded-lg shadow hover:shadow-lg">
+                        <h3 class="text-lg font-semibold text-gray-800">Confidentiality and Data Protection (UoL
+                            Blackboard)</h3>
+                        <p class="text-gray-600 text-sm mt-2">Understand the principles of confidentiality and data
+                            protection to handle sensitive information responsibly during your placement.</p>
+                        <a href="https://blackboard.le.ac.uk/ultra/courses/_76682_1/outline/edit/document/_4566374_1?courseId=_76682_1&view=content"
+                           target="_blank" class="text-teal-600 hover:underline mt-4 inline-block text-sm">View
+                            Confidentiality Guide</a>
+                    </div>
+
+                    <!-- Working Remotely (UoL Blackboard) -->
+                    <div class="col-span-2 sm:col-span-1 p-6 bg-white rounded-lg shadow hover:shadow-lg">
+                        <h3 class="text-lg font-semibold text-gray-800">Working Remotely (UoL Blackboard)</h3>
+                        <p class="text-gray-600 text-sm mt-2">Discover best practices for remote work, including tips on
+                            productivity, communication, and maintaining work-life balance while working away from the
+                            office.</p>
+                        <a href="https://blackboard.le.ac.uk/ultra/courses/_76682_1/outline/edit/document/_4568392_1?courseId=_76682_1&view=content"
+                           target="_blank" class="text-teal-600 hover:underline mt-4 inline-block text-sm">Learn About
+                            Remote Work</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Support -->
+            <div id="supportDiv" class="mt-12"
+                 th:classappend="${category != 'all' && category != 'support'  ? 'hidden' : ''}">
+                <h2 class="text-xl font-bold tracking-tight text-gray-900 border-b border-gray-200 pb-2">
+                    Support
+                </h2>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-8 mt-4">
+
+                    <!-- AccessAbility Centre (UoL) -->
+                    <div class="col-span-2 sm:col-span-1 p-6 bg-white rounded-lg shadow hover:shadow-lg">
+                        <h3 class="text-lg font-semibold text-gray-800">AccessAbility Centre (UoL)</h3>
+                        <a href="https://le.ac.uk/accessability" target="_blank"
+                           class="text-teal-600 hover:underline mt-4 inline-block text-sm">Visit AccessAbility
+                            Centre</a>
+                    </div>
+
+                    <!-- Student Wellbeing (UoL) -->
+                    <div class="col-span-2 sm:col-span-1 p-6 bg-white rounded-lg shadow hover:shadow-lg">
+                        <h3 class="text-lg font-semibold text-gray-800">Student Wellbeing (UoL)</h3>
+                        <a href="https://uniofleicester.sharepoint.com/sites/Student-Support" target="_blank"
+                           class="text-teal-600 hover:underline mt-4 inline-block text-sm">Access Wellbeing
+                            Resources</a>
+                    </div>
+
+                    <!-- Career Development Service (UoL) -->
+                    <div class="col-span-2 sm:col-span-1 p-6 bg-white rounded-lg shadow hover:shadow-lg">
+                        <h3 class="text-lg font-semibold text-gray-800">Career Development Service (UoL)</h3>
+                        <a href="https://le.ac.uk/career-development-service" target="_blank"
+                           class="text-teal-600 hover:underline mt-4 inline-block text-sm">Visit Career Development
+                            Service</a>
+                    </div>
+
+                    <!-- UoL Student’s Union Support Services -->
+                    <div class="col-span-2 sm:col-span-1 p-6 bg-white rounded-lg shadow hover:shadow-lg">
+                        <h3 class="text-lg font-semibold text-gray-800">Student’s Union Support Services</h3>
+                        <a href="https://www.leicesterunion.com/support/adviceservice/leicestertalks/" target="_blank"
+                           class="text-teal-600 hover:underline mt-4 inline-block text-sm">Explore Support Services</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script src="/js/app.js"></script>
+
+</body>
+</html>

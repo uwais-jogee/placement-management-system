@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" class="h-full bg-gray-100">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="'Placement #' + ${placement.id} + ' | PMS'"></title>
+    <link rel="stylesheet" href="/css/main.css"/>
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+</head>
+<body>
+<div class="min-h-full">
+    <!-- Nav Bar Fragment -->
+    <div th:replace="fragments :: navAdmin ('')"></div>
+
+    <header class="bg-white shadow">
+        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+            <h1 class="text-3xl font-bold tracking-tight text-gray-900" th:text="'Placement #' + ${placement.id}"></h1>
+        </div>
+    </header>
+
+    <main>
+        <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+
+            <!-- Success Toast Fragment -->
+            <div th:if="${successMessage}">
+                <div th:replace="fragments :: successToast (${successMessage})"></div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-x-12 gap-y-12">
+
+                <!-- Placement Details Card -->
+                <div class="col-span-1 bg-white shadow rounded-lg max-h-fit">
+                    <div class="px-4 py-5 flex justify-between items-center">
+                        <h2 class="text-lg font-medium leading-6 text-gray-900">Placement Details</h2>
+                        <!-- Status Badge -->
+                        <span th:if="${placement.status.getFormattedStatus() == 'In Progress'}"
+                              class="inline-flex items-center text-nowrap rounded-full px-3 py-1 text-sm font-medium bg-green-100 text-green-800"
+                              th:text="${placement.status.getFormattedStatus()}">
+                                        </span>
+                        <span th:if="${placement.status.getFormattedStatus() == 'Upcoming'}"
+                              class="inline-flex items-center text-nowrap rounded-full px-3 py-1 text-sm font-medium bg-blue-100 text-blue-800"
+                              th:text="${placement.status.getFormattedStatus()}">
+                        </span>
+                        <span th:if="${placement.status.getFormattedStatus() == 'Pending Student Evaluation'}"
+                              class="inline-flex items-center text-nowrap rounded-full px-3 py-1 text-sm font-medium bg-yellow-100 text-yellow-800"
+                              th:text="${placement.status.getFormattedStatus()}">
+                                        </span>
+                        <span th:if="${placement.status.getFormattedStatus() == 'Completed'}"
+                              class="inline-flex items-center text-nowrap rounded-full px-3 py-1 text-sm font-medium bg-gray-100 text-gray-800"
+                              th:text="${placement.status.getFormattedStatus()}">
+                        </span>
+                    </div>
+                    <div class="border-t border-gray-200 px-6 py-5">
+                        <div class="grid grid-cols-1 gap-y-6 sm:grid-cols-6">
+                            <!-- ID -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">Placement ID</label>
+                                <p class="text-sm text-gray-800" id="placementId" th:text="'#' + ${placement.id}"></p>
+                            </div>
+
+                            <!-- Status -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">Status</label>
+                                <p class="text-sm text-gray-800" id="status"
+                                   th:text="${placement.status.getFormattedStatus()}"></p>
+                            </div>
+
+                            <!-- Placement Auth Request ID - Linked -->
+                            <div class="sm:col-span-6">
+                                <label class="text-sm font-medium text-gray-500">Placement Authorisation Request
+                                    ID</label>
+                                <p class="text-sm text-teal-600 hover:underline" id="placementAuthRequestId">
+                                    <a th:text="${'#' + placement.placementAuthRequest.id}"
+                                       th:href="@{/admin/auth-request/view(id=${placement.placementAuthRequest.id})}"></a>
+                                </p>
+                            </div>
+
+                            <!-- Start Date -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">Start Date</label>
+                                <p class="text-sm text-gray-800" id="startDate"
+                                   th:text="${#temporals.format(placement.startDate, 'dd/MM/yy')}"></p>
+                            </div>
+
+                            <!-- End Date -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">End Date</label>
+                                <p class="text-sm text-gray-800" id="endDate"
+                                   th:text="${#temporals.format(placement.endDate, 'dd/MM/yy')}"></p>
+                            </div>
+
+                            <!-- Role Title -->
+                            <div class="sm:col-span-6">
+                                <label class="text-sm font-medium text-gray-500">Role Title</label>
+                                <p class="text-sm text-gray-800" id="roleTitle"
+                                   th:text="${placement.placementAuthRequest.roleTitle}"></p>
+                            </div>
+
+                            <!-- Role Description -->
+                            <div class="sm:col-span-6">
+                                <label class="text-sm font-medium text-gray-500">Role Description</label>
+                                <p class="text-sm text-gray-800" id="roleDescription"
+                                   th:text="${placement.placementAuthRequest.roleDescription}"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Student Details Card -->
+                <div class="col-span-1 bg-white shadow rounded-lg max-h-fit">
+                    <div class="px-4 py-5">
+                        <h2 class="text-lg font-medium leading-6 text-gray-900">Student Details</h2>
+                    </div>
+                    <div class="border-t border-gray-200 px-6 py-5">
+                        <div class="grid grid-cols-1 gap-y-6 sm:grid-cols-6">
+                            <!-- Student ID -->
+                            <div class="sm:col-span-6">
+                                <label class="text-sm font-medium text-gray-500">Username</label>
+                                <p class="text-sm text-gray-800" id="studentId"
+                                   th:text="${placement.student.username}"></p>
+                            </div>
+
+                            <!-- Student Name -->
+                            <div class="sm:col-span-6">
+                                <label class="text-sm font-medium text-gray-500">Name</label>
+                                <p class="text-sm text-gray-800" id="studentName"
+                                   th:text="${placement.student.firstName + ' ' + placement.student.lastName}"></p>
+                            </div>
+
+                            <!-- Student Email -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">Email</label>
+                                <p class="text-sm text-gray-800" id="studentEmail"
+                                   th:text="${placement.student.email}"></p>
+                            </div>
+
+                            <!-- Student Phone -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">Contact Number</label>
+                                <p class="text-sm text-gray-800" id="studentPhone"
+                                   th:text="${placement.placementAuthRequest.studentPhone}"></p>
+                            </div>
+
+                            <!-- Programme of Study -->
+                            <div class="sm:col-span-6">
+                                <label class="text-sm font-medium text-gray-500">Programme of Study</label>
+                                <p class="text-sm text-gray-800" id="programmeOfStudy"
+                                   th:text="${placement.placementAuthRequest.programmeOfStudy}"></p>
+                            </div>
+
+                            <!-- International Student -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">International Student</label>
+                                <p class="text-sm text-gray-800" id="internationalStudent"
+                                   th:text="${placement.placementAuthRequest.internationStudent}"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Company Details Card -->
+                <div class="col-span-1 bg-white shadow rounded-lg max-h-fit">
+                    <div class="px-4 py-5">
+                        <h2 class="text-lg font-medium leading-6 text-gray-900">Company Details</h2>
+                    </div>
+                    <div class="border-t border-gray-200 px-6 py-5">
+                        <div class="grid grid-cols-1 gap-y-6 sm:grid-cols-6">
+                            <!-- Company Name -->
+                            <div class="sm:col-span-6">
+                                <label class="text-sm font-medium text-gray-500">Company Name</label>
+                                <p class="text-sm text-gray-800" id="companyName"
+                                   th:text="${placement.company.companyName}"></p>
+                            </div>
+
+                            <!-- Address -->
+                            <div class="sm:col-span-6">
+                                <label class="text-sm font-medium text-gray-500">Address</label>
+                                <p class="text-sm text-gray-800" id="companyAddress"
+                                   th:text="${placement.company.address.formattedAddress}"></p>
+                            </div>
+
+                            <!-- Industry -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">Industry</label>
+                                <p class="text-sm text-gray-800" id="companyIndustry"
+                                   th:text="${placement.company.industry}"></p>
+                            </div>
+
+                            <!-- Web Address -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">Web Address</label>
+                                <p class="text-sm text-gray-800" id="companyWeb"
+                                   th:text="${placement.company.webAddress}"></p>
+                            </div>
+
+                            <!-- Contact Information -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">Contact Name</label>
+                                <p class="text-sm text-gray-800" id="contactName"
+                                   th:text="${placement.placementAuthRequest.companyContactName}"></p>
+                            </div>
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">Contact Email</label>
+                                <p class="text-sm text-gray-800" id="contactEmail"
+                                   th:text="${placement.placementAuthRequest.companyContactEmail}"></p>
+                            </div>
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">Contact Phone</label>
+                                <p class="text-sm text-gray-800" id="contactPhone"
+                                   th:text="${placement.placementAuthRequest.companyContactPhone}"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tutor Details Card -->
+                <div th:if="${placement.status.getFormattedStatus() == 'In Progress' || placement.status.getFormattedStatus() == 'Upcoming'}" class="col-span-1 bg-white shadow rounded-lg max-h-fit">
+                    <div class="px-4 py-4 flex items-baseline justify-between">
+                        <h2 class="text-lg font-medium leading-6 text-gray-900">Tutor Details</h2>
+                        <button id="changeTutorButton"
+                                class="w-fit rounded-md bg-teal-600 px-6 py-2 text-sm font-semibold text-white hover:bg-teal-500">
+                            Change Tutor
+                        </button>
+                    </div>
+                    <div class="border-t border-gray-200 px-6 py-5">
+                        <div class="grid grid-cols-1 gap-y-6 sm:grid-cols-6">
+                            <!-- Tutor Username -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">Tutor Username</label>
+                                <p class="text-sm text-gray-800" id="tutorUsername"
+                                   th:text="${placement.tutor.username}"></p>
+                            </div>
+
+                            <!-- Tutor Name -->
+                            <div class="sm:col-span-3">
+                                <label class="text-sm font-medium text-gray-500">Tutor Name</label>
+                                <p class="text-sm text-gray-800" id="tutorName"
+                                   th:text="${placement.tutor.firstName + ' ' + placement.tutor.lastName}"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Button Section -->
+                <div class="flex items-center">
+                    <a class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-400"
+                       href="javascript:window.history.back();">
+                        Back
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Change Tutor Modal -->
+<div id="changeTutorModal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
+    <form th:action="@{/admin/placement/change-tutor}" method="POST" id="changeTutorForm"
+          class="bg-white rounded-lg p-6 max-w-lg w-full text-center shadow-lg">
+        <h2 class="text-lg font-semibold text-gray-800">Change Tutor</h2>
+        <p class="mt-4 mb-6 text-sm text-gray-800">
+            Please select a tutor to assign to this placement.
+            <br>
+            Any visits/messages between the old tutor and student will be lost.
+        </p>
+
+        <!-- Dropdown to select tutor -->
+        <div class="text-left">
+            <label for="newTutorSelect" class="block text-sm font-medium text-gray-900">Select Tutor</label>
+            <select id="newTutorSelect" name="newTutorUsername" required
+                    class="mt-2 w-full rounded-md text-sm text-gray-900 p-2 placeholder:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 leading-6">
+                <th:block th:each="tutor : ${tutors}">
+                    <option th:value="${tutor.username}"
+                            th:text="${tutor.firstName + ' ' + tutor.lastName + ' (' + #lists.size(tutor.placements) + ' placements)'}">
+                    </option>
+                </th:block>
+            </select>
+        </div>
+
+        <!-- Hidden input for Placement ID -->
+        <input type="hidden" name="placementId" th:value="${placement.id}"/>
+        <!-- Hidden input for old tutor username -->
+        <input type="hidden" id="oldTutorUsername" name="oldTutorUsername" th:value="${placement.tutor.username}"/>
+
+
+        <div class="mt-6 flex justify-between">
+            <button type="button" id="goBackChangeTutorModal"
+                    class="rounded-md bg-gray-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">
+                Go Back
+            </button>
+            <button type="button" id="changeTutorModalSubmit"
+                    class="bg-teal-600 text-white text-sm font-semibold shadow-sm px-3 py-2 rounded-md hover:bg-teal-500 disabled:bg-teal-600/50 disabled:text-white disabled:cursor-not-allowed">
+                Change Tutor
+            </button>
+        </div>
+    </form>
+</div>
+
+<script src="/js/app.js" defer></script>
+<script src="/js/utilities.js" defer></script>
+<script src="/js/admin/viewPlacement.js" defer></script>
+
+</body>
+</html>

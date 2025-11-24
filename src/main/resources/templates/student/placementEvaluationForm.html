@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" class="h-full bg-gray-100">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${'Placement Evaluation #' + placement.id + ' : ' + placement.company.companyName}"></title>
+    <link rel="stylesheet" href="/css/main.css"/>
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+</head>
+<body>
+<div class="min-h-full">
+    <!-- Nav Bar Fragment -->
+    <div th:replace="fragments :: navStudent ('')"></div>
+
+    <header class="bg-white shadow">
+        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+            <h1 class="text-3xl font-bold tracking-tight text-gray-900" th:text="${'Placement Evaluation #' + placement.id + ' : ' + placement.company.companyName}"></h1>
+        </div>
+    </header>
+    <main>
+        <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+            <!-- Content -->
+            <form id="placementEvaluationForm" th:action="@{/student/evaluation/new/submit}"
+                  th:object="${placementEvaluation}" method="POST">
+                <div class="border-b border-gray-300 pb-6">
+                    <p class="leading-6 text-gray-900 text-center" th:text="${'Now that you have completed your placement with ' + placement.company.companyName + ', we would like to gather your feedback on your experience. This evaluation covers key areas such as the training and support you received, thedevelopment of your skills, and the overall work environment. Your responses will help us assess how well the company supported your growth during the placement.'}"></p>
+                </div>
+
+                <div class="space-y-16 my-10">
+
+                    <!-- Training -->
+                    <div>
+                        <label for="training-1" class="block text-center text-sm font-medium leading-6 text-gray-900">
+                            How satisfied were you with the training provided by the company?</label>
+                        <p class="mt-2 text-xs text-gray-500 text-center">1 - Very Dissatisfied, 5 - Very Satisfied</p>
+                        <div class="mt-4">
+                            <!-- Rating Selector -->
+                            <div class="flex space-x-10 justify-center">
+                                <label for="training-1" class="flex items-center space-x-1">
+                                    <input type="radio" id="training-1" name="trainingRating" value="1" class="opacity-0 peer" required>
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">1</span>
+                                </label>
+                                <label for="training-2" class="flex items-center space-x-1">
+                                    <input type="radio" id="training-2" name="trainingRating" value="2" class="opacity-0 peer">
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">2</span>
+                                </label>
+                                <label for="training-3" class="flex items-center space-x-1">
+                                    <input type="radio" id="training-3" name="trainingRating" value="3" class="opacity-0 peer">
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">3</span>
+                                </label>
+                                <label for="training-4" class="flex items-center space-x-1">
+                                    <input type="radio" id="training-4" name="trainingRating" value="4" class="opacity-0 peer">
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">4</span>
+                                </label>
+                                <label for="training-5" class="flex items-center space-x-1">
+                                    <input type="radio" id="training-5" name="trainingRating" value="5" class="opacity-0 peer">
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">5</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Support -->
+                    <div>
+                        <label for="support-1" class="block text-center text-sm font-medium leading-6 text-gray-900">
+                            How would you rate the support you received from the company during your placement?</label>
+                        <p class="mt-2 text-xs text-gray-500 text-center">1 - Very Poor, 5 - Excellent</p>
+                        <div class="mt-4">
+                            <!-- Rating Selector -->
+                            <div class="flex space-x-10 justify-center">
+                                <label for="support-1" class="flex items-center space-x-1">
+                                    <input type="radio" id="support-1" name="supportRating" value="1" class="opacity-0 peer" required>
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">1</span>
+                                </label>
+                                <label for="support-2" class="flex items-center space-x-1">
+                                    <input type="radio" id="support-2" name="supportRating" value="2" class="opacity-0 peer">
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">2</span>
+                                </label>
+                                <label for="support-3" class="flex items-center space-x-1">
+                                    <input type="radio" id="support-3" name="supportRating" value="3" class="opacity-0 peer">
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">3</span>
+                                </label>
+                                <label for="support-4" class="flex items-center space-x-1">
+                                    <input type="radio" id="support-4" name="supportRating" value="4" class="opacity-0 peer">
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">4</span>
+                                </label>
+                                <label for="support-5" class="flex items-center space-x-1">
+                                    <input type="radio" id="support-5" name="supportRating" value="5" class="opacity-0 peer">
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">5</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Feedback -->
+                    <div>
+                        <label for="feedback-1" class="block text-center text-sm font-medium leading-6 text-gray-900">
+                            How effectively did the company provide feedback on your work?</label>
+                        <p class="mt-2 text-xs text-gray-500 text-center">1 - Very Ineffective, 5 - Very Effective</p>
+                        <div class="mt-4">
+                            <!-- Rating Selector -->
+                            <div class="flex space-x-10 justify-center">
+                                <label for="feedback-1" class="flex items-center space-x-1">
+                                    <input type="radio" id="feedback-1" name="feedbackRating" value="1" class="opacity-0 peer" required>
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">1</span>
+                                </label>
+                                <label for="feedback-2" class="flex items-center space-x-1">
+                                    <input type="radio" id="feedback-2" name="feedbackRating" value="2" class="opacity-0 peer">
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">2</span>
+                                </label>
+                                <label for="feedback-3" class="flex items-center space-x-1">
+                                    <input type="radio" id="feedback-3" name="feedbackRating" value="3" class="opacity-0 peer">
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">3</span>
+                                </label>
+                                <label for="feedback-4" class="flex items-center space-x-1">
+                                    <input type="radio" id="feedback-4" name="feedbackRating" value="4" class="opacity-0 peer">
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">4</span>
+                                </label>
+                                <label for="feedback-5" class="flex items-center space-x-1">
+                                    <input type="radio" id="feedback-5" name="feedbackRating" value="5" class="opacity-0 peer">
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">5</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Industry Skills -->
+                    <div>
+                        <label for="industrySkills-1"
+                               class="block text-center text-sm font-medium leading-6 text-gray-900">
+                            How well did the placement help you develop industry-specific skills?</label>
+                        <p class="mt-2 text-xs text-gray-500 text-center">1 - Not at All, 5 - Very Well</p>
+                        <div class="mt-4">
+                            <!-- Rating Selector -->
+                            <div class="flex space-x-10 justify-center">
+                                <label for="industrySkills-1" class="flex items-center space-x-1">
+                                    <input type="radio" id="industrySkills-1" name="industrySkillsRating" value="1"
+                                           class="opacity-0 peer" required>
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">1</span>
+                                </label>
+                                <label for="industrySkills-2" class="flex items-center space-x-1">
+                                    <input type="radio" id="industrySkills-2" name="industrySkillsRating" value="2"
+                                           class="opacity-0 peer">
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">2</span>
+                                </label>
+                                <label for="industrySkills-3" class="flex items-center space-x-1">
+                                    <input type="radio" id="industrySkills-3" name="industrySkillsRating" value="3"
+                                           class="opacity-0 peer">
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">3</span>
+                                </label>
+                                <label for="industrySkills-4" class="flex items-center space-x-1">
+                                    <input type="radio" id="industrySkills-4" name="industrySkillsRating" value="4"
+                                           class="opacity-0 peer">
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">4</span>
+                                </label>
+                                <label for="industrySkills-5" class="flex items-center space-x-1">
+                                    <input type="radio" id="industrySkills-5" name="industrySkillsRating" value="5"
+                                           class="opacity-0 peer">
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">5</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Soft Skills -->
+                    <div>
+                        <label for="softSkills-1" class="block text-center text-sm font-medium leading-6 text-gray-900">
+                            How well did the placement help you develop your soft skills?</label>
+                        <p class="mt-2 text-xs text-gray-500 text-center">1 - Not at All, 5 - Very Well</p>
+                        <div class="mt-4">
+                            <!-- Rating Selector -->
+                            <div class="flex space-x-10 justify-center">
+                                <label for="softSkills-1" class="flex items-center space-x-1">
+                                    <input type="radio" id="softSkills-1" name="softSkillsRating" value="1"
+                                           class="opacity-0 peer" required>
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">1</span>
+                                </label>
+                                <label for="softSkills-2" class="flex items-center space-x-1">
+                                    <input type="radio" id="softSkills-2" name="softSkillsRating" value="2"
+                                           class="opacity-0 peer">
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">2</span>
+                                </label>
+                                <label for="softSkills-3" class="flex items-center space-x-1">
+                                    <input type="radio" id="softSkills-3" name="softSkillsRating" value="3"
+                                           class="opacity-0 peer">
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">3</span>
+                                </label>
+                                <label for="softSkills-4" class="flex items-center space-x-1">
+                                    <input type="radio" id="softSkills-4" name="softSkillsRating" value="4"
+                                           class="opacity-0 peer">
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">4</span>
+                                </label>
+                                <label for="softSkills-5" class="flex items-center space-x-1">
+                                    <input type="radio" id="softSkills-5" name="softSkillsRating" value="5"
+                                           class="opacity-0 peer">
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">5</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Resources -->
+                    <div>
+                        <label for="resources-1" class="block text-center text-sm font-medium leading-6 text-gray-900">
+                            How satisfied were you with the resources and tools provided to you during your
+                            placement?</label>
+                        <p class="mt-2 text-xs text-gray-500 text-center">1 - Very Dissatisfied, 5 - Very Satisfied</p>
+                        <div class="mt-4">
+                            <!-- Rating Selector -->
+                            <div class="flex space-x-10 justify-center">
+                                <label for="resources-1" class="flex items-center space-x-1">
+                                    <input type="radio" id="resources-1" name="resourcesRating" value="1" class="opacity-0 peer" required>
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">1</span>
+                                </label>
+                                <label for="resources-2" class="flex items-center space-x-1">
+                                    <input type="radio" id="resources-2" name="resourcesRating" value="2" class="opacity-0 peer">
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">2</span>
+                                </label>
+                                <label for="resources-3" class="flex items-center space-x-1">
+                                    <input type="radio" id="resources-3" name="resourcesRating" value="3" class="opacity-0 peer">
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">3</span>
+                                </label>
+                                <label for="resources-4" class="flex items-center space-x-1">
+                                    <input type="radio" id="resources-4" name="resourcesRating" value="4" class="opacity-0 peer">
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">4</span>
+                                </label>
+                                <label for="resources-5" class="flex items-center space-x-1">
+                                    <input type="radio" id="resources-5" name="resourcesRating" value="5" class="opacity-0 peer">
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">5</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Work Environment -->
+                    <div>
+                        <label for="workEnvironment-1"
+                               class="block text-center text-sm font-medium leading-6 text-gray-900">
+                            How would you rate the company's overall work environment for placement students?</label>
+                        <p class="mt-2 text-xs text-gray-500 text-center">1 - Very Poor, 5 - Excellent</p>
+                        <div class="mt-4">
+                            <!-- Rating Selector -->
+                            <div class="flex space-x-10 justify-center">
+                                <label for="workEnvironment-1" class="flex items-center space-x-1">
+                                    <input type="radio" id="workEnvironment-1" name="workEnvironmentRating" value="1"
+                                           class="opacity-0 peer" required>
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">1</span>
+                                </label>
+                                <label for="workEnvironment-2" class="flex items-center space-x-1">
+                                    <input type="radio" id="workEnvironment-2" name="workEnvironmentRating" value="2"
+                                           class="opacity-0 peer">
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">2</span>
+                                </label>
+                                <label for="workEnvironment-3" class="flex items-center space-x-1">
+                                    <input type="radio" id="workEnvironment-3" name="workEnvironmentRating" value="3"
+                                           class="opacity-0 peer">
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">3</span>
+                                </label>
+                                <label for="workEnvironment-4" class="flex items-center space-x-1">
+                                    <input type="radio" id="workEnvironment-4" name="workEnvironmentRating" value="4"
+                                           class="opacity-0 peer">
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">4</span>
+                                </label>
+                                <label for="workEnvironment-5" class="flex items-center space-x-1">
+                                    <input type="radio" id="workEnvironment-5" name="workEnvironmentRating" value="5"
+                                           class="opacity-0 peer">
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">5</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recommend -->
+                    <div>
+                        <label for="recommend-1" class="block text-center text-sm font-medium leading-6 text-gray-900">
+                            How likely are you to recommend this company to other students seeking placements?</label>
+                        <p class="mt-2 text-xs text-gray-500 text-center">1 - Very Unlikely, 5 - Very Likely</p>
+                        <div class="mt-4">
+                            <!-- Rating Selector -->
+                            <div class="flex space-x-10 justify-center">
+                                <label for="recommend-1" class="flex items-center space-x-1">
+                                    <input type="radio" id="recommend-1" name="recommendationRating" value="1" class="opacity-0 peer" required>
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">1</span>
+                                </label>
+                                <label for="recommend-2" class="flex items-center space-x-1">
+                                    <input type="radio" id="recommend-2" name="recommendationRating" value="2" class="opacity-0 peer">
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">2</span>
+                                </label>
+                                <label for="recommend-3" class="flex items-center space-x-1">
+                                    <input type="radio" id="recommend-3" name="recommendationRating" value="3" class="opacity-0 peer">
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">3</span>
+                                </label>
+                                <label for="recommend-4" class="flex items-center space-x-1">
+                                    <input type="radio" id="recommend-4" name="recommendationRating" value="4" class="opacity-0 peer">
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">4</span>
+                                </label>
+                                <label for="recommend-5" class="flex items-center space-x-1">
+                                    <input type="radio" id="recommend-5" name="recommendationRating" value="5" class="opacity-0 peer">
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">5</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Overall -->
+                    <div>
+                        <label for="overall-1" class="block text-center text-sm font-medium leading-6 text-gray-900">
+                            Overall, how would you score your experience with the company on a scale of 1 to 10?</label>
+                        <p class="mt-2 text-xs text-gray-500 text-center">1 - Extremely Poor, 10 - Outstanding</p>
+                        <div class="mt-4">
+                            <!-- Rating Selector -->
+                            <div class="flex space-x-5 justify-center">
+                                <label for="overall-1" class="flex items-center space-x-1">
+                                    <input type="radio" id="overall-1" name="overallRating" value="1" class="opacity-0 peer" required>
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">1</span>
+                                </label>
+                                <label for="overall-2" class="flex items-center space-x-1">
+                                    <input type="radio" id="overall-2" name="overallRating" value="2" class="opacity-0 peer">
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">2</span>
+                                </label>
+                                <label for="overall-3" class="flex items-center space-x-1">
+                                    <input type="radio" id="overall-3" name="overallRating" value="3" class="opacity-0 peer">
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">3</span>
+                                </label>
+                                <label for="overall-4" class="flex items-center space-x-1">
+                                    <input type="radio" id="overall-4" name="overallRating" value="4" class="opacity-0 peer">
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">4</span>
+                                </label>
+                                <label for="overall-5" class="flex items-center space-x-1">
+                                    <input type="radio" id="overall-5" name="overallRating" value="5" class="opacity-0 peer">
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">5</span>
+                                </label>
+                                <label for="overall-6" class="flex items-center space-x-1">
+                                    <input type="radio" id="overall-6" name="overallRating" value="6" class="opacity-0 peer">
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">6</span>
+                                </label>
+                                <label for="overall-7" class="flex items-center space-x-1">
+                                    <input type="radio" id="overall-7" name="overallRating" value="7" class="opacity-0 peer">
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">7</span>
+                                </label>
+                                <label for="overall-8" class="flex items-center space-x-1">
+                                    <input type="radio" id="overall-8" name="overallRating" value="8" class="opacity-0 peer">
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">8</span>
+                                </label>
+                                <label for="overall-9" class="flex items-center space-x-1">
+                                    <input type="radio" id="overall-9" name="overallRating" value="9" class="opacity-0 peer">
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">9</span>
+                                </label>
+                                <label for="overall-10" class="flex items-center space-x-1">
+                                    <input type="radio" id="overall-10" name="overallRating" value="10" class="opacity-0 peer">
+                                    <span class="w-10 h-10 rounded-full border border-gray-300 peer-checked:bg-teal-600 peer-checked:text-white text-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-100">10</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Submit Section -->
+                <div class="mt-6 flex items-center justify-between">
+                    <a th:href="@{/student/dashboard}"
+                       class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-400">
+                        Cancel
+                    </a>
+                    <button id="submitButton" type="button"
+                            class="bg-teal-600 text-white px-4 py-2 rounded-md hover:bg-teal-500 disabled:bg-teal-600/50 disabled:text-white disabled:cursor-not-allowed">
+                        Submit
+                    </button>
+                </div>
+            </form>
+
+            <!-- Confirmation Modal -->
+            <div id="modal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
+                <div class="bg-white rounded-lg p-6 max-w-sm w-full text-center shadow-lg">
+                    <h2 class="text-lg font-semibold text-gray-800">Confirm Submission</h2>
+                    <p class="mt-4 text-sm text-gray-800">Please ensure all responses are accurate. Are you sure you would
+                        like to submit your evaluation?</p>
+                    <div class="mt-6 flex justify-between">
+                        <button id="goBackModalButton"
+                                class="rounded-md bg-gray-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">
+                            Go Back
+                        </button>
+                        <button id="confirmModalButton"
+                                class="rounded-md bg-teal-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">
+                            Submit
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script src="/js/app.js" defer></script>
+<script src="/js/utilities.js" defer></script>
+<script src="/js/student/placementEvaluationForm.js" defer></script>
+
+</body>
+</html>

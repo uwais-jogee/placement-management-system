@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" class="h-full bg-gray-100">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Placements | PMS</title>
+    <link rel="stylesheet" href="/css/main.css"/>
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.2.1/css/dataTables.dataTables.min.css">
+    <!-- DataTable Custom CSS -->
+    <link rel="stylesheet" th:href="@{/css/data-table.css}"/>
+</head>
+<body>
+<div class="min-h-full">
+    <!-- Nav Bar Fragment -->
+    <div th:replace="fragments :: navTutor ('placements')"></div>
+
+    <header class="bg-white shadow">
+        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+            <h1 class="text-3xl font-bold tracking-tight text-gray-900">Placements</h1>
+        </div>
+    </header>
+    <main>
+        <!-- Content -->
+        <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+
+            <!-- Table Card -->
+            <div class="tableDiv bg-white shadow rounded-lg max-h-fit">
+                <div class="px-4 py-5 flex justify-between items-center">
+                    <h2 class="text-lg font-medium leading-6 text-gray-900">Current Placements</h2>
+                    <!-- Search Bar -->
+                    <div class="w-1/3">
+                        <input type="search"
+                               class="tableSearch block w-full rounded border border-gray-300 bg-white px-2 py-1"
+                               placeholder="Search" aria-label="Search"/>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto overflow-y-auto max-h-screen pb-5">
+                    <table class="w-full table-auto">
+                        <thead class="border border-y border-gray-300">
+                        <tr class="bg-gray-200">
+                            <th scope="col" class="text-xs px-4 py-1 text-gray-600">
+                                ID
+                            </th>
+                            <th scope="col" class="text-xs px-4 py-1 text-gray-600">
+                                Student Name
+                            </th>
+                            <th scope="col" class="text-xs px-4 py-1 text-gray-600">
+                                Company
+                            </th>
+                            <th scope="col" class="text-xs px-4 py-1 text-gray-600">
+                                Start Date
+                            </th>
+                            <th scope="col" class="text-xs px-4 py-1 text-gray-600">
+                                End Date
+                            </th>
+                            <th scope="col" class="text-xs px-4 py-1 text-gray-600">
+                                Status
+                            </th>
+                            <th scope="col" class="text-xs px-4 py-1 text-gray-600">
+                                View
+                            </th>
+                        </tr>
+                        </thead>
+
+                        <tbody class="divide-y divide-gray-300 border-b border-b-gray-100">
+                        <tr th:each="placement : ${placements}" class="hover:bg-gray-50">
+                            <td th:text="'#' + ${placement.id}"
+                                class="px-4 py-3 text-sm text-gray-900">
+                            </td>
+                            <td th:text="${placement.student.firstName + ' ' + placement.student.lastName}"
+                                class="px-4 py-3 text-sm text-gray-900">
+                            </td>
+                            <td th:text="${placement.company.companyName}"
+                                class="px-4 py-3 text-sm text-gray-900">
+                            </td>
+                            <td th:text="${#temporals.format(placement.startDate, 'dd/MM/yy')}"
+                                class="px-4 py-3 text-sm text-gray-900">
+                            </td>
+                            <td th:text="${#temporals.format(placement.endDate, 'dd/MM/yy')}"
+                                class="px-4 py-3 text-sm text-gray-900">
+                            </td>
+                            <td class="text-sm text-gray-900">
+                                <span th:if="${placement.status.getFormattedStatus() == 'In Progress'}"
+                                      class="text-nowrap px-2 py-1 text-sm font-medium rounded-full bg-green-100 text-green-800"
+                                      th:text="${placement.status.getFormattedStatus()}">
+                                </span>
+                                <span th:if="${placement.status.getFormattedStatus() == 'Upcoming'}"
+                                      class="text-nowrap px-2 py-1 text-sm font-medium rounded-full bg-blue-100 text-blue-800"
+                                      th:text="${placement.status.getFormattedStatus()}">
+                                </span>
+                            </td>
+                            <td class="px-4 py-3 text-sm text-gray-900">
+                                <a th:href="@{/tutor/placement/view(id=${placement.id})}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                         stroke-width="1.5" stroke="currentColor"
+                                         class="h-6 w-6 text-teal-600 hover:text-teal-400 inline-block">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                              d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/>
+                                    </svg>
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script src="/js/app.js" defer></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/2.2.1/js/dataTables.min.js" defer></script>
+<script src="/js/dataTableSetup.js" defer></script>
+
+</body>
+</html>

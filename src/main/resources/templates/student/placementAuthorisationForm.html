@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" class="h-full bg-gray-100">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Placement Authorisation Request | PMS</title>
+    <link rel="stylesheet" href="/css/main.css"/>
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+</head>
+<body>
+<div class="min-h-full">
+    <!-- Nav Bar Fragment -->
+    <div th:replace="fragments :: navStudent ('')"></div>
+
+    <header class="bg-white shadow">
+        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+            <h1 class="text-3xl font-bold tracking-tight text-gray-900">New Placement Authorisation Request</h1>
+        </div>
+    </header>
+
+    <main>
+        <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+            <!-- Content -->
+            <form id="placementAuthRequestForm" th:action="@{/student/auth-request/new/submit}"
+                  th:object="${placementAuthRequest}" method="POST">
+                <div class="space-y-12">
+                    <div class="border-b border-gray-300 pb-12">
+                        <p class="text-sm leading-6 text-gray-900">
+                            By submitting this form, you confirm that you will meet the following requirements for your
+                            placement:
+                        </p>
+                        <ul class="list-disc pl-5 mt-3 text-sm leading-6 text-gray-900">
+                            <li>Act professionally and responsibly, both in your studies and on placement.</li>
+                            <li>Inform the University if you have any queries or concerns about your placement or
+                                Placement Provider.
+                            </li>
+                            <li>Update the University immediately if your placement start or end date changes.</li>
+                        </ul>
+                        <p class="mt-4 text-sm leading-6 text-gray-900">
+                            After submitting this form, an email will be sent to your contact at the placement providing
+                            company requesting additional information.<br/><br/>
+                            Once your placement is confirmed, you will be assigned a tutor who will serve as your
+                            primary contact throughout the placement. Your tutor may also schedule a visit during your
+                            placement.
+                        </p>
+                        <p class="mt-4 text-sm leading-6 text-gray-900">
+                            Please ensure all fields are valid and completed.
+                        </p>
+                    </div>
+
+                    <!-- Personal Details Section -->
+                    <div class="border-b border-gray-300 pb-12">
+                        <h2 class="text-base font-semibold leading-7 text-gray-900">Personal Details</h2>
+
+                        <div class="mt-10 grid grid-cols-1 gap-x-12 gap-y-12 sm:grid-cols-6">
+                            <!-- First Name -->
+                            <div class="sm:col-span-3">
+                                <label for="firstName" class="block text-sm font-medium leading-6 text-gray-900">First
+                                    Name</label>
+                                <div class="mt-2">
+                                    <input type="text" id="firstName" name="firstName" maxlength="255"
+                                           th:value="${#authentication.principal.firstName}"
+                                           class="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-teal-600 text-sm leading-6 disabled:bg-gray-200 disabled:text-gray-900 disabled:cursor-not-allowed"
+                                           disabled required>
+                                </div>
+                            </div>
+
+                            <!-- Last Name -->
+                            <div class="sm:col-span-3">
+                                <label for="lastName" class="block text-sm font-medium leading-6 text-gray-900">Last
+                                    Name</label>
+                                <div class="mt-2">
+                                    <input type="text" id="lastName" name="lastName" maxlength="255"
+                                           th:value="${#authentication.principal.lastName}"
+                                           class="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-teal-600 text-sm leading-6 disabled:bg-gray-200 disabled:text-gray-900 disabled:cursor-not-allowed"
+                                           disabled required>
+                                </div>
+                            </div>
+
+                            <!-- Student Email -->
+                            <div class="sm:col-span-3">
+                                <label for="studentEmail" class="block text-sm font-medium leading-6 text-gray-900">Student
+                                    Email</label>
+                                <div class="mt-2">
+                                    <input type="email" pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$" id="studentEmail"
+                                           name="studentEmail" maxlength="255"
+                                           th:value="${#authentication.principal.email}"
+                                           class="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-teal-600 text-sm leading-6 disabled:bg-gray-200 disabled:text-gray-900 disabled:cursor-not-allowed"
+                                           disabled required>
+                                </div>
+                            </div>
+
+                            <!-- Student Phone -->
+                            <div class="sm:col-span-3">
+                                <label for="studentPhone" class="block text-sm font-medium leading-6 text-gray-900">Contact
+                                    Number</label>
+                                <div class="mt-2">
+                                    <input th:field="*{studentPhone}" type="tel" id="studentPhone" name="studentPhone"
+                                           placeholder="e.g. 01234567890" pattern="^0\d{10}$" maxlength="11"
+                                           class="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-teal-600 text-sm leading-6"
+                                           required>
+                                </div>
+                            </div>
+
+                            <!-- Programme of Study -->
+                            <div class="sm:col-span-3">
+                                <label for="programmeOfStudy" class="block text-sm font-medium leading-6 text-gray-900">Programme
+                                    of Study</label>
+                                <div class="mt-2">
+                                    <select th:field="*{programmeOfStudy}" id="programmeOfStudy" name="programmeOfStudy"
+                                            class="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-teal-600 text-sm leading-6 h-9"
+                                            required>
+                                        <option value="" selected disabled>Select an option</option>
+                                        <option value="Accounting and Finance">Accounting and Finance</option>
+                                        <option value="American Studies">American Studies</option>
+                                        <option value="Ancient History">Ancient History</option>
+                                        <option value="Archaeology">Archaeology</option>
+                                        <option value="Archaeology and Ancient History">Archaeology and Ancient
+                                            History
+                                        </option>
+                                        <option value="Biological Sciences">Biological Sciences</option>
+                                        <option value="Business Management and Marketing">Business Management and
+                                            Marketing
+                                        </option>
+                                        <option value="Chemistry">Chemistry</option>
+                                        <option value="Computer Science">Computer Science</option>
+                                        <option value="Criminology and Policing">Criminology and Policing</option>
+                                        <option value="Economics">Economics</option>
+                                        <option value="Education">Education</option>
+                                        <option value="Engineering">Engineering</option>
+                                        <option value="English">English</option>
+                                        <option value="Film Studies">Film Studies</option>
+                                        <option value="Genetics">Genetics</option>
+                                        <option value="Geography">Geography</option>
+                                        <option value="Geography and Geosciences">Geography and Geosciences</option>
+                                        <option value="Geology">Geology</option>
+                                        <option value="Healthcare">Healthcare</option>
+                                        <option value="History">History</option>
+                                        <option value="History of Art">History of Art</option>
+                                        <option value="Journalism">Journalism</option>
+                                        <option value="Law">Law</option>
+                                        <option value="Maths">Maths</option>
+                                        <option value="Media and Communication">Media and Communication</option>
+                                        <option value="Medicine">Medicine</option>
+                                        <option value="Modern Languages">Modern Languages</option>
+                                        <option value="Museum Studies">Museum Studies</option>
+                                        <option value="Nursing">Nursing</option>
+                                        <option value="ODP">ODP</option>
+                                        <option value="Physics">Physics</option>
+                                        <option value="Politics and International Relations">Politics and International
+                                            Relations
+                                        </option>
+                                        <option value="Psychology">Psychology</option>
+                                        <option value="Sociology">Sociology</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <br class="hidden sm:block"/>
+
+                            <!-- International Student -->
+                            <div class="sm:col-span-6">
+                                <label for="internationalStudent"
+                                       class="block text-sm font-medium leading-6 text-gray-900">Are you an
+                                    international student?</label>
+                                <div class="mt-2">
+                                    <select th:field="*{internationStudent}" id="internationalStudent"
+                                            name="internationalStudent"
+                                            class="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-teal-600 text-sm leading-6 h-9"
+                                            required>
+                                        <option value="" selected disabled>Select an option</option>
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Visa Status (Appears only if international student is Yes) -->
+                            <div id="visaStatusSection" class="sm:col-span-6 hidden">
+                                <label for="visaStatus" class="block text-sm font-medium leading-6 text-gray-900">Does
+                                    your Student Visa duration account for your placement?</label>
+                                <div class="mt-2">
+                                    <select th:field="*{visaStatus}" id="visaStatus" name="visaStatus"
+                                            class="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-teal-600 text-sm leading-6 h-9">
+                                        <option value="" selected disabled>Select an option</option>
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                        <option value="N/A" hidden>No</option>
+                                    </select>
+                                </div>
+                                <div id="visaAlert"
+                                     class="mt-5 bg-red-100 border border-red-200 text-sm text-red-800 rounded-lg p-2 hidden"
+                                     role="alert" tabindex="-1" aria-labelledby="hs-soft-color-danger-label">
+                                    <p class="hs-soft-color-danger-label">Your student visa does not allow for a
+                                        placement - please contact
+                                        <a href="mailto:visas@leicester.ac.uk"
+                                           class="hover:text-red-600 font-bold">visas@leicester.ac.uk</a>.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Company Details Section -->
+                    <div class="border-b border-gray-300 pb-12">
+                        <h2 class="text-base font-semibold leading-7 text-gray-900">Company Details</h2>
+
+                        <div class="mt-10 grid grid-cols-1 gap-x-12 gap-y-12 sm:grid-cols-6">
+
+                            <!-- Company Name Select -->
+                            <div class="sm:col-span-3">
+                                <label for="companyNameSelect"
+                                       class="block text-sm font-medium leading-6 text-gray-900">Company
+                                    Name</label>
+                                <div class="mt-2">
+                                    <select th:field="*{companySelect}" id="companyNameSelect" name="companyNameSelect"
+                                            class="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-teal-600 text-sm leading-6 h-9"
+                                            required>
+                                        <!-- Disabled selection for initial state on page load -->
+                                        <option value="" selected disabled>Select an option</option>
+                                        <!-- Loop through all companies and add them as options -->
+                                        <option th:each="company : ${allCompanies}"
+                                                th:value="${company.id}"
+                                                th:text="${company.companyName}"
+                                                th:attr="data-placeId=${company.address.placeId}, data-formattedAddress=${company.address.formattedAddress}, data-industry=${company.industry}, data-webAddress=${company.webAddress}">
+                                        </option>
+                                        <!-- Add an 'Other' option for custom company name in case it does not exist -->
+                                        <option value="Other">Other</option>
+                                    </select>
+                                    <p class="mt-2 text-sm text-gray-900">
+                                        If your company is not listed, please select 'Other' to enter your employer's
+                                        details
+                                    </p>
+                                </div>
+                            </div>
+
+
+                            <!-- Company Name Input (only appears if 'Other' is selected) -->
+                            <div id="companyNameOtherInputSection" class="sm:col-span-3 hidden">
+                                <label for="companyNameOtherInput"
+                                       class="block text-sm font-medium leading-6 text-gray-900">Company
+                                    Name if Other</label>
+                                <div class="mt-2">
+                                    <input th:field="*{companyNameOther}" type="text" id="companyNameOtherInput"
+                                           name="companyNameOtherInput" maxlength="255"
+                                           class="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-teal-600 text-sm leading-6">
+                                </div>
+                            </div>
+
+                            <br id="breakDiv" class="hidden sm:block"/>
+
+                            <!-- Company Address -->
+                            <div class="sm:col-span-6">
+                                <label for="companyAddress"
+                                       class="block text-sm font-medium leading-6 text-gray-900">
+                                    Company Address</label>
+                                <div class="mt-2">
+                                    <input type="text" id="companyAddress" name="companyAddress" maxlength="255"
+                                           class="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-teal-600 text-sm leading-6 disabled:bg-gray-200 disabled:text-gray-900 disabled:cursor-not-allowed"
+                                           placeholder="Start typing an address..." disabled required/>
+                                </div>
+                            </div>
+
+                            <input th:field="*{companyPlaceId}" type="hidden" id="companyPlaceId" name="companyPlaceId">
+                            <input th:field="*{companyFormattedAddress}" type="hidden" id="companyFormattedAddress"
+                                   name="companyFormattedAddress">
+
+                            <!-- Company Industry -->
+                            <div class="sm:col-span-3">
+                                <label for="companyIndustry"
+                                       class="block text-sm font-medium leading-6 text-gray-900">Company
+                                    Industry</label>
+                                <div class="mt-2">
+                                    <select th:field="*{companyIndustry}" id="companyIndustry" name="companyIndustry" style="opacity: 1 !important;"
+                                            class="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-teal-600 text-sm leading-6 h-9 disabled:bg-gray-200 disabled:text-gray-900 disabled:cursor-not-allowed"
+                                            disabled required>
+                                        <option class value="" selected disabled>Select an option</option>
+                                        <option value="Agriculture">Agriculture</option>
+                                        <option value="Automotive">Automotive</option>
+                                        <option value="Banking and Financial Services">Banking and Financial Services
+                                        </option>
+                                        <option value="Construction">Construction</option>
+                                        <option value="Consumer Goods">Consumer Goods</option>
+                                        <option value="Education">Education</option>
+                                        <option value="Energy and Utilities">Energy and Utilities</option>
+                                        <option value="Entertainment and Media">Entertainment and Media</option>
+                                        <option value="Environmental Services">Environmental Services</option>
+                                        <option value="Fashion and Apparel">Fashion and Apparel</option>
+                                        <option value="Financial Technology">Financial Technology
+                                        </option>
+                                        <option value="Food and Beverage">Food and Beverage</option>
+                                        <option value="Healthcare and Pharmaceuticals">Healthcare and Pharmaceuticals
+                                        </option>
+                                        <option value="Hospitality and Travel">Hospitality and Travel</option>
+                                        <option value="Human Resources and Recruitment">Human Resources and
+                                            Recruitment
+                                        </option>
+                                        <option value="Insurance">Insurance</option>
+                                        <option value="Information Technology">Information Technology</option>
+                                        <option value="Legal Services">Legal Services</option>
+                                        <option value="Manufacturing">Manufacturing</option>
+                                        <option value="Marketing and Advertising">Marketing and Advertising</option>
+                                        <option value="Mining and Metals">Mining and Metals</option>
+                                        <option value="Non-Profit">Non-Profit</option>
+                                        <option value="Professional Services">Professional Services</option>
+                                        <option value="Real Estate">Real Estate</option>
+                                        <option value="Retail and E-commerce">Retail and E-commerce</option>
+                                        <option value="Telecommunications">Telecommunications</option>
+                                        <option value="Transportation and Logistics">Transportation and Logistics
+                                        </option>
+                                        <option value="Technology">Technology</option>
+                                        <option value="Wholesale Trade">Wholesale Trade</option>
+                                        <option value="Renewable Energy">Renewable Energy</option>
+                                        <option value="Government">Government</option>
+                                        <option value="Aerospace">Aerospace</option>
+                                        <option value="Luxury Goods">Luxury Goods</option>
+                                        <option value="Sports and Recreation">Sports and Recreation</option>
+                                        <option value="Media and Publishing">Media and Publishing</option>
+                                        <option value="Biotechnology">Biotechnology</option>
+                                        <option value="Chemicals">Chemicals</option>
+                                        <option value="Blockchain and Cryptocurrency">Blockchain and Cryptocurrency
+                                        </option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Company Web Address -->
+                            <div class="sm:col-span-3">
+                                <label for="companyWebAddress"
+                                       class="block text-sm font-medium leading-6 text-gray-900">Company Web
+                                    Address</label>
+                                <div class="mt-2">
+                                    <input th:field="*{companyWebAddress}" type="text" id="companyWebAddress"
+                                           name="companyWebAddress" placeholder="e.g. www.example.com" maxlength="255"
+                                           pattern="^[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&//=]*)$"
+                                           class="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-teal-600 text-sm leading-6 disabled:bg-gray-200 disabled:text-gray-900 disabled:cursor-not-allowed"
+                                           disabled required>
+                                </div>
+                            </div>
+
+                            <!-- Company Contact Name -->
+                            <div class="sm:col-span-3">
+                                <label for="companyContactName"
+                                       class="block text-sm font-medium leading-6 text-gray-900">Company Contact
+                                    Name</label>
+                                <div class="mt-2">
+                                    <input th:field="*{companyContactName}" type="text" id="companyContactName"
+                                           name="companyContactName" maxlength="255"
+                                           class="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-teal-600 text-sm leading-6"
+                                           required>
+                                </div>
+                            </div>
+
+                            <!-- Company Contact Email -->
+                            <div class="sm:col-span-3">
+                                <label for="companyContactEmail"
+                                       class="block text-sm font-medium leading-6 text-gray-900">Company Contact
+                                    Email</label>
+                                <div class="mt-2">
+                                    <input th:field="*{companyContactEmail}" type="email"
+                                           pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$" id="companyContactEmail"
+                                           name="companyContactEmail" maxlength="255"
+                                           class="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-teal-600 text-sm leading-6"
+                                           required>
+                                </div>
+                            </div>
+
+                            <!-- Company Contact Phone -->
+                            <div class="sm:col-span-3">
+                                <label for="companyContactPhone"
+                                       class="block text-sm font-medium leading-6 text-gray-900">Company Contact
+                                    Telephone Number</label>
+                                <div class="mt-2">
+                                    <input th:field="*{companyContactPhone}" type="tel" id="companyContactPhone"
+                                           name="companyContactPhone" placeholder="e.g. 01234567890" pattern="^0\d{10}$"
+                                           maxlength="11"
+                                           class="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-teal-600 text-sm leading-6"
+                                           required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Placement Details Section -->
+                    <div class="border-b border-gray-300 pb-12">
+                        <h2 class="text-base font-semibold leading-7 text-gray-900">Placement Details</h2>
+                        <div class="mt-10 grid grid-cols-1 gap-x-12 gap-y-12 sm:grid-cols-6">
+
+                            <!-- Role Title -->
+                            <div class="sm:col-span-6">
+                                <label for="roleTitle" class="block text-sm font-medium leading-6 text-gray-900">Role
+                                    Title</label>
+                                <div class="mt-2">
+                                    <input th:field="*{roleTitle}" type="text" id="roleTitle" name="roleTitle"
+                                           maxlength="255"
+                                           class="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-teal-600 text-sm leading-6"
+                                           required>
+                                </div>
+                            </div>
+
+                            <!-- Placement Start Date -->
+                            <div class="sm:col-span-3">
+                                <label for="placementStartDate"
+                                       class="block text-sm font-medium leading-6 text-gray-900">Placement
+                                    Start Date</label>
+                                <div class="mt-2">
+                                    <input th:field="*{placementStartDate}" type="date" id="placementStartDate"
+                                           name="placementStartDate"
+                                           class="block w-full rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-teal-600 text-sm leading-6"
+                                           required>
+                                </div>
+                            </div>
+
+                            <!-- Placement End Date -->
+                            <div class="sm:col-span-3">
+                                <label for="placementEndDate" class="block text-sm font-medium leading-6 text-gray-900">Placement
+                                    End Date</label>
+                                <div class="mt-2">
+                                    <input th:field="*{placementEndDate}" type="date" id="placementEndDate"
+                                           name="placementEndDate"
+                                           class="block w-full rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-teal-600 text-sm leading-6"
+                                           required>
+                                </div>
+                            </div>
+
+                            <!-- Working Hours per Week -->
+                            <div class="sm:col-span-3">
+                                <label for="hoursPerWeek" class="block text-sm font-medium leading-6 text-gray-900">Working
+                                    Hours per Week</label>
+                                <div class="mt-2">
+                                    <input th:field="*{hoursPerWeek}" type="number" id="hoursPerWeek"
+                                           name="hoursPerWeek"
+                                           class="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-teal-600 text-sm leading-6"
+                                           required min="1" max="168" step="0.5">
+                                </div>
+                            </div>
+
+                            <!-- Annual Salary -->
+                            <div class="sm:col-span-3">
+                                <label for="salary" class="block text-sm font-medium leading-6 text-gray-900">
+                                    Annual Salary</label>
+                                <div class="mt-2 flex rounded-md shadow-sm">
+                                    <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">£</span>
+                                    <input th:field="*{salary}" type="number" id="salary" name="salary"
+                                           class="px-3 block w-full rounded-none rounded-r-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-teal-600 text-sm leading-6"
+                                           min="1" step="0.01" required>
+                                </div>
+                            </div>
+
+                            <!-- Role Description -->
+                            <div class="sm:col-span-6">
+                                <label for="roleDescription" class="block text-sm font-medium leading-6 text-gray-900">Role
+                                    Description</label>
+                                <div class="mt-2">
+                                <textarea th:field="*{roleDescription}" id="roleDescription" name="roleDescription"
+                                          rows="4" maxlength="65535"
+                                          class="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-teal-600 text-sm leading-6"
+                                          required></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Remote Work Question -->
+                            <div class="sm:col-span-3">
+                                <label for="remote" class="block text-sm font-medium leading-6 text-gray-900">Does the
+                                    role involve working from home/remotely?</label>
+                                <div class="mt-2">
+                                    <select th:field="*{remote}" id="remote" name="remote"
+                                            class="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-teal-600 text-sm leading-6 h-9"
+                                            required>
+                                        <option value="" selected disabled>Select an option</option>
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Travel Arrangements -->
+                            <div class="sm:col-span-3">
+                                <label for="travelArrangements"
+                                       class="block text-sm font-medium leading-6 text-gray-900">How will you travel to
+                                    and from the placement and your residence?</label>
+                                <div class="mt-2">
+                                    <select th:field="*{travelArrangements}" id="travelArrangements"
+                                            name="travelArrangements"
+                                            class="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-teal-600 text-sm leading-6 h-9"
+                                            required>
+                                        <option value="" disabled selected>Select an option</option>
+                                        <option value="Public transport">Public transport</option>
+                                        <option value="Walking">Walking</option>
+                                        <option value="Cycle">Cycle</option>
+                                        <option value="Own Car">Own Car</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Residential Arrangements -->
+                            <div class="sm:col-span-3">
+                                <label for="residentialArrangements"
+                                       class="block text-sm font-medium leading-6 text-gray-900">What are your
+                                    residential arrangements while on placement?</label>
+                                <div class="mt-2">
+                                    <select th:field="*{residentialArrangements}" id="residentialArrangements"
+                                            name="residentialArrangements"
+                                            class="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-teal-600 text-sm leading-6 h-9"
+                                            required>
+                                        <option value="" selected disabled>Select an option</option>
+                                        <option value="Live at home">Live at home</option>
+                                        <option value="Renting">Renting</option>
+                                        <option value="University Accommodation">University Accommodation</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Adjustments for Disability or Health Condition -->
+                            <div class="sm:col-span-6">
+                                <label for="personalAdjustments"
+                                       class="block text-sm font-medium leading-6 text-gray-900">Have you considered any
+                                    adjustments with your employer that may be required for you to carry out the role
+                                    relating to any disability or health condition?</label>
+                                <div class="mt-2">
+                                    <select th:field="*{personalAdjustments}" id="personalAdjustments"
+                                            name="personalAdjustments"
+                                            class="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-teal-600 text-sm leading-6 h-9"
+                                            required>
+                                        <option value="" selected disabled>Select an option</option>
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                        <option value="N/A">N/A</option>
+                                    </select>
+                                </div>
+                                <div id="personalAdjustmentsAlert"
+                                     class="mt-5 bg-red-100 border border-red-200 text-sm text-red-800 rounded-lg p-2 hidden"
+                                     role="alert" tabindex="-1" aria-labelledby="hs-soft-color-danger-label">
+                                    <p>If adjustments are required for you to perform your role effectively, we
+                                        recommend you first discuss this with your employer.<br/><br/>If you are unsure
+                                        about this subject, then we recommend you reach out through the <a
+                                                href="https://le.ac.uk/accessability"
+                                                class="hover:text-red-600 font-bold">AccessAbility Centre</a>.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Section -->
+                    <div class="mt-6 flex items-center justify-between">
+                        <a th:href="@{/student/dashboard}"
+                           class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-400">
+                            Cancel
+                        </a>
+                        <button id="submitButton" type="button"
+                                class="bg-teal-600 text-white px-4 py-2 rounded-md hover:bg-teal-500 disabled:bg-teal-600/50 disabled:text-white disabled:cursor-not-allowed">
+                            Submit
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Confirmation Modal -->
+            <div id="modal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
+                <div class="bg-white rounded-lg p-6 max-w-sm w-full text-center shadow-lg">
+                    <h2 class="text-lg font-semibold text-gray-800">Confirm Submission</h2>
+                    <p class="mt-4 text-sm text-gray-800">Please ensure all details are correct. Are you sure you would
+                        like to submit this request?</p>
+                    <div class="mt-6 flex justify-between">
+                        <button id="goBackModalButton"
+                                class="rounded-md bg-gray-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">
+                            Go Back
+                        </button>
+                        <button id="confirmModalButton"
+                                class="rounded-md bg-teal-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">
+                            Submit
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+<script src="/js/app.js" defer></script>
+<script src="/js/utilities.js" defer></script>
+<script src="/js/student/placementAuthorisationForm.js" defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCWEiwbCY0v7DjfGIs9BsPrFbpMa0Tb8fQ&libraries=places&callback=initGoogle"
+        defer></script>
+
+</body>
+</html>
