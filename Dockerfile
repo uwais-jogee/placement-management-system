@@ -6,7 +6,7 @@ COPY . .
 RUN gradle clean build -x test --no-daemon
 
 # Create a minimal runtime image
-FROM openjdk:17-jdk-slim
+FROM eclipse-temurin:17-jdk-jammy
 # Copy the built JAR file from the builder stage
 COPY --from=build /home/gradle/build/libs/PlacementManagementSystem-0.0.1-SNAPSHOT.jar PlacementManagementSystem.jar
 # Expose the application's port
